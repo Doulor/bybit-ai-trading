@@ -114,7 +114,8 @@
 
 <script>
 // ========== 交易数据，每次新增一条即可 ==========
-const INITIAL_CAPITAL = 9.00;
+const INITIAL_CAPITAL = 7.00;
+const EXTRA_INVESTMENT = 2.00; // 虫洞投资
 const TRADES = [
   { time: "06-20 15:10", symbol: "EPICUSDT",  side: "long", entry: 0.4257, exit: 0.4408, qty: 148, result: "tp", pnl: 2.23 },
   { time: "06-20 15:33", symbol: "HEIUSDT",   side: "long", entry: 0.1018, exit: 0.1068, qty: 401, result: "tp", pnl: 1.81 },
@@ -124,7 +125,7 @@ const TRADES = [
 
 // 计算统计
 const totalPnl = TRADES.reduce((s, t) => s + t.pnl, 0);
-const currentBalance = INITIAL_CAPITAL + totalPnl;
+const currentBalance = INITIAL_CAPITAL + EXTRA_INVESTMENT + totalPnl;
 const winTrades = TRADES.filter(t => t.pnl > 0).length;
 const winRate = TRADES.length > 0 ? (winTrades / TRADES.length * 100) : 0;
 const lastUpdate = "2026-06-20 23:02";
@@ -132,8 +133,9 @@ const lastUpdate = "2026-06-20 23:02";
 // 渲染统计卡片
 const statsHtml = [
   { label: "初始资金", value: INITIAL_CAPITAL.toFixed(2) + " U", cls: "blue" },
+  { label: "外部投资", value: EXTRA_INVESTMENT.toFixed(2) + " U", cls: "blue" },
   { label: "当前余额", value: currentBalance.toFixed(2) + " U", cls: totalPnl >= 0 ? "green" : "red" },
-  { label: "累计盈亏", value: (totalPnl >= 0 ? "+" : "") + totalPnl.toFixed(2) + " U", cls: totalPnl >= 0 ? "green" : "red" },
+  { label: "交易盈亏", value: (totalPnl >= 0 ? "+" : "") + totalPnl.toFixed(2) + " U", cls: totalPnl >= 0 ? "green" : "red" },
   { label: "胜率", value: winRate.toFixed(0) + "%", cls: winRate >= 50 ? "green" : "red" },
   { label: "总交易次数", value: String(TRADES.length), cls: "blue" },
 ].map(s => `<div class="stat-card"><div class="label">${s.label}</div><div class="value ${s.cls}">${s.value}</div></div>`).join("");
@@ -166,7 +168,7 @@ TRADES.forEach((t, i) => {
   running += t.pnl;
   equityData.push(parseFloat(running.toFixed(2)));
 });
-equityLabels.push("当前");
+equityLabels.push("当前 (含投资)");
 equityData.push(parseFloat(currentBalance.toFixed(2)));
 
 // 盈亏柱状图数据
