@@ -8,403 +8,133 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-primary: #0a0a0f;
-    --bg-card: #12121a;
-    --bg-card-hover: #1a1a25;
-    --border: #1e1e2e;
-    --border-accent: #2a2a3e;
-    --text-primary: #e8e8ec;
-    --text-secondary: #6e6e82;
-    --text-muted: #44445a;
-    --green: #00e676;
-    --green-dim: rgba(0,230,118,0.12);
-    --red: #ff3b3b;
-    --red-dim: rgba(255,59,59,0.12);
-    --blue: #3b82f6;
-    --blue-dim: rgba(59,130,246,0.12);
-    --gold: #f5a623;
-    --gold-dim: rgba(245,166,35,0.12);
+    --bg: #0a0a0f; --bg2: #12121a; --bg3: #1a1a25;
+    --border: #1e1e2e; --border2: #2a2a3e;
+    --t1: #e8e8ec; --t2: #6e6e82; --t3: #44445a;
+    --green: #00e676; --green2: rgba(0,230,118,0.12);
+    --red: #ff3b3b; --red2: rgba(255,59,59,0.12);
+    --blue: #3b82f6; --gold: #f5a623; --gold2: rgba(245,166,35,0.12);
     --cyan: #22d3ee;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Noto Sans SC', sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    min-height: 100vh;
-    padding: 0;
-  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Noto Sans SC',sans-serif; background:var(--bg); color:var(--t1); min-height:100vh; }
 
   /* Top Bar */
-  .topbar {
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .topbar-left { display: flex; align-items: center; gap: 14px; }
-  .topbar-logo {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: 1.15em;
-    color: var(--cyan);
-    letter-spacing: -0.5px;
-  }
-  .topbar-tag {
-    background: var(--cyan);
-    color: #000;
-    font-size: 0.65em;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 3px;
-    letter-spacing: 1px;
-  }
-  .topbar-right {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78em;
-    color: var(--text-muted);
-  }
-  .topbar-right .live { color: var(--green); }
-  .topbar-right .live::before {
-    content: '';
-    display: inline-block;
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    margin-right: 5px;
-    animation: pulse 2s infinite;
-  }
+  .topbar { background:var(--bg2); border-bottom:1px solid var(--border); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  .topbar-logo { font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.1em; color:var(--cyan); }
+  .topbar-tag { background:var(--cyan); color:#000; font-size:0.6em; font-weight:700; padding:2px 6px; border-radius:3px; margin-left:8px; }
+  .topbar-right { font-family:'JetBrains Mono',monospace; font-size:0.72em; color:var(--t3); }
+  .topbar-right .live { color:var(--green); }
+  .topbar-right .live::before { content:''; display:inline-block; width:6px; height:6px; background:var(--green); border-radius:50%; margin-right:4px; animation:pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+  .container { max-width:1200px; margin:0 auto; padding:20px 16px; }
+
+  /* Grid Layout */
+  .main-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  .full-width { grid-column:1/-1; }
+  @media(max-width:800px) { .main-grid { grid-template-columns:1fr; } }
+
+  /* Cards */
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:18px; }
+  .card-title { font-size:0.7em; color:var(--t3); text-transform:uppercase; letter-spacing:1.5px; font-family:'JetBrains Mono',monospace; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .card-title .dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
 
   /* Stats Row */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 18px;
-    transition: border-color 0.2s;
-  }
-  .stat-card:hover { border-color: var(--border-accent); }
-  .stat-card .label {
-    font-size: 0.7em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-family: 'JetBrains Mono', monospace;
-    margin-bottom: 8px;
-  }
-  .stat-card .value {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.5em;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-  .stat-card .value.green { color: var(--green); }
-  .stat-card .value.red { color: var(--red); }
-  .stat-card .value.blue { color: var(--blue); }
-  .stat-card .value.gold { color: var(--gold); }
-  .stat-card .value.cyan { color: var(--cyan); }
+  .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-bottom:14px; }
+  .stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px; text-align:center; }
+  .stat-card .label { font-size:0.65em; color:var(--t3); text-transform:uppercase; letter-spacing:1.2px; font-family:'JetBrains Mono',monospace; margin-bottom:6px; }
+  .stat-card .value { font-family:'JetBrains Mono',monospace; font-size:1.35em; font-weight:700; }
+  .green { color:var(--green); } .red { color:var(--red); } .blue { color:var(--blue); } .gold { color:var(--gold); } .cyan { color:var(--cyan); }
 
-  /* Chart Section */
-  .chart-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
-  .section-title {
-    font-size: 0.85em;
-    font-weight: 500;
-    color: var(--text-secondary);
-    letter-spacing: 0.5px;
-  }
-  .section-badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65em;
-    color: var(--text-muted);
-    background: var(--bg-primary);
-    padding: 3px 8px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-  }
+  /* Balance & Positions */
+  .balance-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+  .balance-label { font-size:0.78em; color:var(--t2); }
+  .balance-value { font-family:'JetBrains Mono',monospace; font-size:1.3em; font-weight:700; color:var(--cyan); }
+  .balance-sub { font-family:'JetBrains Mono',monospace; font-size:0.85em; color:var(--t3); }
+  .pos-card { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:8px; }
+  .pos-card:last-child { margin-bottom:0; }
+  .pos-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .pos-symbol { font-family:'JetBrains Mono',monospace; font-weight:700; }
+  .pos-details { display:grid; grid-template-columns:1fr 1fr; gap:4px; font-family:'JetBrains Mono',monospace; font-size:0.75em; color:var(--t2); }
+  .pos-details span { color:var(--t3); }
+  .pos-pnl { font-family:'JetBrains Mono',monospace; font-weight:700; }
+  .update-time { font-family:'JetBrains Mono',monospace; font-size:0.62em; color:var(--t3); text-align:right; margin-top:6px; }
+  .no-data { font-family:'JetBrains Mono',monospace; font-size:0.82em; color:var(--t3); text-align:center; padding:16px; }
 
-  /* Trades Table */
-  .trades-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-  table { width: 100%; border-collapse: collapse; }
-  th {
-    text-align: left;
-    padding: 10px 14px;
-    color: var(--text-muted);
-    font-size: 0.68em;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-family: 'JetBrains Mono', monospace;
-    border-bottom: 1px solid var(--border);
-    font-weight: 600;
-  }
-  td {
-    padding: 14px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.88em;
-    border-bottom: 1px solid rgba(30,30,46,0.5);
-    color: var(--text-primary);
-  }
-  tr:hover td { background: rgba(255,255,255,0.015); }
-  .badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-size: 0.75em;
-    font-weight: 600;
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.5px;
-  }
-  .badge.long { background: var(--green-dim); color: var(--green); }
-  .badge.short { background: var(--red-dim); color: var(--red); }
-  .badge.tp { background: var(--green-dim); color: var(--green); }
-  .badge.sl { background: var(--red-dim); color: var(--red); }
-  .badge.inv { background: var(--gold-dim); color: var(--gold); }
-  .pnl-pos { color: var(--green); font-weight: 600; }
-  .pnl-neg { color: var(--red); font-weight: 600; }
+  /* Badges */
+  .badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:0.72em; font-weight:600; font-family:'JetBrains Mono',monospace; }
+  .badge.long { background:var(--green2); color:var(--green); }
+  .badge.short { background:var(--red2); color:var(--red); }
+  .badge.tp { background:var(--green2); color:var(--green); }
+  .badge.sl { background:var(--red2); color:var(--red); }
+  .pnl-pos { color:var(--green); font-weight:600; }
+  .pnl-neg { color:var(--red); font-weight:600; }
 
-  /* Investor Card */
-  .investors-row {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-  .investor-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--gold);
-    border-radius: 8px;
-    padding: 14px 18px;
-    flex: 1;
-    min-width: 180px;
-  }
-  .investor-card .inv-name {
-    font-size: 0.75em;
-    color: var(--gold);
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-  }
-  .investor-card .inv-amount {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.3em;
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-  .investor-card .inv-label {
-    font-size: 0.65em;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
+  /* Investors */
+  .investors-row { display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .investor-card { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:8px; padding:12px 16px; flex:1; min-width:160px; }
+  .inv-name { font-size:0.72em; color:var(--gold); font-weight:600; margin-bottom:2px; }
+  .inv-amount { font-family:'JetBrains Mono',monospace; font-size:1.2em; font-weight:700; }
+  .inv-label { font-size:0.62em; color:var(--t3); margin-top:2px; }
 
-  /* Live Data Section */
-  .live-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  @media (max-width: 700px) { .live-grid { grid-template-columns: 1fr; } }
-  .live-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-  }
-  .live-card .live-title {
-    font-size: 0.72em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-family: 'JetBrains Mono', monospace;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .live-card .live-title .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    animation: pulse 2s infinite;
-  }
-  .balance-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 8px;
-  }
-  .balance-label {
-    font-size: 0.78em;
-    color: var(--text-secondary);
-  }
-  .balance-value {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.4em;
-    font-weight: 700;
-    color: var(--cyan);
-  }
-  .balance-sub {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85em;
-    color: var(--text-muted);
-  }
-  .pos-card {
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px;
-    margin-bottom: 10px;
-  }
-  .pos-card:last-child { margin-bottom: 0; }
-  .pos-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .pos-symbol {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: 1em;
-    color: var(--text-primary);
-  }
-  .pos-pnl {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: 0.95em;
-  }
-  .pos-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78em;
-    color: var(--text-secondary);
-  }
-  .pos-details span { color: var(--text-muted); }
-  .no-data {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85em;
-    color: var(--text-muted);
-    text-align: center;
-    padding: 20px;
-  }
-  .update-time {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65em;
-    color: var(--text-muted);
-    text-align: right;
-    margin-top: 8px;
-  }
+  /* Tables */
+  table { width:100%; border-collapse:collapse; }
+  th { text-align:left; padding:8px 10px; color:var(--t3); font-size:0.65em; text-transform:uppercase; letter-spacing:1.2px; font-family:'JetBrains Mono',monospace; border-bottom:1px solid var(--border); font-weight:600; }
+  td { padding:10px; font-family:'JetBrains Mono',monospace; font-size:0.82em; border-bottom:1px solid rgba(30,30,46,0.5); }
+  tr:hover td { background:rgba(255,255,255,0.015); }
 
-  .footer {
-    text-align: center;
-    color: var(--text-muted);
-    padding: 20px 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72em;
-    letter-spacing: 0.5px;
-  }
-
-  /* Responsive */
-  @media (max-width: 600px) {
-    .container { padding: 16px 12px; }
-    .stats-row { grid-template-columns: repeat(2, 1fr); }
-    td, th { padding: 10px 8px; font-size: 0.8em; }
-    .stat-card .value { font-size: 1.2em; }
-  }
+  /* Footer */
+  .footer { text-align:center; color:var(--t3); padding:16px 0; font-family:'JetBrains Mono',monospace; font-size:0.68em; letter-spacing:0.5px; }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-left">
+  <div style="display:flex;align-items:center;gap:8px">
     <div class="topbar-logo">RUBEN AI</div>
     <div class="topbar-tag">LIVE</div>
   </div>
-  <div class="topbar-right">
-    <span class="live">TRADING TERMINAL</span> · BYBIT USDT PERP
-  </div>
+  <div class="topbar-right"><span class="live">TERMINAL</span> · BYBIT USDT PERP</div>
 </div>
 
 <div class="container">
 
   <div class="stats-row" id="statsRow"></div>
-
   <div class="investors-row" id="investorsRow"></div>
 
-  <div class="live-grid">
-    <div class="live-card">
-      <div class="live-title"><div class="dot"></div>账户余额</div>
+  <div class="main-grid">
+    <!-- 左列: 账户 + 持仓 -->
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>账户余额</div>
       <div id="balanceContent"><div class="no-data">加载中...</div></div>
     </div>
-    <div class="live-card">
-      <div class="live-title"><div class="dot"></div>当前持仓</div>
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>当前持仓</div>
       <div id="positionsContent"><div class="no-data">加载中...</div></div>
     </div>
-  </div>
 
-  <div class="chart-section">
-    <div class="section-header">
-      <div class="section-title">EQUITY CURVE</div>
-      <div class="section-badge" id="chartBadge">USDT</div>
+    <!-- 资金曲线 -->
+    <div class="card full-width">
+      <div class="card-title">EQUITY CURVE<span style="margin-left:auto;font-size:0.9em;color:var(--t2)" id="chartBadge">USDT</span></div>
+      <canvas id="equityChart" height="70"></canvas>
     </div>
-    <canvas id="equityChart" height="80"></canvas>
-  </div>
 
-  <div class="chart-section">
-    <div class="section-header">
-      <div class="section-title">TRADE P&L</div>
-      <div class="section-badge">PER TRADE</div>
+    <!-- 盈亏柱状图 -->
+    <div class="card full-width">
+      <div class="card-title">TRADE P&L<span style="margin-left:auto;font-size:0.9em;color:var(--t2)">PER TRADE</span></div>
+      <canvas id="pnlChart" height="50"></canvas>
     </div>
-    <canvas id="pnlChart" height="60"></canvas>
-  </div>
 
-  <div class="trades-section">
-    <div class="section-header">
-      <div class="section-title">TRADE HISTORY</div>
-      <div class="section-badge" id="tradeCount"></div>
+    <!-- 交易记录 -->
+    <div class="card full-width">
+      <div class="card-title">TRADE HISTORY<span style="margin-left:auto;font-size:0.9em;color:var(--t2)" id="tradeCount"></span></div>
+      <table>
+        <thead><tr><th>时间</th><th>币种</th><th>方向</th><th>开仓价</th><th>平仓价</th><th>数量</th><th>结果</th><th>盈亏</th></tr></thead>
+        <tbody id="tradesBody"></tbody>
+      </table>
     </div>
-    <table>
-      <thead>
-        <tr><th>时间</th><th>币种</th><th>方向</th><th>开仓价</th><th>平仓价</th><th>数量</th><th>结果</th><th>盈亏</th></tr>
-      </thead>
-      <tbody id="tradesBody"></tbody>
-    </table>
   </div>
-
 </div>
 
 <div class="footer" id="footer"></div>
@@ -430,12 +160,11 @@ const winTrades = TRADES.filter(t => t.pnl > 0).length;
 const winRate = TRADES.length > 0 ? (winTrades / TRADES.length * 100) : 0;
 const bestTrade = Math.max(...TRADES.map(t => t.pnl));
 const worstTrade = Math.min(...TRADES.map(t => t.pnl));
-const avgPnl = TRADES.length > 0 ? totalPnl / TRADES.length : 0;
 const roi = ((currentBalance - INITIAL_CAPITAL) / INITIAL_CAPITAL * 100);
-const lastUpdate = "2026-06-21 00:50";
+const lastUpdate = "2026-06-21 01:02";
 
 // 统计卡片
-const statsHtml = [
+const stats = [
   { label: "初始资金", value: INITIAL_CAPITAL.toFixed(2), cls: "cyan" },
   { label: "外部投资", value: totalInvestment.toFixed(2), cls: "gold" },
   { label: "当前余额", value: currentBalance.toFixed(2), cls: totalPnl >= 0 ? "green" : "red" },
@@ -444,23 +173,20 @@ const statsHtml = [
   { label: "胜率", value: winRate.toFixed(0) + "%", cls: winRate >= 50 ? "green" : "red" },
   { label: "最佳单", value: "+" + bestTrade.toFixed(2), cls: "green" },
   { label: "最差单", value: worstTrade.toFixed(2), cls: "red" },
-].map(s => `<div class="stat-card"><div class="label">${s.label}</div><div class="value ${s.cls}">${s.value}</div></div>`).join("");
-document.getElementById("statsRow").innerHTML = statsHtml;
-
-// 投资人卡片
-const invHtml = INVESTMENTS.map(inv =>
-  `<div class="investor-card">
-    <div class="inv-name">${inv.name}</div>
-    <div class="inv-amount">${inv.amount.toFixed(2)} USDT</div>
-    <div class="inv-label">${inv.time}</div>
-  </div>`
+];
+document.getElementById("statsRow").innerHTML = stats.map(s =>
+  `<div class="stat-card"><div class="label">${s.label}</div><div class="value ${s.cls}">${s.value}</div></div>`
 ).join("");
-document.getElementById("investorsRow").innerHTML = invHtml;
 
-// 交易表格
+// 投资人
+document.getElementById("investorsRow").innerHTML = INVESTMENTS.map(inv =>
+  `<div class="investor-card"><div class="inv-name">${inv.name}</div><div class="inv-amount">${inv.amount.toFixed(2)} USDT</div><div class="inv-label">${inv.time}</div></div>`
+).join("");
+
+// 交易表格 - 最新在上
 document.getElementById("tradeCount").textContent = TRADES.length + " TRADES";
 const tbody = document.getElementById("tradesBody");
-TRADES.forEach(t => {
+[...TRADES].reverse().forEach(t => {
   const sideCls = t.side === "long" ? "long" : "short";
   const sideText = t.side === "long" ? "LONG" : "SHORT";
   const resultCls = t.result === "tp" ? "tp" : "sl";
@@ -476,123 +202,53 @@ TRADES.forEach(t => {
   </tr>`;
 });
 
-// 资金曲线 - 按时间顺序：EPIC → HEI → 虫洞投资 → ETH
+// 资金曲线
 const equityLabels = ["START"];
 const equityData = [INITIAL_CAPITAL];
-const pointBgColors = ["#22d3ee"];
-const pointRadii = [5];
+const pointBg = ["#22d3ee"];
+const pointR = [5];
 let running = INITIAL_CAPITAL;
-
-const INVEST_AFTER = 2; // 第2单之后插入投资
+const INVEST_AFTER = 2;
 
 TRADES.forEach((t, i) => {
   equityLabels.push("#" + (i+1) + " " + t.symbol);
   running += t.pnl;
   equityData.push(parseFloat(running.toFixed(2)));
-  pointBgColors.push(t.pnl >= 0 ? "#22d3ee" : "#ff3b3b");
-  pointRadii.push(5);
-  // 检查这单之后是否有投资
+  pointBg.push(t.pnl >= 0 ? "#22d3ee" : "#ff3b3b");
+  pointR.push(5);
   const inv = INVESTMENTS.find((_, idx) => idx === 0 && i + 1 === INVEST_AFTER);
   if (inv) {
     running += inv.amount;
     equityLabels.push("💰 " + inv.name + " +" + inv.amount + "U");
     equityData.push(parseFloat(running.toFixed(2)));
-    pointBgColors.push("#f5a623");
-    pointRadii.push(9);
+    pointBg.push("#f5a623");
+    pointR.push(9);
   }
 });
 equityLabels.push("NOW");
-equityData.push(parseFloat(currentBalance.toFixed(2)));
-pointBgColors.push("#22d3ee");
-pointRadii.push(5);
+equityData.push(currentBalance);
+pointBg.push("#22d3ee");
+pointR.push(5);
 
 // 盈亏柱状图
-const pnlLabels = TRADES.map(t => "#" + (TRADES.indexOf(t)+1) + " " + t.symbol);
+const pnlLabels = TRADES.map((t, i) => "#" + (i+1) + " " + t.symbol);
 const pnlValues = TRADES.map(t => t.pnl);
 const pnlColors = pnlValues.map(v => v >= 0 ? "rgba(0,230,118,0.7)" : "rgba(255,59,59,0.7)");
 const pnlBorders = pnlValues.map(v => v >= 0 ? "#00e676" : "#ff3b3b");
 
-const commonOpts = {
-  responsive: true,
-  plugins: {
-    legend: { display: false },
-    tooltip: {
-      backgroundColor: "#1a1a2e", titleColor: "#e8e8ec", bodyColor: "#888",
-      borderColor: "#2a2a3e", borderWidth: 1, cornerRadius: 6, padding: 12,
-      titleFont: { family: "'JetBrains Mono', monospace", weight: "600" },
-      bodyFont: { family: "'JetBrains Mono', monospace" },
-    }
-  },
-  scales: {
-    x: {
-      grid: { color: "rgba(255,255,255,0.03)", drawBorder: false },
-      ticks: { color: "#44445a", font: { family: "'JetBrains Mono', monospace", size: 10 } }
-    },
-    y: {
-      grid: { color: "rgba(255,255,255,0.03)", drawBorder: false },
-      ticks: { color: "#44445a", font: { family: "'JetBrains Mono', monospace", size: 10 }, callback: v => v.toFixed(2) }
-    }
-  }
-};
+const font = { family: "'JetBrains Mono', monospace" };
+const tipStyle = { backgroundColor:"#1a1a2e", titleColor:"#e8e8ec", bodyColor:"#888", borderColor:"#2a2a3e", borderWidth:1, cornerRadius:6, padding:10, titleFont:{...font,weight:"600"}, bodyFont:font };
+const gridX = { grid:{color:"rgba(255,255,255,0.03)",drawBorder:false}, ticks:{color:"#44445a",font:{...font,size:10}} };
+const gridY = { grid:{color:"rgba(255,255,255,0.03)",drawBorder:false}, ticks:{color:"#44445a",font:{...font,size:10},callback:v=>v.toFixed(2)} };
 
 new Chart(document.getElementById("equityChart"), {
-  type: "line",
-  data: {
-    labels: equityLabels,
-    datasets: [{
-      data: equityData,
-      borderColor: "#22d3ee",
-      backgroundColor: "rgba(34,211,238,0.04)",
-      borderWidth: 2,
-      pointBackgroundColor: pointBgColors,
-      pointBorderColor: "transparent",
-      pointRadius: pointRadii,
-      pointHoverRadius: 8,
-      fill: true,
-      tension: 0.3,
-    }]
-  },
-  options: {
-    ...commonOpts,
-    plugins: {
-      ...commonOpts.plugins,
-      tooltip: {
-        ...commonOpts.plugins.tooltip,
-        callbacks: {
-          label: ctx => ctx.parsed.y.toFixed(2) + " USDT"
-        }
-      }
-    }
-  }
+  type:"line", data:{ labels:equityLabels, datasets:[{ data:equityData, borderColor:"#22d3ee", backgroundColor:"rgba(34,211,238,0.04)", borderWidth:2, pointBackgroundColor:pointBg, pointBorderColor:"transparent", pointRadius:pointR, pointHoverRadius:8, fill:true, tension:0.3 }] },
+  options:{ responsive:true, plugins:{legend:{display:false},tooltip:{...tipStyle,callbacks:{label:ctx=>ctx.parsed.y.toFixed(2)+" USDT"}}}, scales:{x:gridX,y:gridY} }
 });
 
 new Chart(document.getElementById("pnlChart"), {
-  type: "bar",
-  data: {
-    labels: pnlLabels,
-    datasets: [{
-      data: pnlValues,
-      backgroundColor: pnlColors,
-      borderColor: pnlBorders,
-      borderWidth: 1,
-      borderRadius: 4,
-      borderSkipped: false
-    }]
-  },
-  options: {
-    ...commonOpts,
-    plugins: {
-      ...commonOpts.plugins,
-      tooltip: {
-        ...commonOpts.plugins.tooltip,
-        callbacks: { label: ctx => (ctx.parsed.y >= 0 ? "+" : "") + ctx.parsed.y.toFixed(2) + " USDT" }
-      }
-    },
-    scales: {
-      ...commonOpts.scales,
-      y: { ...commonOpts.scales.y, beginAtZero: true }
-    }
-  }
+  type:"bar", data:{ labels:pnlLabels, datasets:[{ data:pnlValues, backgroundColor:pnlColors, borderColor:pnlBorders, borderWidth:1, borderRadius:4, borderSkipped:false }] },
+  options:{ responsive:true, plugins:{legend:{display:false},tooltip:{...tipStyle,callbacks:{label:ctx=>(ctx.parsed.y>=0?"+":"")+ctx.parsed.y.toFixed(2)+" USDT"}}}, scales:{x:gridX,y:{...gridY,beginAtZero:true}} }
 });
 
 document.getElementById("footer").textContent = "RUBEN AI · BYBIT USDT PERP · LAST UPDATE: " + lastUpdate;
@@ -601,52 +257,26 @@ document.getElementById("footer").textContent = "RUBEN AI · BYBIT USDT PERP · 
 async function loadLiveData() {
   const balEl = document.getElementById('balanceContent');
   const posEl = document.getElementById('positionsContent');
-
   let data = null;
 
-  // Try API function first
   try {
-    const resp = await fetch('/api/bybit?t=' + Date.now(), { signal: AbortSignal.timeout(8000) });
-    if (resp.ok) {
-      const d = await resp.json();
-      if (!d.error) data = d;
-    }
-  } catch (e) {
-    console.log('API function failed, trying data.json fallback');
-  }
-
-  // Fallback to data.json
-  if (!data) {
-    try {
-      const resp = await fetch('data.json?t=' + Date.now());
-      if (resp.ok) data = await resp.json();
-    } catch (e) {
-      console.log('data.json fallback also failed');
-    }
-  }
+    const r = await fetch('/api/bybit?t=' + Date.now(), { signal: AbortSignal.timeout(8000) });
+    if (r.ok) { const d = await r.json(); if (!d.error) data = d; }
+  } catch(e) {}
 
   if (!data) {
-    balEl.innerHTML = '<div class="no-data">数据加载中...</div>';
-    posEl.innerHTML = '<div class="no-data">请稍候</div>';
-    return;
+    try { const r = await fetch('data.json?t=' + Date.now()); if (r.ok) data = await r.json(); } catch(e) {}
   }
 
-  // 余额
+  if (!data) { balEl.innerHTML = '<div class="no-data">数据加载中...</div>'; return; }
+
   if (data.equity) {
     balEl.innerHTML = `
-      <div class="balance-row">
-        <span class="balance-label">权益</span>
-        <span class="balance-value">${data.equity.toFixed(4)} USDT</span>
-      </div>
-      <div class="balance-row">
-        <span class="balance-label">钱包余额</span>
-        <span class="balance-sub">${data.wallet.toFixed(4)} USDT</span>
-      </div>
-      <div class="update-time">${new Date(data.updated_at).toLocaleString('zh-CN')}</div>
-    `;
+      <div class="balance-row"><span class="balance-label">权益</span><span class="balance-value">${data.equity.toFixed(4)} USDT</span></div>
+      <div class="balance-row"><span class="balance-label">钱包余额</span><span class="balance-sub">${data.wallet.toFixed(4)} USDT</span></div>
+      <div class="update-time">${new Date(data.updated_at).toLocaleString('zh-CN')}</div>`;
   }
 
-  // 持仓
   if (data.positions && data.positions.length > 0) {
     posEl.innerHTML = data.positions.map(p => {
       const pnl = parseFloat(p.unrealisedPnl);
@@ -654,32 +284,16 @@ async function loadLiveData() {
       const pnlText = (pnl >= 0 ? '+' : '') + pnl.toFixed(4) + ' U';
       const sideText = p.side === 'Buy' ? 'LONG' : 'SHORT';
       const sideCls = p.side === 'Buy' ? 'long' : 'short';
-      return `
-        <div class="pos-card">
-          <div class="pos-header">
-            <span class="pos-symbol">${p.symbol}</span>
-            <span class="badge ${sideCls}">${sideText}</span>
-          </div>
-          <div class="pos-details">
-            <div><span>数量</span> ${p.size}</div>
-            <div><span>均价</span> ${p.avgPrice}</div>
-            <div><span>止盈</span> ${p.takeProfit}</div>
-            <div><span>止损</span> ${p.stopLoss}</div>
-            <div><span>杠杆</span> ${p.leverage}x</div>
-            <div><span>强平</span> ${p.liqPrice}</div>
-          </div>
-          <div class="balance-row" style="margin-top:10px;margin-bottom:0">
-            <span class="balance-label">浮动盈亏</span>
-            <span class="pos-pnl ${pnlCls}">${pnlText}</span>
-          </div>
-        </div>
-      `;
+      return `<div class="pos-card">
+        <div class="pos-header"><span class="pos-symbol">${p.symbol}</span><span class="badge ${sideCls}">${sideText}</span></div>
+        <div class="pos-details"><div><span>数量</span> ${p.size}</div><div><span>均价</span> ${p.avgPrice}</div><div><span>止盈</span> ${p.takeProfit}</div><div><span>止损</span> ${p.stopLoss}</div><div><span>杠杆</span> ${p.leverage}x</div><div><span>强平</span> ${p.liqPrice}</div></div>
+        <div class="balance-row" style="margin-top:8px;margin-bottom:0"><span class="balance-label">浮动盈亏</span><span class="pos-pnl ${pnlCls}">${pnlText}</span></div>
+      </div>`;
     }).join('');
   } else {
     posEl.innerHTML = '<div class="no-data">无持仓</div>';
   }
 }
-
 loadLiveData();
 setInterval(loadLiveData, 30000);
 </script>
