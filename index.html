@@ -419,6 +419,7 @@ const TRADES = [
   { time: "06-20 15:10", symbol: "EPICUSDT",  side: "long", entry: 0.4257, exit: 0.4408, qty: 148, result: "tp", pnl: 2.23 },
   { time: "06-20 15:33", symbol: "HEIUSDT",   side: "long", entry: 0.1018, exit: 0.1068, qty: 401, result: "tp", pnl: 1.81 },
   { time: "06-20 22:32", symbol: "ETHUSDT",   side: "long", entry: 1713.59, exit: 1735.09, qty: 0.02, result: "tp", pnl: 0.43 },
+  { time: "06-21 00:30", symbol: "AXSUSDT",   side: "long", entry: 1.141, exit: 1.166, qty: 30, result: "tp", pnl: 0.75 },
 ];
 // ==========================
 
@@ -431,7 +432,7 @@ const bestTrade = Math.max(...TRADES.map(t => t.pnl));
 const worstTrade = Math.min(...TRADES.map(t => t.pnl));
 const avgPnl = TRADES.length > 0 ? totalPnl / TRADES.length : 0;
 const roi = ((currentBalance - INITIAL_CAPITAL) / INITIAL_CAPITAL * 100);
-const lastUpdate = "2026-06-20 23:19";
+const lastUpdate = "2026-06-21 00:50";
 
 // 统计卡片
 const statsHtml = [
