@@ -25,7 +25,6 @@
   }
   @keyframes shimmer { 0%,100%{background-position:0%} 50%{background-position:100%} }
   .header .subtitle { color: #888; margin-top: 8px; font-size: 0.95em; }
-
   .stats-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 24px 0; }
   .stat-card {
     background: rgba(255,255,255,0.06);
@@ -43,7 +42,6 @@
   .stat-card .value.green { color: #00e676; }
   .stat-card .value.red { color: #ff5252; }
   .stat-card .value.blue { color: #40c4ff; }
-
   .chart-container {
     background: rgba(255,255,255,0.04);
     backdrop-filter: blur(12px);
@@ -54,7 +52,6 @@
     max-width: 900px;
   }
   .chart-container h2 { font-size: 1.1em; color: #aaa; margin-bottom: 16px; font-weight: 500; }
-
   .trades-table {
     background: rgba(255,255,255,0.04);
     backdrop-filter: blur(12px);
@@ -77,7 +74,6 @@
   .badge.sl { background: rgba(255,82,82,0.2); color: #ff5252; }
   .pnl-pos { color: #00e676; font-weight: 600; }
   .pnl-neg { color: #ff5252; font-weight: 600; }
-
   .footer { text-align: center; color: #555; padding: 30px 0; font-size: 0.8em; }
   @media (max-width: 600px) {
     .stats-row { flex-direction: column; align-items: center; }
@@ -87,34 +83,12 @@
 </style>
 </head>
 <body>
-
 <div class="header">
   <h1>Ruben AI 交易仪表盘</h1>
   <div class="subtitle">Bybit USDT 永续合约 · AI 子账户</div>
 </div>
 
-<div class="stats-row">
-  <div class="stat-card">
-    <div class="label">初始资金</div>
-    <div class="value blue">7.00 U</div>
-  </div>
-  <div class="stat-card">
-    <div class="label">当前余额</div>
-    <div class="value green" id="currentBalance">11.04 U</div>
-  </div>
-  <div class="stat-card">
-    <div class="label">累计盈亏</div>
-    <div class="value green" id="totalPnl">+4.04 U</div>
-  </div>
-  <div class="stat-card">
-    <div class="label">胜率</div>
-    <div class="value green">100%</div>
-  </div>
-  <div class="stat-card">
-    <div class="label">总交易次数</div>
-    <div class="value blue">2</div>
-  </div>
-</div>
+<div class="stats-row" id="statsRow"></div>
 
 <div class="chart-container">
   <h2>资金曲线</h2>
@@ -130,128 +104,115 @@
   <h2>交易记录</h2>
   <table>
     <thead>
-      <tr>
-        <th>时间</th>
-        <th>币种</th>
-        <th>方向</th>
-        <th>开仓价</th>
-        <th>平仓价</th>
-        <th>数量</th>
-        <th>结果</th>
-        <th>盈亏</th>
-      </tr>
+      <tr><th>时间</th><th>币种</th><th>方向</th><th>开仓价</th><th>平仓价</th><th>数量</th><th>结果</th><th>盈亏</th></tr>
     </thead>
-    <tbody>
-      <tr>
-        <td>06-20 15:10</td>
-        <td>EPICUSDT</td>
-        <td><span class="badge long">做多</span></td>
-        <td>0.4257</td>
-        <td>0.4408</td>
-        <td>148</td>
-        <td><span class="badge tp">止盈</span></td>
-        <td class="pnl-pos">+2.23 U</td>
-      </tr>
-      <tr>
-        <td>06-20 15:33</td>
-        <td>HEIUSDT</td>
-        <td><span class="badge long">做多</span></td>
-        <td>0.1018</td>
-        <td>0.1068</td>
-        <td>401</td>
-        <td><span class="badge tp">止盈</span></td>
-        <td class="pnl-pos">+1.81 U</td>
-      </tr>
-    </tbody>
+    <tbody id="tradesBody"></tbody>
   </table>
 </div>
 
-<div class="footer">
-  Ruben AI · 最后更新: 2026-06-20 18:05
-</div>
+<div class="footer" id="footer"></div>
 
 <script>
-const equityData = {
-  labels: ['起始', '第1单 (EPIC)', '第2单 (HEI)', '当前'],
-  datasets: [{
-    label: '资金 (USDT)',
-    data: [7.00, 9.23, 11.04, 11.04],
-    borderColor: '#00d2ff',
-    backgroundColor: 'rgba(0, 210, 255, 0.08)',
-    borderWidth: 3,
-    pointBackgroundColor: '#00d2ff',
-    pointBorderColor: '#fff',
-    pointBorderWidth: 2,
-    pointRadius: 6,
-    pointHoverRadius: 8,
-    fill: true,
-    tension: 0.35,
-  }]
-};
+// ========== 交易数据，每次新增一条即可 ==========
+const INITIAL_CAPITAL = 7.00;
+const TRADES = [
+  { time: "06-20 15:10", symbol: "EPICUSDT",  side: "long", entry: 0.4257, exit: 0.4408, qty: 148, result: "tp", pnl: 2.23 },
+  { time: "06-20 15:33", symbol: "HEIUSDT",   side: "long", entry: 0.1018, exit: 0.1068, qty: 401, result: "tp", pnl: 1.81 },
+];
+// =================================================
 
-const pnlData = {
-  labels: ['EPICUSDT 做多', 'HEIUSDT 做多'],
-  datasets: [{
-    label: '盈亏 (USDT)',
-    data: [2.23, 1.81],
-    backgroundColor: ['rgba(0,230,118,0.6)', 'rgba(0,230,118,0.6)'],
-    borderColor: ['#00e676', '#00e676'],
-    borderWidth: 2,
-    borderRadius: 8,
-    borderSkipped: false,
-  }]
-};
+// 计算统计
+const totalPnl = TRADES.reduce((s, t) => s + t.pnl, 0);
+const currentBalance = INITIAL_CAPITAL + totalPnl;
+const winTrades = TRADES.filter(t => t.pnl > 0).length;
+const winRate = TRADES.length > 0 ? (winTrades / TRADES.length * 100) : 0;
+const lastUpdate = "2026-06-20 18:17";
 
-const commonOptions = {
+// 渲染统计卡片
+const statsHtml = [
+  { label: "初始资金", value: INITIAL_CAPITAL.toFixed(2) + " U", cls: "blue" },
+  { label: "当前余额", value: currentBalance.toFixed(2) + " U", cls: totalPnl >= 0 ? "green" : "red" },
+  { label: "累计盈亏", value: (totalPnl >= 0 ? "+" : "") + totalPnl.toFixed(2) + " U", cls: totalPnl >= 0 ? "green" : "red" },
+  { label: "胜率", value: winRate.toFixed(0) + "%", cls: winRate >= 50 ? "green" : "red" },
+  { label: "总交易次数", value: String(TRADES.length), cls: "blue" },
+].map(s => `<div class="stat-card"><div class="label">${s.label}</div><div class="value ${s.cls}">${s.value}</div></div>`).join("");
+document.getElementById("statsRow").innerHTML = statsHtml;
+
+// 渲染交易记录表
+const tbody = document.getElementById("tradesBody");
+TRADES.forEach(t => {
+  const sideCls = t.side === "long" ? "long" : "short";
+  const sideText = t.side === "long" ? "做多" : "做空";
+  const resultCls = t.result === "tp" ? "tp" : "sl";
+  const resultText = t.result === "tp" ? "止盈" : "止损";
+  const pnlCls = t.pnl >= 0 ? "pnl-pos" : "pnl-neg";
+  const pnlText = (t.pnl >= 0 ? "+" : "") + t.pnl.toFixed(2) + " U";
+  tbody.innerHTML += `<tr>
+    <td>${t.time}</td><td>${t.symbol}</td>
+    <td><span class="badge ${sideCls}">${sideText}</span></td>
+    <td>${t.entry}</td><td>${t.exit}</td><td>${t.qty}</td>
+    <td><span class="badge ${resultCls}">${resultText}</span></td>
+    <td class="${pnlCls}">${pnlText}</td>
+  </tr>`;
+});
+
+// 资金曲线数据
+const equityLabels = ["起始"];
+const equityData = [INITIAL_CAPITAL];
+let running = INITIAL_CAPITAL;
+TRADES.forEach((t, i) => {
+  equityLabels.push(`第${i + 1}单 (${t.symbol})`);
+  running += t.pnl;
+  equityData.push(parseFloat(running.toFixed(2)));
+});
+equityLabels.push("当前");
+equityData.push(parseFloat(currentBalance.toFixed(2)));
+
+// 盈亏柱状图数据
+const pnlLabels = TRADES.map(t => t.symbol + (t.side === "long" ? " 做多" : " 做空"));
+const pnlValues = TRADES.map(t => t.pnl);
+const pnlColors = pnlValues.map(v => v >= 0 ? "rgba(0,230,118,0.6)" : "rgba(255,82,82,0.6)");
+const pnlBorders = pnlValues.map(v => v >= 0 ? "#00e676" : "#ff5252");
+
+const commonOpts = {
   responsive: true,
   plugins: {
     legend: { display: false },
     tooltip: {
-      backgroundColor: 'rgba(30,30,60,0.95)',
-      titleColor: '#fff',
-      bodyColor: '#ccc',
-      borderColor: 'rgba(255,255,255,0.1)',
-      borderWidth: 1,
-      cornerRadius: 10,
-      padding: 12,
+      backgroundColor: "rgba(30,30,60,0.95)", titleColor: "#fff", bodyColor: "#ccc",
+      borderColor: "rgba(255,255,255,0.1)", borderWidth: 1, cornerRadius: 10, padding: 12,
     }
   },
   scales: {
-    x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#888' } },
-    y: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#888', callback: v => v.toFixed(2) + ' U' } }
+    x: { grid: { color: "rgba(255,255,255,0.04)" }, ticks: { color: "#888" } },
+    y: { grid: { color: "rgba(255,255,255,0.06)" }, ticks: { color: "#888", callback: v => v.toFixed(2) + " U" } }
   }
 };
 
-new Chart(document.getElementById('equityChart'), {
-  type: 'line',
-  data: equityData,
-  options: {
-    ...commonOptions,
-    plugins: {
-      ...commonOptions.plugins,
-      tooltip: {
-        ...commonOptions.plugins.tooltip,
-        callbacks: { label: ctx => '资金: ' + ctx.parsed.y.toFixed(2) + ' USDT' }
-      }
-    }
-  }
+new Chart(document.getElementById("equityChart"), {
+  type: "line",
+  data: {
+    labels: equityLabels,
+    datasets: [{
+      label: "资金 (USDT)", data: equityData,
+      borderColor: "#00d2ff", backgroundColor: "rgba(0,210,255,0.08)",
+      borderWidth: 3, pointBackgroundColor: "#00d2ff", pointBorderColor: "#fff",
+      pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8, fill: true, tension: 0.35,
+    }]
+  },
+  options: { ...commonOpts, plugins: { ...commonOpts.plugins, tooltip: { ...commonOpts.plugins.tooltip, callbacks: { label: ctx => "资金: " + ctx.parsed.y.toFixed(2) + " USDT" } } } }
 });
 
-new Chart(document.getElementById('pnlChart'), {
-  type: 'bar',
-  data: pnlData,
-  options: {
-    ...commonOptions,
-    plugins: {
-      ...commonOptions.plugins,
-      tooltip: {
-        ...commonOptions.plugins.tooltip,
-        callbacks: { label: ctx => '+' + ctx.parsed.y.toFixed(2) + ' USDT' }
-      }
-    },
-    scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, beginAtZero: true } }
-  }
+new Chart(document.getElementById("pnlChart"), {
+  type: "bar",
+  data: {
+    labels: pnlLabels,
+    datasets: [{ label: "盈亏 (USDT)", data: pnlValues, backgroundColor: pnlColors, borderColor: pnlBorders, borderWidth: 2, borderRadius: 8, borderSkipped: false }]
+  },
+  options: { ...commonOpts, plugins: { ...commonOpts.plugins, tooltip: { ...commonOpts.plugins.tooltip, callbacks: { label: ctx => (ctx.parsed.y >= 0 ? "+" : "") + ctx.parsed.y.toFixed(2) + " USDT" } } }, scales: { ...commonOpts.scales, y: { ...commonOpts.scales.y, beginAtZero: true } } }
 });
+
+document.getElementById("footer").textContent = "Ruben AI · 最后更新: " + lastUpdate;
 </script>
 </body>
 </html>
