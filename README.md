@@ -2,7 +2,7 @@
 
 这是一个由Openclaw管理的bybit虚拟货币交易的统计记录仪表盘记录每一笔交易的盈亏情况。
 
-📊 **[点击查看交易仪表盘](https://doulor.github.io/bybit-ai-trading/)**
+📊 **[点击查看交易仪表盘](https://bybit.doulor.cn/)**
 
 ## 交易统计
 
