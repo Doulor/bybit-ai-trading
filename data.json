@@ -1,17 +1,17 @@
 {
-  "wallet": 13.4173418,
-  "equity": 13.6917418,
+  "wallet": 13.45494216,
+  "equity": 13.60334216,
   "positions": [
     {
       "symbol": "AXSUSDT",
       "side": "Buy",
       "size": "30",
       "avgPrice": "1.14105333",
-      "unrealisedPnl": "0.2894",
+      "unrealisedPnl": "0.1514",
       "takeProfit": "1.165",
       "stopLoss": "1.11",
       "leverage": "10",
-      "liqPrice": "0.71206904"
+      "liqPrice": "0.71071337"
     }
   ],
   "open_orders": [
@@ -94,5 +94,5 @@
       "createdTime": "1781939409509"
     }
   ],
-  "updated_at": 1781971143238
+  "updated_at": 1781971334247
 }
