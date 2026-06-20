@@ -599,9 +599,10 @@ document.getElementById("footer").textContent = "RUBEN AI · BYBIT USDT PERP · 
 // ========== 实时数据 ==========
 async function loadLiveData() {
   try {
-    const resp = await fetch('data.json?t=' + Date.now());
+    const resp = await fetch('/api/bybit?t=' + Date.now());
     if (!resp.ok) return;
     const data = await resp.json();
+    if (data.error) { console.log('API error:', data.error); return; }
 
     // 余额
     const balEl = document.getElementById('balanceContent');
