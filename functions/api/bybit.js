@@ -1,6 +1,6 @@
 // Cloudflare Pages Function: /api/bybit
 // Fetches live account data from Bybit using RSA signing
-// Environment variables: BYBIT_API_KEY, BYBIT_PRIVATE_KEY (full PEM)
+// Env vars: BYBIT_API_KEY, BYBIT_PRIVATE_KEY (full PEM content)
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -9,7 +9,6 @@ const CORS = {
 };
 
 function pemToDer(pem) {
-  // Handle both literal \n and actual newlines
   const cleaned = pem
     .replace(/\\n/g, '\n')
     .replace(/-----BEGIN PRIVATE KEY-----/, '')
@@ -32,36 +31,41 @@ async function signRS256(data, privateKeyPem) {
   return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function bybitGet(path, params, apiKey, privateKey) {
+async function bybitSignedGet(endpoint, queryStr, apiKey, privateKey) {
   const ts = Date.now().toString();
-  const qs = new URLSearchParams(params).toString();
-  const signStr = ts + apiKey + '5000' + path + qs;
-  const signature = await signRS256(signStr, privateKey);
+  const recvWindow = '5000';
+  const signPayload = ts + apiKey + recvWindow + endpoint + queryStr;
+  const signature = await signRS256(signPayload, privateKey);
+  const fullUrl = 'https://api.bybit.com' + endpoint + '?' + queryStr;
 
-  const url = 'https://api.bybit.com' + path + '?' + qs;
-  const resp = await fetch(url, {
+  const resp = await fetch(fullUrl, {
     headers: {
       'X-BAPI-API-KEY': apiKey,
       'X-BAPI-TIMESTAMP': ts,
-      'X-BAPI-RECV-WINDOW': '5000',
+      'X-BAPI-RECV-WINDOW': recvWindow,
       'X-BAPI-SIGN': signature,
     },
   });
-  return resp.json();
+  const json = await resp.json();
+  return { json, signPayload, fullUrl };
 }
 
 export async function onRequestGet(context) {
   const { BYBIT_API_KEY, BYBIT_PRIVATE_KEY } = context.env;
   if (!BYBIT_API_KEY || !BYBIT_PRIVATE_KEY) {
-    return Response.json({ error: 'Missing API credentials' }, { status: 500, headers: CORS });
+    return Response.json({ error: 'Missing BYBIT_API_KEY or BYBIT_PRIVATE_KEY env vars' }, { status: 500, headers: CORS });
   }
 
   try {
-    const [bal, pos, orders] = await Promise.all([
-      bybitGet('/v5/account/wallet-balance', { accountType: 'UNIFIED', coin: 'USDT' }, BYBIT_API_KEY, BYBIT_PRIVATE_KEY),
-      bybitGet('/v5/position/list', { category: 'linear', settleCoin: 'USDT' }, BYBIT_API_KEY, BYBIT_PRIVATE_KEY),
-      bybitGet('/v5/order/realtime', { category: 'linear', settleCoin: 'USDT' }, BYBIT_API_KEY, BYBIT_PRIVATE_KEY),
+    const [balRes, posRes, ordRes] = await Promise.all([
+      bybitSignedGet('/v5/account/wallet-balance', 'accountType=UNIFIED&coin=USDT', BYBIT_API_KEY, BYBIT_PRIVATE_KEY),
+      bybitSignedGet('/v5/position/list', 'category=linear&settleCoin=USDT', BYBIT_API_KEY, BYBIT_PRIVATE_KEY),
+      bybitSignedGet('/v5/order/realtime', 'category=linear&settleCoin=USDT', BYBIT_API_KEY, BYBIT_PRIVATE_KEY),
     ]);
+
+    const bal = balRes.json;
+    const pos = posRes.json;
+    const orders = ordRes.json;
 
     // Extract USDT balance
     let wallet = 0, equity = 0;
@@ -113,11 +117,17 @@ export async function onRequestGet(context) {
     return Response.json({
       wallet, equity, positions, openOrders,
       updated_at: Date.now(),
-      _debug: { balCode: bal.retCode, balMsg: bal.retMsg, posCode: pos.retCode },
+      _debug: {
+        balCode: bal.retCode,
+        balMsg: bal.retMsg,
+        signPayload: balRes.signPayload,
+        url: balRes.fullUrl,
+        keyPrefix: BYBIT_API_KEY.substring(0, 6),
+      },
     }, { headers: CORS });
 
   } catch (e) {
-    return Response.json({ error: e.message }, { status: 500, headers: CORS });
+    return Response.json({ error: e.message, stack: e.stack }, { status: 500, headers: CORS });
   }
 }
 
