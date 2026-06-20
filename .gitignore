@@ -6,4 +6,6 @@
 !index.html
 !README.md
 !data.json
+!functions/
+!functions/**
 
