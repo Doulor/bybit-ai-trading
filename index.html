@@ -128,7 +128,7 @@ const totalPnl = TRADES.reduce((s, t) => s + t.pnl, 0);
 const currentBalance = INITIAL_CAPITAL + EXTRA_INVESTMENT + totalPnl;
 const winTrades = TRADES.filter(t => t.pnl > 0).length;
 const winRate = TRADES.length > 0 ? (winTrades / TRADES.length * 100) : 0;
-const lastUpdate = "2026-06-20 23:02";
+const lastUpdate = "2026-06-20 23:16";
 
 // 渲染统计卡片
 const statsHtml = [
@@ -160,16 +160,36 @@ TRADES.forEach(t => {
 });
 
 // 资金曲线数据
+// 投资节点单独标记
+const INVESTMENTS = [
+  { afterTrade: 2, amount: 2.00, from: "虫洞" }, // 第2单之后
+];
+
 const equityLabels = ["起始"];
 const equityData = [INITIAL_CAPITAL];
+const pointBgColors = ["#00d2ff"];
+const pointRadii = [6];
 let running = INITIAL_CAPITAL;
 TRADES.forEach((t, i) => {
   equityLabels.push(`第${i + 1}单 (${t.symbol})`);
   running += t.pnl;
   equityData.push(parseFloat(running.toFixed(2)));
+  pointBgColors.push("#00d2ff");
+  pointRadii.push(6);
+  // 检查这单之后是否有投资
+  const inv = INVESTMENTS.find(iv => iv.afterTrade === i + 1);
+  if (inv) {
+    running += inv.amount;
+    equityLabels.push(`💰 ${inv.from}投资 +${inv.amount}U`);
+    equityData.push(parseFloat(running.toFixed(2)));
+    pointBgColors.push("#ffd740");
+    pointRadii.push(10);
+  }
 });
-equityLabels.push("当前 (含投资)");
+equityLabels.push("当前");
 equityData.push(parseFloat(currentBalance.toFixed(2)));
+pointBgColors.push("#00d2ff");
+pointRadii.push(6);
 
 // 盈亏柱状图数据
 const pnlLabels = TRADES.map(t => t.symbol + (t.side === "long" ? " 做多" : " 做空"));
@@ -199,8 +219,8 @@ new Chart(document.getElementById("equityChart"), {
     datasets: [{
       label: "资金 (USDT)", data: equityData,
       borderColor: "#00d2ff", backgroundColor: "rgba(0,210,255,0.08)",
-      borderWidth: 3, pointBackgroundColor: "#00d2ff", pointBorderColor: "#fff",
-      pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8, fill: true, tension: 0.35,
+      borderWidth: 3, pointBackgroundColor: pointBgColors, pointBorderColor: "#fff",
+      pointBorderWidth: 2, pointRadius: pointRadii, pointHoverRadius: 10, fill: true, tension: 0.35,
     }]
   },
   options: { ...commonOpts, plugins: { ...commonOpts.plugins, tooltip: { ...commonOpts.plugins.tooltip, callbacks: { label: ctx => "资金: " + ctx.parsed.y.toFixed(2) + " USDT" } } } }
