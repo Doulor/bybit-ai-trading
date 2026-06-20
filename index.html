@@ -228,7 +228,107 @@
     margin-top: 2px;
   }
 
-  /* Footer */
+  /* Live Data Section */
+  .live-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 700px) { .live-grid { grid-template-columns: 1fr; } }
+  .live-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .live-card .live-title {
+    font-size: 0.72em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .live-card .live-title .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  .balance-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .balance-label {
+    font-size: 0.78em;
+    color: var(--text-secondary);
+  }
+  .balance-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.4em;
+    font-weight: 700;
+    color: var(--cyan);
+  }
+  .balance-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    color: var(--text-muted);
+  }
+  .pos-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .pos-card:last-child { margin-bottom: 0; }
+  .pos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .pos-symbol {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 1em;
+    color: var(--text-primary);
+  }
+  .pos-pnl {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.95em;
+  }
+  .pos-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78em;
+    color: var(--text-secondary);
+  }
+  .pos-details span { color: var(--text-muted); }
+  .no-data {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 20px;
+  }
+  .update-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65em;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 8px;
+  }
+
   .footer {
     text-align: center;
     color: var(--text-muted);
@@ -264,6 +364,17 @@
   <div class="stats-row" id="statsRow"></div>
 
   <div class="investors-row" id="investorsRow"></div>
+
+  <div class="live-grid">
+    <div class="live-card">
+      <div class="live-title"><div class="dot"></div>账户余额</div>
+      <div id="balanceContent"><div class="no-data">加载中...</div></div>
+    </div>
+    <div class="live-card">
+      <div class="live-title"><div class="dot"></div>当前持仓</div>
+      <div id="positionsContent"><div class="no-data">加载中...</div></div>
+    </div>
+  </div>
 
   <div class="chart-section">
     <div class="section-header">
@@ -484,6 +595,71 @@ new Chart(document.getElementById("pnlChart"), {
 });
 
 document.getElementById("footer").textContent = "RUBEN AI · BYBIT USDT PERP · LAST UPDATE: " + lastUpdate;
+
+// ========== 实时数据 ==========
+async function loadLiveData() {
+  try {
+    const resp = await fetch('data.json?t=' + Date.now());
+    if (!resp.ok) return;
+    const data = await resp.json();
+
+    // 余额
+    const balEl = document.getElementById('balanceContent');
+    if (data.equity) {
+      const pnlColor = data.equity >= INITIAL_CAPITAL ? 'green' : 'red';
+      balEl.innerHTML = `
+        <div class="balance-row">
+          <span class="balance-label">权益</span>
+          <span class="balance-value">${data.equity.toFixed(4)} USDT</span>
+        </div>
+        <div class="balance-row">
+          <span class="balance-label">钱包余额</span>
+          <span class="balance-sub">${data.wallet.toFixed(4)} USDT</span>
+        </div>
+        <div class="update-time">${new Date(data.updated_at).toLocaleString('zh-CN')}</div>
+      `;
+    }
+
+    // 持仓
+    const posEl = document.getElementById('positionsContent');
+    if (data.positions && data.positions.length > 0) {
+      posEl.innerHTML = data.positions.map(p => {
+        const pnl = parseFloat(p.unrealisedPnl);
+        const pnlCls = pnl >= 0 ? 'pnl-pos' : 'pnl-neg';
+        const pnlText = (pnl >= 0 ? '+' : '') + pnl.toFixed(4) + ' U';
+        const sideText = p.side === 'Buy' ? 'LONG' : 'SHORT';
+        const sideCls = p.side === 'Buy' ? 'long' : 'short';
+        return `
+          <div class="pos-card">
+            <div class="pos-header">
+              <span class="pos-symbol">${p.symbol}</span>
+              <span class="badge ${sideCls}">${sideText}</span>
+            </div>
+            <div class="pos-details">
+              <div><span>数量</span> ${p.size}</div>
+              <div><span>均价</span> ${p.avgPrice}</div>
+              <div><span>止盈</span> ${p.takeProfit}</div>
+              <div><span>止损</span> ${p.stopLoss}</div>
+              <div><span>杠杆</span> ${p.leverage}x</div>
+              <div><span>强平</span> ${p.liqPrice}</div>
+            </div>
+            <div class="balance-row" style="margin-top:10px;margin-bottom:0">
+              <span class="balance-label">浮动盈亏</span>
+              <span class="pos-pnl ${pnlCls}">${pnlText}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } else {
+      posEl.innerHTML = '<div class="no-data">无持仓</div>';
+    }
+  } catch (e) {
+    console.log('Live data load failed:', e);
+  }
+}
+
+loadLiveData();
+setInterval(loadLiveData, 30000);
 </script>
 </body>
 </html>

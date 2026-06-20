@@ -1,0 +1,98 @@
+{
+  "wallet": 13.4173418,
+  "equity": 13.6917418,
+  "positions": [
+    {
+      "symbol": "AXSUSDT",
+      "side": "Buy",
+      "size": "30",
+      "avgPrice": "1.14105333",
+      "unrealisedPnl": "0.2894",
+      "takeProfit": "1.165",
+      "stopLoss": "1.11",
+      "leverage": "10",
+      "liqPrice": "0.71206904"
+    }
+  ],
+  "open_orders": [
+    {
+      "symbol": "AXSUSDT",
+      "side": "Sell",
+      "orderType": "Market",
+      "qty": "30",
+      "price": "0",
+      "stopLoss": "",
+      "takeProfit": "",
+      "orderStatus": "Untriggered"
+    },
+    {
+      "symbol": "AXSUSDT",
+      "side": "Sell",
+      "orderType": "Market",
+      "qty": "30",
+      "price": "0",
+      "stopLoss": "",
+      "takeProfit": "",
+      "orderStatus": "Untriggered"
+    }
+  ],
+  "recent_trades": [
+    {
+      "symbol": "AXSUSDT",
+      "side": "Buy",
+      "qty": "30",
+      "avgPrice": "1.14105333",
+      "status": "Filled",
+      "createdTime": "1781966863674"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "side": "Sell",
+      "qty": "0.02",
+      "avgPrice": "1735.09",
+      "status": "Filled",
+      "createdTime": "1781966035083"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "side": "Buy",
+      "qty": "0.02",
+      "avgPrice": "1713.59",
+      "status": "Filled",
+      "createdTime": "1781966035080"
+    },
+    {
+      "symbol": "HEIUSDT",
+      "side": "Sell",
+      "qty": "401",
+      "avgPrice": "0.10676",
+      "status": "Filled",
+      "createdTime": "1781940896885"
+    },
+    {
+      "symbol": "HEIUSDT",
+      "side": "Buy",
+      "qty": "401",
+      "avgPrice": "0.10177631",
+      "status": "Filled",
+      "createdTime": "1781940896882"
+    },
+    {
+      "symbol": "EPICUSDT",
+      "side": "Sell",
+      "qty": "148",
+      "avgPrice": "0.4408",
+      "status": "Filled",
+      "createdTime": "1781939409512"
+    },
+    {
+      "symbol": "EPICUSDT",
+      "side": "Buy",
+      "qty": "148",
+      "avgPrice": "0.4257",
+      "status": "Filled",
+      "createdTime": "1781939409509"
+    }
+  ],
+  "updated_at": 1781971143238
+}
