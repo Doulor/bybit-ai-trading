@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruben AI · Bybit 交易记录</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .header { text-align: center; padding: 30px 0 20px; }
+  .header h1 {
+    font-size: 2em;
+    background: linear-gradient(90deg, #00d2ff, #3a7bd5, #00d2ff);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  @keyframes shimmer { 0%,100%{background-position:0%} 50%{background-position:100%} }
+  .header .subtitle { color: #888; margin-top: 8px; font-size: 0.95em; }
+
+  .stats-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 24px 0; }
+  .stat-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 20px 28px;
+    min-width: 150px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .stat-card:hover { transform: translateY(-4px); }
+  .stat-card .label { font-size: 0.78em; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-card .value { font-size: 1.8em; font-weight: 700; margin-top: 6px; }
+  .stat-card .value.green { color: #00e676; }
+  .stat-card .value.red { color: #ff5252; }
+  .stat-card .value.blue { color: #40c4ff; }
+
+  .chart-container {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 28px;
+    margin: 24px auto;
+    max-width: 900px;
+  }
+  .chart-container h2 { font-size: 1.1em; color: #aaa; margin-bottom: 16px; font-weight: 500; }
+
+  .trades-table {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 28px;
+    margin: 24px auto;
+    max-width: 900px;
+    overflow-x: auto;
+  }
+  .trades-table h2 { font-size: 1.1em; color: #aaa; margin-bottom: 16px; font-weight: 500; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 10px 12px; color: #888; font-size: 0.78em; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  td { padding: 12px; font-size: 0.95em; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  tr:hover td { background: rgba(255,255,255,0.03); }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.78em; font-weight: 600; }
+  .badge.long { background: rgba(0,230,118,0.15); color: #00e676; }
+  .badge.short { background: rgba(255,82,82,0.15); color: #ff5252; }
+  .badge.tp { background: rgba(64,196,255,0.15); color: #40c4ff; }
+  .badge.sl { background: rgba(255,82,82,0.2); color: #ff5252; }
+  .pnl-pos { color: #00e676; font-weight: 600; }
+  .pnl-neg { color: #ff5252; font-weight: 600; }
+
+  .footer { text-align: center; color: #555; padding: 30px 0; font-size: 0.8em; }
+  @media (max-width: 600px) {
+    .stats-row { flex-direction: column; align-items: center; }
+    .stat-card { width: 100%; max-width: 300px; }
+    td, th { padding: 8px 6px; font-size: 0.85em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Ruben AI 交易仪表盘</h1>
+  <div class="subtitle">Bybit USDT 永续合约 · AI 子账户</div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="label">初始资金</div>
+    <div class="value blue">7.00 U</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">当前余额</div>
+    <div class="value green" id="currentBalance">11.04 U</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">累计盈亏</div>
+    <div class="value green" id="totalPnl">+4.04 U</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">胜率</div>
+    <div class="value green">100%</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">总交易次数</div>
+    <div class="value blue">2</div>
+  </div>
+</div>
+
+<div class="chart-container">
+  <h2>资金曲线</h2>
+  <canvas id="equityChart"></canvas>
+</div>
+
+<div class="chart-container">
+  <h2>单笔盈亏</h2>
+  <canvas id="pnlChart"></canvas>
+</div>
+
+<div class="trades-table">
+  <h2>交易记录</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>时间</th>
+        <th>币种</th>
+        <th>方向</th>
+        <th>开仓价</th>
+        <th>平仓价</th>
+        <th>数量</th>
+        <th>结果</th>
+        <th>盈亏</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>06-20 15:10</td>
+        <td>EPICUSDT</td>
+        <td><span class="badge long">做多</span></td>
+        <td>0.4257</td>
+        <td>0.4408</td>
+        <td>148</td>
+        <td><span class="badge tp">止盈</span></td>
+        <td class="pnl-pos">+2.23 U</td>
+      </tr>
+      <tr>
+        <td>06-20 15:33</td>
+        <td>HEIUSDT</td>
+        <td><span class="badge long">做多</span></td>
+        <td>0.1018</td>
+        <td>0.1068</td>
+        <td>401</td>
+        <td><span class="badge tp">止盈</span></td>
+        <td class="pnl-pos">+1.81 U</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer">
+  Ruben AI · 最后更新: 2026-06-20 18:05
+</div>
+
+<script>
+const equityData = {
+  labels: ['起始', '第1单 (EPIC)', '第2单 (HEI)', '当前'],
+  datasets: [{
+    label: '资金 (USDT)',
+    data: [7.00, 9.23, 11.04, 11.04],
+    borderColor: '#00d2ff',
+    backgroundColor: 'rgba(0, 210, 255, 0.08)',
+    borderWidth: 3,
+    pointBackgroundColor: '#00d2ff',
+    pointBorderColor: '#fff',
+    pointBorderWidth: 2,
+    pointRadius: 6,
+    pointHoverRadius: 8,
+    fill: true,
+    tension: 0.35,
+  }]
+};
+
+const pnlData = {
+  labels: ['EPICUSDT 做多', 'HEIUSDT 做多'],
+  datasets: [{
+    label: '盈亏 (USDT)',
+    data: [2.23, 1.81],
+    backgroundColor: ['rgba(0,230,118,0.6)', 'rgba(0,230,118,0.6)'],
+    borderColor: ['#00e676', '#00e676'],
+    borderWidth: 2,
+    borderRadius: 8,
+    borderSkipped: false,
+  }]
+};
+
+const commonOptions = {
+  responsive: true,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: 'rgba(30,30,60,0.95)',
+      titleColor: '#fff',
+      bodyColor: '#ccc',
+      borderColor: 'rgba(255,255,255,0.1)',
+      borderWidth: 1,
+      cornerRadius: 10,
+      padding: 12,
+    }
+  },
+  scales: {
+    x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#888' } },
+    y: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#888', callback: v => v.toFixed(2) + ' U' } }
+  }
+};
+
+new Chart(document.getElementById('equityChart'), {
+  type: 'line',
+  data: equityData,
+  options: {
+    ...commonOptions,
+    plugins: {
+      ...commonOptions.plugins,
+      tooltip: {
+        ...commonOptions.plugins.tooltip,
+        callbacks: { label: ctx => '资金: ' + ctx.parsed.y.toFixed(2) + ' USDT' }
+      }
+    }
+  }
+});
+
+new Chart(document.getElementById('pnlChart'), {
+  type: 'bar',
+  data: pnlData,
+  options: {
+    ...commonOptions,
+    plugins: {
+      ...commonOptions.plugins,
+      tooltip: {
+        ...commonOptions.plugins.tooltip,
+        callbacks: { label: ctx => '+' + ctx.parsed.y.toFixed(2) + ' USDT' }
+      }
+    },
+    scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, beginAtZero: true } }
+  }
+});
+</script>
+</body>
+</html>
