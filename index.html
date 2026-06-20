@@ -85,7 +85,7 @@
 <body>
 <div class="header">
   <h1>Ruben AI 交易仪表盘</h1>
-  <div class="subtitle">Bybit USDT 永续合约 · AI 子账户</div>
+  <div class="subtitle">Bybit USDT 永续合约 · AI 子账户 · 投资人: 歪头 · 虫洞 · 喜忧半半开</div>
 </div>
 
 <div class="stats-row" id="statsRow"></div>
@@ -114,10 +114,11 @@
 
 <script>
 // ========== 交易数据，每次新增一条即可 ==========
-const INITIAL_CAPITAL = 7.00;
+const INITIAL_CAPITAL = 9.00;
 const TRADES = [
   { time: "06-20 15:10", symbol: "EPICUSDT",  side: "long", entry: 0.4257, exit: 0.4408, qty: 148, result: "tp", pnl: 2.23 },
   { time: "06-20 15:33", symbol: "HEIUSDT",   side: "long", entry: 0.1018, exit: 0.1068, qty: 401, result: "tp", pnl: 1.81 },
+  { time: "06-20 22:32", symbol: "ETHUSDT",   side: "long", entry: 1713.59, exit: 1735.09, qty: 0.02, result: "tp", pnl: 0.43 },
 ];
 // =================================================
 
@@ -126,7 +127,7 @@ const totalPnl = TRADES.reduce((s, t) => s + t.pnl, 0);
 const currentBalance = INITIAL_CAPITAL + totalPnl;
 const winTrades = TRADES.filter(t => t.pnl > 0).length;
 const winRate = TRADES.length > 0 ? (winTrades / TRADES.length * 100) : 0;
-const lastUpdate = "2026-06-20 18:17";
+const lastUpdate = "2026-06-20 23:02";
 
 // 渲染统计卡片
 const statsHtml = [
