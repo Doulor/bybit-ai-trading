@@ -598,64 +598,84 @@ document.getElementById("footer").textContent = "RUBEN AI · BYBIT USDT PERP · 
 
 // ========== 实时数据 ==========
 async function loadLiveData() {
+  const balEl = document.getElementById('balanceContent');
+  const posEl = document.getElementById('positionsContent');
+
+  let data = null;
+
+  // Try API function first
   try {
-    const resp = await fetch('/api/bybit?t=' + Date.now());
-    if (!resp.ok) return;
-    const data = await resp.json();
-    if (data.error) { console.log('API error:', data.error); return; }
-
-    // 余额
-    const balEl = document.getElementById('balanceContent');
-    if (data.equity) {
-      const pnlColor = data.equity >= INITIAL_CAPITAL ? 'green' : 'red';
-      balEl.innerHTML = `
-        <div class="balance-row">
-          <span class="balance-label">权益</span>
-          <span class="balance-value">${data.equity.toFixed(4)} USDT</span>
-        </div>
-        <div class="balance-row">
-          <span class="balance-label">钱包余额</span>
-          <span class="balance-sub">${data.wallet.toFixed(4)} USDT</span>
-        </div>
-        <div class="update-time">${new Date(data.updated_at).toLocaleString('zh-CN')}</div>
-      `;
-    }
-
-    // 持仓
-    const posEl = document.getElementById('positionsContent');
-    if (data.positions && data.positions.length > 0) {
-      posEl.innerHTML = data.positions.map(p => {
-        const pnl = parseFloat(p.unrealisedPnl);
-        const pnlCls = pnl >= 0 ? 'pnl-pos' : 'pnl-neg';
-        const pnlText = (pnl >= 0 ? '+' : '') + pnl.toFixed(4) + ' U';
-        const sideText = p.side === 'Buy' ? 'LONG' : 'SHORT';
-        const sideCls = p.side === 'Buy' ? 'long' : 'short';
-        return `
-          <div class="pos-card">
-            <div class="pos-header">
-              <span class="pos-symbol">${p.symbol}</span>
-              <span class="badge ${sideCls}">${sideText}</span>
-            </div>
-            <div class="pos-details">
-              <div><span>数量</span> ${p.size}</div>
-              <div><span>均价</span> ${p.avgPrice}</div>
-              <div><span>止盈</span> ${p.takeProfit}</div>
-              <div><span>止损</span> ${p.stopLoss}</div>
-              <div><span>杠杆</span> ${p.leverage}x</div>
-              <div><span>强平</span> ${p.liqPrice}</div>
-            </div>
-            <div class="balance-row" style="margin-top:10px;margin-bottom:0">
-              <span class="balance-label">浮动盈亏</span>
-              <span class="pos-pnl ${pnlCls}">${pnlText}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-    } else {
-      posEl.innerHTML = '<div class="no-data">无持仓</div>';
+    const resp = await fetch('/api/bybit?t=' + Date.now(), { signal: AbortSignal.timeout(8000) });
+    if (resp.ok) {
+      const d = await resp.json();
+      if (!d.error) data = d;
     }
   } catch (e) {
-    console.log('Live data load failed:', e);
+    console.log('API function failed, trying data.json fallback');
+  }
+
+  // Fallback to data.json
+  if (!data) {
+    try {
+      const resp = await fetch('data.json?t=' + Date.now());
+      if (resp.ok) data = await resp.json();
+    } catch (e) {
+      console.log('data.json fallback also failed');
+    }
+  }
+
+  if (!data) {
+    balEl.innerHTML = '<div class="no-data">数据加载中...</div>';
+    posEl.innerHTML = '<div class="no-data">请稍候</div>';
+    return;
+  }
+
+  // 余额
+  if (data.equity) {
+    balEl.innerHTML = `
+      <div class="balance-row">
+        <span class="balance-label">权益</span>
+        <span class="balance-value">${data.equity.toFixed(4)} USDT</span>
+      </div>
+      <div class="balance-row">
+        <span class="balance-label">钱包余额</span>
+        <span class="balance-sub">${data.wallet.toFixed(4)} USDT</span>
+      </div>
+      <div class="update-time">${new Date(data.updated_at).toLocaleString('zh-CN')}</div>
+    `;
+  }
+
+  // 持仓
+  if (data.positions && data.positions.length > 0) {
+    posEl.innerHTML = data.positions.map(p => {
+      const pnl = parseFloat(p.unrealisedPnl);
+      const pnlCls = pnl >= 0 ? 'pnl-pos' : 'pnl-neg';
+      const pnlText = (pnl >= 0 ? '+' : '') + pnl.toFixed(4) + ' U';
+      const sideText = p.side === 'Buy' ? 'LONG' : 'SHORT';
+      const sideCls = p.side === 'Buy' ? 'long' : 'short';
+      return `
+        <div class="pos-card">
+          <div class="pos-header">
+            <span class="pos-symbol">${p.symbol}</span>
+            <span class="badge ${sideCls}">${sideText}</span>
+          </div>
+          <div class="pos-details">
+            <div><span>数量</span> ${p.size}</div>
+            <div><span>均价</span> ${p.avgPrice}</div>
+            <div><span>止盈</span> ${p.takeProfit}</div>
+            <div><span>止损</span> ${p.stopLoss}</div>
+            <div><span>杠杆</span> ${p.leverage}x</div>
+            <div><span>强平</span> ${p.liqPrice}</div>
+          </div>
+          <div class="balance-row" style="margin-top:10px;margin-bottom:0">
+            <span class="balance-label">浮动盈亏</span>
+            <span class="pos-pnl ${pnlCls}">${pnlText}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } else {
+    posEl.innerHTML = '<div class="no-data">无持仓</div>';
   }
 }
 
