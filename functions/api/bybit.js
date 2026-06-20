@@ -1,6 +1,6 @@
 // Cloudflare Pages Function: /api/bybit
-// Fetches live account data from Bybit using RSA signing
-// Env vars: BYBIT_API_KEY, BYBIT_PRIVATE_KEY (full PEM content)
+// Fetches live account data from Bybit using HMAC signing
+// Env vars: BYBIT_API_KEY, BYBIT_API_SECRET
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -8,37 +8,28 @@ const CORS = {
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
-function pemToDer(pem) {
-  const cleaned = pem
-    .replace(/\\n/g, '\n')
-    .replace(/-----BEGIN PRIVATE KEY-----/, '')
-    .replace(/-----END PRIVATE KEY-----/, '')
-    .replace(/\s+/g, '');
-  const raw = atob(cleaned);
-  const buf = new Uint8Array(raw.length);
-  for (let i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
-  return buf;
-}
-
-async function signRS256(data, privateKeyPem) {
-  const der = pemToDer(privateKeyPem);
+async function hmacSign(secret, data) {
   const key = await crypto.subtle.importKey(
-    'pkcs8', der,
-    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-    false, ['sign']
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
   );
-  const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(data));
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(data));
   return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function bybitSignedGet(endpoint, queryStr, apiKey, privateKey) {
+async function bybitGet(path, params, apiKey, apiSecret) {
   const ts = Date.now().toString();
   const recvWindow = '5000';
-  const signPayload = ts + apiKey + recvWindow + endpoint + queryStr;
-  const signature = await signRS256(signPayload, privateKey);
-  const fullUrl = 'https://api.bybit.com' + endpoint + '?' + queryStr;
+  const qs = new URLSearchParams(params).toString();
+  // HMAC signing: timestamp + apiKey + recvWindow + queryString (NO path)
+  const signStr = ts + apiKey + recvWindow + qs;
+  const signature = await hmacSign(apiSecret, signStr);
 
-  const resp = await fetch(fullUrl, {
+  const url = 'https://api.bybit.com' + path + '?' + qs;
+  const resp = await fetch(url, {
     headers: {
       'X-BAPI-API-KEY': apiKey,
       'X-BAPI-TIMESTAMP': ts,
@@ -46,26 +37,21 @@ async function bybitSignedGet(endpoint, queryStr, apiKey, privateKey) {
       'X-BAPI-SIGN': signature,
     },
   });
-  const json = await resp.json();
-  return { json, signPayload, fullUrl };
+  return resp.json();
 }
 
 export async function onRequestGet(context) {
-  const { BYBIT_API_KEY, BYBIT_PRIVATE_KEY } = context.env;
-  if (!BYBIT_API_KEY || !BYBIT_PRIVATE_KEY) {
-    return Response.json({ error: 'Missing BYBIT_API_KEY or BYBIT_PRIVATE_KEY env vars' }, { status: 500, headers: CORS });
+  const { BYBIT_API_KEY, BYBIT_API_SECRET } = context.env;
+  if (!BYBIT_API_KEY || !BYBIT_API_SECRET) {
+    return Response.json({ error: 'Missing BYBIT_API_KEY or BYBIT_API_SECRET env vars' }, { status: 500, headers: CORS });
   }
 
   try {
-    const [balRes, posRes, ordRes] = await Promise.all([
-      bybitSignedGet('/v5/account/wallet-balance', 'accountType=UNIFIED&coin=USDT', BYBIT_API_KEY, BYBIT_PRIVATE_KEY),
-      bybitSignedGet('/v5/position/list', 'category=linear&settleCoin=USDT', BYBIT_API_KEY, BYBIT_PRIVATE_KEY),
-      bybitSignedGet('/v5/order/realtime', 'category=linear&settleCoin=USDT', BYBIT_API_KEY, BYBIT_PRIVATE_KEY),
+    const [bal, pos, orders] = await Promise.all([
+      bybitGet('/v5/account/wallet-balance', { accountType: 'UNIFIED', coin: 'USDT' }, BYBIT_API_KEY, BYBIT_API_SECRET),
+      bybitGet('/v5/position/list', { category: 'linear', settleCoin: 'USDT' }, BYBIT_API_KEY, BYBIT_API_SECRET),
+      bybitGet('/v5/order/realtime', { category: 'linear', settleCoin: 'USDT' }, BYBIT_API_KEY, BYBIT_API_SECRET),
     ]);
-
-    const bal = balRes.json;
-    const pos = posRes.json;
-    const orders = ordRes.json;
 
     // Extract USDT balance
     let wallet = 0, equity = 0;
@@ -114,16 +100,17 @@ export async function onRequestGet(context) {
       }
     }
 
+    if (bal.retCode !== 0) {
+      return Response.json({
+        error: 'Bybit API error: ' + bal.retMsg,
+        wallet: 0, equity: 0, positions: [], openOrders: [],
+        updated_at: Date.now(),
+      }, { headers: CORS });
+    }
+
     return Response.json({
       wallet, equity, positions, openOrders,
       updated_at: Date.now(),
-      _debug: {
-        balCode: bal.retCode,
-        balMsg: bal.retMsg,
-        signPayload: balRes.signPayload,
-        url: balRes.fullUrl,
-        keyPrefix: BYBIT_API_KEY.substring(0, 6),
-      },
     }, { headers: CORS });
 
   } catch (e) {
