@@ -9,10 +9,13 @@ const CORS = {
 };
 
 function pemToDer(pem) {
-  const b64 = pem.replace(/-----BEGIN PRIVATE KEY-----/, '')
-                 .replace(/-----END PRIVATE KEY-----/, '')
-                 .replace(/\s+/g, '');
-  const raw = atob(b64);
+  // Handle both literal \n and actual newlines
+  const cleaned = pem
+    .replace(/\\n/g, '\n')
+    .replace(/-----BEGIN PRIVATE KEY-----/, '')
+    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/\s+/g, '');
+  const raw = atob(cleaned);
   const buf = new Uint8Array(raw.length);
   for (let i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
   return buf;
@@ -110,6 +113,7 @@ export async function onRequestGet(context) {
     return Response.json({
       wallet, equity, positions, openOrders,
       updated_at: Date.now(),
+      _debug: { balCode: bal.retCode, balMsg: bal.retMsg, posCode: pos.retCode },
     }, { headers: CORS });
 
   } catch (e) {
