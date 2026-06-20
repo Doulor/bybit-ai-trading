@@ -3,6 +3,6 @@
 
 # Except these files
 !.gitignore
-!dashboard.html
 !index.html
 !README.md
+
