@@ -165,6 +165,15 @@ const worstTrade = Math.min(...TRADES.map(t => t.pnl));
 const roi = ((currentBalance - INITIAL_CAPITAL) / INITIAL_CAPITAL * 100);
 const lastUpdate = "2026-06-21 15:51";
 
+// Live data from local export
+let liveData = null;
+async function loadLiveData() {
+  try {
+    const resp = await fetch('data/live.json?t=' + Date.now());
+    if (resp.ok) liveData = await resp.json();
+  } catch {}
+}
+
 // 统计卡片
 const stats = [
   { label: "初始资金", value: INITIAL_CAPITAL.toFixed(2), cls: "cyan" },
@@ -266,6 +275,9 @@ async function loadLiveData() {
     if (r.ok) { const d = await r.json(); if (!d.error) data = d; }
   } catch(e) {}
 
+  if (!data) {
+    try { const r = await fetch('data/live.json?t=' + Date.now()); if (r.ok) data = await r.json(); } catch(e) {}
+  }
   if (!data) {
     try { const r = await fetch('data.json?t=' + Date.now()); if (r.ok) data = await r.json(); } catch(e) {}
   }
