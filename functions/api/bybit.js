@@ -53,7 +53,12 @@ async function bybitGet(path, params, apiKey, privateKey) {
       'X-BAPI-SIGN-TYPE': '2',
     },
   });
-  return resp.json();
+  const text = await resp.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { retCode: -1, retMsg: 'Invalid response: ' + text.slice(0, 200), result: {} };
+  }
 }
 
 export async function onRequestGet(context) {
