@@ -141,9 +141,9 @@ const TRADES = [
   { time: "06-20 15:33", symbol: "HEIUSDT",   side: "long", entry: 0.1018, exit: 0.1068, qty: 401, result: "tp", pnl: 1.81 },
   { time: "06-20 22:32", symbol: "ETHUSDT",   side: "long", entry: 1713.59, exit: 1735.09, qty: 0.02, result: "tp", pnl: 0.43 },
   { time: "06-21 00:30", symbol: "AXSUSDT",   side: "long", entry: 1.141, exit: 1.166, qty: 30, result: "tp", pnl: 0.75 },
-  { time: "06-21 15:51", symbol: "EDENUSDT",  side: "long", entry: 0.04756, exit: null, qty: 251, result: "open", pnl: 0 },
+  { time: "06-21 15:51", symbol: "EDENUSDT",  side: "long", entry: 0.04756, exit: 0.04730, qty: 251, result: "sl", pnl: -0.07 },
 ];
-const lastUpdate = "2026-06-21 16:13";
+const lastUpdate = "2026-06-21 16:28";
 // ==========================
 
 const totalInvestment = INVESTMENTS.reduce((s, i) => s + i.amount, 0);
