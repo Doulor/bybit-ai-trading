@@ -109,16 +109,16 @@
       "symbol": "EPICUSDT",
       "side": "long",
       "entry": 0.4252,
-      "exit": null,
+      "exit": 0.435,
       "qty": 290,
-      "result": "open",
-      "pnl": 0,
+      "result": "tp",
+      "pnl": 2.56,
       "tp": 0.435,
       "sl": 0.408,
       "leverage": 10,
-      "holdTime": "open",
+      "holdTime": "2h10min",
       "entryReason": "24h低点0.413支撑位，暴跌13%后企稳，双底确认。位置3%极低，反弹目标0.435（+2.3%）。止损0.408保底，盈亏比1:0.58。",
-      "exitReason": ""
+      "exitReason": "止盈触发"
     }
   ]
 }
