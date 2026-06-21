@@ -1,18 +1,18 @@
 {
-  "wallet": 14.17453915,
-  "equity": 14.21218915,
+  "wallet": 14.17393926,
+  "equity": 14.18397926,
   "positions": [
     {
       "symbol": "EDENUSDT",
       "side": "Buy",
       "size": "251",
       "avgPrice": "0.04756",
-      "unrealisedPnl": "0.03765",
+      "unrealisedPnl": "0.01255",
       "takeProfit": "0.0492",
       "stopLoss": "0.047",
       "leverage": "5",
       "liqPrice": "",
-      "markPrice": "0.04771"
+      "markPrice": "0.04761"
     }
   ],
   "openOrders": [
@@ -21,19 +21,15 @@
       "side": "Sell",
       "orderType": "Market",
       "qty": "251",
-      "price": "0",
-      "stopLoss": "",
-      "takeProfit": ""
+      "price": "0"
     },
     {
       "symbol": "EDENUSDT",
       "side": "Sell",
       "orderType": "Market",
       "qty": "251",
-      "price": "0",
-      "stopLoss": "",
-      "takeProfit": ""
+      "price": "0"
     }
   ],
-  "updated_at": 1782028768421
+  "updated_at": 1782029600375
 }
