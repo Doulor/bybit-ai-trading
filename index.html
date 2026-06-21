@@ -105,16 +105,6 @@
   <div class="investors-row" id="investorsRow"></div>
 
   <div class="main-grid">
-    <!-- 左列: 账户 + 持仓 -->
-    <div class="card">
-      <div class="card-title"><div class="dot"></div>账户余额</div>
-      <div id="balanceContent"><div class="no-data">加载中...</div></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><div class="dot"></div>当前持仓</div>
-      <div id="positionsContent"><div class="no-data">加载中...</div></div>
-    </div>
-
     <!-- 资金曲线 -->
     <div class="card full-width">
       <div class="card-title">EQUITY CURVE<span style="margin-left:auto;font-size:0.9em;color:var(--t2)" id="chartBadge">USDT</span></div>
@@ -153,6 +143,7 @@ const TRADES = [
   { time: "06-21 00:30", symbol: "AXSUSDT",   side: "long", entry: 1.141, exit: 1.166, qty: 30, result: "tp", pnl: 0.75 },
   { time: "06-21 15:51", symbol: "EDENUSDT",  side: "long", entry: 0.04756, exit: null, qty: 251, result: "open", pnl: 0 },
 ];
+const lastUpdate = "2026-06-21 16:13";
 // ==========================
 
 const totalInvestment = INVESTMENTS.reduce((s, i) => s + i.amount, 0);
@@ -163,16 +154,7 @@ const winRate = TRADES.length > 0 ? (winTrades / TRADES.length * 100) : 0;
 const bestTrade = Math.max(...TRADES.map(t => t.pnl));
 const worstTrade = Math.min(...TRADES.map(t => t.pnl));
 const roi = ((currentBalance - INITIAL_CAPITAL) / INITIAL_CAPITAL * 100);
-const lastUpdate = "2026-06-21 15:51";
 
-// Live data from local export
-let liveData = null;
-async function loadLiveData() {
-  try {
-    const resp = await fetch('data/live.json?t=' + Date.now());
-    if (resp.ok) liveData = await resp.json();
-  } catch {}
-}
 
 // 统计卡片
 const stats = [
@@ -263,53 +245,6 @@ new Chart(document.getElementById("pnlChart"), {
 });
 
 document.getElementById("footer").textContent = "RUBEN AI · BYBIT USDT PERP · LAST UPDATE: " + lastUpdate;
-
-// ========== 实时数据 ==========
-async function loadLiveData() {
-  const balEl = document.getElementById('balanceContent');
-  const posEl = document.getElementById('positionsContent');
-  let data = null;
-
-  try {
-    const r = await fetch('/api/bybit?t=' + Date.now(), { signal: AbortSignal.timeout(8000) });
-    if (r.ok) { const d = await r.json(); if (!d.error) data = d; }
-  } catch(e) {}
-
-  if (!data) {
-    try { const r = await fetch('data/live.json?t=' + Date.now()); if (r.ok) data = await r.json(); } catch(e) {}
-  }
-  if (!data) {
-    try { const r = await fetch('data.json?t=' + Date.now()); if (r.ok) data = await r.json(); } catch(e) {}
-  }
-
-  if (!data) { balEl.innerHTML = '<div class="no-data">数据加载中...</div>'; return; }
-
-  if (data.equity) {
-    balEl.innerHTML = `
-      <div class="balance-row"><span class="balance-label">权益</span><span class="balance-value">${data.equity.toFixed(4)} USDT</span></div>
-      <div class="balance-row"><span class="balance-label">钱包余额</span><span class="balance-sub">${data.wallet.toFixed(4)} USDT</span></div>
-      <div class="update-time">${new Date(data.updated_at).toLocaleString('zh-CN')}</div>`;
-  }
-
-  if (data.positions && data.positions.length > 0) {
-    posEl.innerHTML = data.positions.map(p => {
-      const pnl = parseFloat(p.unrealisedPnl);
-      const pnlCls = pnl >= 0 ? 'pnl-pos' : 'pnl-neg';
-      const pnlText = (pnl >= 0 ? '+' : '') + pnl.toFixed(4) + ' U';
-      const sideText = p.side === 'Buy' ? 'LONG' : 'SHORT';
-      const sideCls = p.side === 'Buy' ? 'long' : 'short';
-      return `<div class="pos-card">
-        <div class="pos-header"><span class="pos-symbol">${p.symbol}</span><span class="badge ${sideCls}">${sideText}</span></div>
-        <div class="pos-details"><div><span>数量</span> ${p.size}</div><div><span>均价</span> ${p.avgPrice}</div><div><span>止盈</span> ${p.takeProfit}</div><div><span>止损</span> ${p.stopLoss}</div><div><span>杠杆</span> ${p.leverage}x</div><div><span>强平</span> ${p.liqPrice}</div></div>
-        <div class="balance-row" style="margin-top:8px;margin-bottom:0"><span class="balance-label">浮动盈亏</span><span class="pos-pnl ${pnlCls}">${pnlText}</span></div>
-      </div>`;
-    }).join('');
-  } else {
-    posEl.innerHTML = '<div class="no-data">无持仓</div>';
-  }
-}
-loadLiveData();
-setInterval(loadLiveData, 30000);
 </script>
 </body>
 </html>
