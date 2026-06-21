@@ -1,0 +1,33 @@
+name: Export Live Data
+
+on:
+  schedule:
+    - cron: '*/3 * * * *'  # every 3 minutes
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install requests cryptography
+
+      - name: Export Bybit data
+        env:
+          BYBIT_API_KEY: ${{ secrets.BYBIT_API_KEY }}
+          BYBIT_PRIVATE_KEY: ${{ secrets.BYBIT_PRIVATE_KEY }}
+        run: |
+          mkdir -p data
+          python3 export_live.py
+          
+      - name: Commit and push
+        run: |
+          git config user.name "Ruben AI"
+          git config user.email "bot@ruben.ai"
+          git add data/live.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto: update live data $(date -u +'%Y-%m-%d %H:%M')" && git push)
