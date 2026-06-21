@@ -87,6 +87,23 @@
 
   /* Footer */
   .footer { text-align:center; color:var(--t3); padding:16px 0; font-family:'JetBrains Mono',monospace; font-size:0.68em; letter-spacing:0.5px; }
+
+  /* Trade detail */
+  tr.trade-row { cursor:pointer; }
+  tr.trade-row:hover td { background:rgba(255,255,255,0.025); }
+  tr.trade-detail-row { display:none; }
+  tr.trade-detail-row.open { display:table-row; }
+  tr.trade-detail-row td { padding:0; border-bottom:2px solid var(--cyan); }
+  .detail-panel { background:var(--bg3); padding:16px 20px; display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; }
+  .detail-panel .dp-title { grid-column:1/-1; font-family:'JetBrains Mono',monospace; font-size:0.7em; color:var(--cyan); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; border-bottom:1px solid var(--border); padding-bottom:6px; }
+  .detail-panel .dp-item { font-size:0.78em; }
+  .detail-panel .dp-item .dp-label { color:var(--t3); margin-right:6px; }
+  .detail-panel .dp-item .dp-value { color:var(--t1); font-family:'JetBrains Mono',monospace; }
+  .detail-panel .dp-reason { grid-column:1/-1; font-size:0.78em; margin-top:4px; }
+  .detail-panel .dp-reason .dp-label { color:var(--t3); display:block; margin-bottom:4px; }
+  .detail-panel .dp-reason .dp-value { color:var(--t2); line-height:1.5; }
+  .expand-icon { font-size:0.7em; color:var(--t3); margin-left:4px; transition:transform 0.2s; }
+  tr.trade-row.expanded .expand-icon { transform:rotate(90deg); }
 </style>
 </head>
 <body>
@@ -137,11 +154,26 @@ const INVESTMENTS = [
   { name: "虫洞", amount: 2.00, time: "06-20 21:18" },
 ];
 const TRADES = [
-  { time: "06-20 15:10", symbol: "EPICUSDT",  side: "long", entry: 0.4257, exit: 0.4408, qty: 148, result: "tp", pnl: 2.23 },
-  { time: "06-20 15:33", symbol: "HEIUSDT",   side: "long", entry: 0.1018, exit: 0.1068, qty: 401, result: "tp", pnl: 1.81 },
-  { time: "06-20 22:32", symbol: "ETHUSDT",   side: "long", entry: 1713.59, exit: 1735.09, qty: 0.02, result: "tp", pnl: 0.43 },
-  { time: "06-21 00:30", symbol: "AXSUSDT",   side: "long", entry: 1.141, exit: 1.166, qty: 30, result: "tp", pnl: 0.75 },
-  { time: "06-21 15:51", symbol: "EDENUSDT",  side: "long", entry: 0.04756, exit: 0.04730, qty: 251, result: "sl", pnl: -0.07 },
+  { time: "06-20 15:10", symbol: "EPICUSDT",  side: "long", entry: 0.4257, exit: 0.4408, qty: 148, result: "tp", pnl: 2.23,
+    tp: 0.4408, sl: 0.4150, leverage: 9, holdTime: "10min",
+    entryReason: "15m超卖反弹+放量确认，底部企稳信号",
+    exitReason: "止盈触发" },
+  { time: "06-20 15:33", symbol: "HEIUSDT",   side: "long", entry: 0.1018, exit: 0.1068, qty: 401, result: "tp", pnl: 1.81,
+    tp: 0.1068, sl: 0.0980, leverage: 6, holdTime: "35min",
+    entryReason: "15m超卖反弹+3x放量，空头付费-0.1%",
+    exitReason: "止盈触发" },
+  { time: "06-20 22:32", symbol: "ETHUSDT",   side: "long", entry: 1713.59, exit: 1735.09, qty: 0.02, result: "tp", pnl: 0.43,
+    tp: 1735.09, sl: 1700.00, leverage: 5, holdTime: "4h",
+    entryReason: "4h级别支撑位反弹+RSI超卖",
+    exitReason: "止盈触发" },
+  { time: "06-21 00:30", symbol: "AXSUSDT",   side: "long", entry: 1.141, exit: 1.166, qty: 30, result: "tp", pnl: 0.75,
+    tp: 1.166, sl: 1.120, leverage: 5, holdTime: "2h",
+    entryReason: "15m超卖反弹+温和放量，空头付费-0.46%",
+    exitReason: "止盈触发" },
+  { time: "06-21 15:51", symbol: "EDENUSDT",  side: "long", entry: 0.04756, exit: 0.04730, qty: 251, result: "sl", pnl: -0.07,
+    tp: 0.0492, sl: 0.0470, leverage: 5, holdTime: "37min",
+    entryReason: "14:45巨量拉盘至0.04815，回踩0.0476支撑不破",
+    exitReason: "14:45巨量后无后续支撑，连续4根阴线阴跌，提前认亏" },
 ];
 const lastUpdate = "2026-06-21 16:28";
 // ==========================
@@ -179,21 +211,45 @@ document.getElementById("investorsRow").innerHTML = INVESTMENTS.map(inv =>
 // 交易表格 - 最新在上
 document.getElementById("tradeCount").textContent = TRADES.length + " TRADES";
 const tbody = document.getElementById("tradesBody");
-[...TRADES].reverse().forEach(t => {
+[...TRADES].reverse().forEach((t, idx) => {
   const sideCls = t.side === "long" ? "long" : "short";
   const sideText = t.side === "long" ? "LONG" : "SHORT";
   const resultCls = t.result === "tp" ? "tp" : t.result === "sl" ? "sl" : "hold";
   const resultText = t.result === "tp" ? "TP" : t.result === "sl" ? "SL" : "HOLD";
   const pnlCls = t.pnl >= 0 ? "pnl-pos" : "pnl-neg";
   const pnlText = (t.pnl >= 0 ? "+" : "") + t.pnl.toFixed(2);
-  tbody.innerHTML += `<tr>
-    <td>${t.time}</td><td>${t.symbol}</td>
-    <td><span class="badge ${sideCls}">${sideText}</span></td>
-    <td>${t.entry}</td><td>${t.exit ?? '-'}</td><td>${t.qty}</td>
-    <td><span class="badge ${resultCls}">${resultText}</span></td>
-    <td class="${pnlCls}">${pnlText}</td>
-  </tr>`;
+  const exitText = t.exit ? t.exit : "-";
+  const id = "trade-" + idx;
+  tbody.innerHTML += `
+    <tr class="trade-row" onclick="toggleDetail('${id}')">
+      <td>${t.time}</td><td>${t.symbol}</td>
+      <td><span class="badge ${sideCls}">${sideText}</span></td>
+      <td>${t.entry}</td><td>${exitText}</td><td>${t.qty}</td>
+      <td><span class="badge ${resultCls}">${resultText}</span></td>
+      <td class="${pnlCls}">${pnlText}</td>
+      <td class="expand-icon">▶</td>
+    </tr>
+    <tr class="trade-detail-row" id="${id}">
+      <td colspan="9">
+        <div class="detail-panel">
+          <div class="dp-title">交易详情</div>
+          <div class="dp-item"><span class="dp-label">杠杆:</span><span class="dp-value">${t.leverage || '-'}x</span></div>
+          <div class="dp-item"><span class="dp-label">持仓时间:</span><span class="dp-value">${t.holdTime || '-'}</span></div>
+          <div class="dp-item"><span class="dp-label">止盈价:</span><span class="dp-value">${t.tp || '-'}</span></div>
+          <div class="dp-item"><span class="dp-label">止损价:</span><span class="dp-value">${t.sl || '-'}</span></div>
+          <div class="dp-reason"><span class="dp-label">📈 入场逻辑:</span><span class="dp-value">${t.entryReason || '-'}</span></div>
+          <div class="dp-reason"><span class="dp-label">📤 平仓原因:</span><span class="dp-value">${t.exitReason || '-'}</span></div>
+        </div>
+      </td>
+    </tr>`;
 });
+
+function toggleDetail(id) {
+  const el = document.getElementById(id);
+  const row = el.previousElementSibling;
+  el.classList.toggle('open');
+  row.classList.toggle('expanded');
+}
 
 // 资金曲线
 const equityLabels = ["START"];
