@@ -250,27 +250,32 @@ const equityData = [INITIAL_CAPITAL];
 const pointBg = ["#22d3ee"];
 const pointR = [5];
 let running = INITIAL_CAPITAL;
-const INVEST_AFTER = 2;
 
+// Build base equity from trades
 TRADES.forEach((t, i) => {
   equityLabels.push("#" + (i+1) + " " + t.symbol);
   running += t.pnl;
   equityData.push(parseFloat(running.toFixed(2)));
   pointBg.push(t.pnl >= 0 ? "#22d3ee" : "#ff3b3b");
   pointR.push(5);
-  const inv = INVESTMENTS.find((_, idx) => idx === 0 && i + 1 === INVEST_AFTER);
-  if (inv) {
-    running += inv.amount;
-    equityLabels.push("💰 " + inv.name + " +" + inv.amount + "U");
-    equityData.push(parseFloat(running.toFixed(2)));
-    pointBg.push("#f5a623");
-    pointR.push(9);
-  }
 });
-equityLabels.push("NOW");
-equityData.push(currentBalance);
-pointBg.push("#22d3ee");
-pointR.push(5);
+
+// Insert investments at the right position
+INVESTMENTS.forEach(inv => {
+  let insertIdx = equityLabels.length - 1; // default: end
+  const invDate = inv.time;
+  for (let i = 0; i < TRADES.length; i++) {
+    if (TRADES[i].time > invDate) {
+      insertIdx = i + 1; // after the trade before this investment
+      break;
+    }
+  }
+  running += inv.amount;
+  equityLabels.splice(insertIdx, 0, inv.name + " +" + inv.amount + "U");
+  equityData.splice(insertIdx, 0, parseFloat(running.toFixed(2)));
+  pointBg.splice(insertIdx, 0, "#f5a623");
+  pointR.splice(insertIdx, 0, 9);
+});
 
 // 盈亏柱状图
 const pnlLabels = TRADES.map((t, i) => "#" + (i+1) + " " + t.symbol);
