@@ -1,0 +1,90 @@
+{
+  "config": {
+    "initial_capital": 7.00,
+    "investments": [
+      { "name": "虫洞", "amount": 2.00, "time": "06-20 21:18" }
+    ]
+  },
+  "trades": [
+    {
+      "time": "06-20 15:10",
+      "symbol": "EPICUSDT",
+      "side": "long",
+      "entry": 0.4257,
+      "exit": 0.4408,
+      "qty": 148,
+      "result": "tp",
+      "pnl": 2.23,
+      "tp": 0.4408,
+      "sl": 0.4150,
+      "leverage": 9,
+      "holdTime": "10min",
+      "entryReason": "15m超卖反弹+放量确认，底部企稳信号",
+      "exitReason": "止盈触发"
+    },
+    {
+      "time": "06-20 15:33",
+      "symbol": "HEIUSDT",
+      "side": "long",
+      "entry": 0.1018,
+      "exit": 0.1068,
+      "qty": 401,
+      "result": "tp",
+      "pnl": 1.81,
+      "tp": 0.1068,
+      "sl": 0.0980,
+      "leverage": 6,
+      "holdTime": "35min",
+      "entryReason": "15m超卖反弹+3x放量，空头付费-0.1%",
+      "exitReason": "止盈触发"
+    },
+    {
+      "time": "06-20 22:32",
+      "symbol": "ETHUSDT",
+      "side": "long",
+      "entry": 1713.59,
+      "exit": 1735.09,
+      "qty": 0.02,
+      "result": "tp",
+      "pnl": 0.43,
+      "tp": 1735.09,
+      "sl": 1700.00,
+      "leverage": 5,
+      "holdTime": "4h",
+      "entryReason": "4h级别支撑位反弹+RSI超卖",
+      "exitReason": "止盈触发"
+    },
+    {
+      "time": "06-21 00:30",
+      "symbol": "AXSUSDT",
+      "side": "long",
+      "entry": 1.141,
+      "exit": 1.166,
+      "qty": 30,
+      "result": "tp",
+      "pnl": 0.75,
+      "tp": 1.166,
+      "sl": 1.120,
+      "leverage": 5,
+      "holdTime": "2h",
+      "entryReason": "15m超卖反弹+温和放量，空头付费-0.46%",
+      "exitReason": "止盈触发"
+    },
+    {
+      "time": "06-21 15:51",
+      "symbol": "EDENUSDT",
+      "side": "long",
+      "entry": 0.04756,
+      "exit": 0.04730,
+      "qty": 251,
+      "result": "sl",
+      "pnl": -0.07,
+      "tp": 0.0492,
+      "sl": 0.0470,
+      "leverage": 5,
+      "holdTime": "37min",
+      "entryReason": "14:45巨量拉盘至0.04815，回踩0.0476支撑不破",
+      "exitReason": "14:45巨量后无后续支撑，连续4根阴线阴跌，提前认亏"
+    }
+  ]
+}
