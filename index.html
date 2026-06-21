@@ -68,6 +68,7 @@
   .badge.short { background:var(--red2); color:var(--red); }
   .badge.tp { background:var(--green2); color:var(--green); }
   .badge.sl { background:var(--red2); color:var(--red); }
+  .badge.hold { background:rgba(59,130,246,0.12); color:var(--blue); }
   .pnl-pos { color:var(--green); font-weight:600; }
   .pnl-neg { color:var(--red); font-weight:600; }
 
@@ -150,6 +151,7 @@ const TRADES = [
   { time: "06-20 15:33", symbol: "HEIUSDT",   side: "long", entry: 0.1018, exit: 0.1068, qty: 401, result: "tp", pnl: 1.81 },
   { time: "06-20 22:32", symbol: "ETHUSDT",   side: "long", entry: 1713.59, exit: 1735.09, qty: 0.02, result: "tp", pnl: 0.43 },
   { time: "06-21 00:30", symbol: "AXSUSDT",   side: "long", entry: 1.141, exit: 1.166, qty: 30, result: "tp", pnl: 0.75 },
+  { time: "06-21 15:51", symbol: "EDENUSDT",  side: "long", entry: 0.04756, exit: null, qty: 251, result: "open", pnl: 0 },
 ];
 // ==========================
 
@@ -161,7 +163,7 @@ const winRate = TRADES.length > 0 ? (winTrades / TRADES.length * 100) : 0;
 const bestTrade = Math.max(...TRADES.map(t => t.pnl));
 const worstTrade = Math.min(...TRADES.map(t => t.pnl));
 const roi = ((currentBalance - INITIAL_CAPITAL) / INITIAL_CAPITAL * 100);
-const lastUpdate = "2026-06-21 01:02";
+const lastUpdate = "2026-06-21 15:51";
 
 // 统计卡片
 const stats = [
@@ -189,14 +191,14 @@ const tbody = document.getElementById("tradesBody");
 [...TRADES].reverse().forEach(t => {
   const sideCls = t.side === "long" ? "long" : "short";
   const sideText = t.side === "long" ? "LONG" : "SHORT";
-  const resultCls = t.result === "tp" ? "tp" : "sl";
-  const resultText = t.result === "tp" ? "TP" : "SL";
+  const resultCls = t.result === "tp" ? "tp" : t.result === "sl" ? "sl" : "hold";
+  const resultText = t.result === "tp" ? "TP" : t.result === "sl" ? "SL" : "HOLD";
   const pnlCls = t.pnl >= 0 ? "pnl-pos" : "pnl-neg";
   const pnlText = (t.pnl >= 0 ? "+" : "") + t.pnl.toFixed(2);
   tbody.innerHTML += `<tr>
     <td>${t.time}</td><td>${t.symbol}</td>
     <td><span class="badge ${sideCls}">${sideText}</span></td>
-    <td>${t.entry}</td><td>${t.exit}</td><td>${t.qty}</td>
+    <td>${t.entry}</td><td>${t.exit ?? '-'}</td><td>${t.qty}</td>
     <td><span class="badge ${resultCls}">${resultText}</span></td>
     <td class="${pnlCls}">${pnlText}</td>
   </tr>`;
