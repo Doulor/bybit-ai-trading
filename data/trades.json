@@ -2,8 +2,10 @@
   "config": {
     "initial_capital": 7.00,
     "investments": [
-      { "name": "虫洞", "amount": 2.00, "time": "06-20 21:18" }
-    ]
+      { "name": "虫洞", "amount": 2.00, "time": "06-20 21:18" },
+      { "name": "三三终得玖", "amount": 9.00, "time": "06-22 01:00" }
+    ],
+    "note": "初始资金7U来自歪头，Doulor(喜忧半半开)是管理者不是出资人"
   },
   "trades": [
     {
