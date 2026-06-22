@@ -270,9 +270,14 @@ INVESTMENTS.forEach(inv => {
       break;
     }
   }
-  running += inv.amount;
+  // Calculate running total at the insertion point (sum trades up to that point)
+  let runningAtInsert = INITIAL_CAPITAL;
+  for (let j = 0; j < insertIdx - 1; j++) {
+    runningAtInsert += TRADES[j].pnl;
+  }
+  runningAtInsert += inv.amount;
   equityLabels.splice(insertIdx, 0, inv.name + " +" + inv.amount + "U");
-  equityData.splice(insertIdx, 0, parseFloat(running.toFixed(2)));
+  equityData.splice(insertIdx, 0, parseFloat(runningAtInsert.toFixed(2)));
   pointBg.splice(insertIdx, 0, "#f5a623");
   pointR.splice(insertIdx, 0, 9);
 });
