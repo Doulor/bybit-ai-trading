@@ -244,42 +244,34 @@ function toggleDetail(id) {
   row.classList.toggle('expanded');
 }
 
-// 资金曲线
+// 资金曲线 - 按时间排序所有事件，统一计算余额
+const allEvents = [];
+TRADES.forEach((t, i) => allEvents.push({ type: 'trade', time: t.time, pnl: t.pnl, symbol: t.symbol, index: i }));
+INVESTMENTS.forEach(inv => allEvents.push({ type: 'investment', time: inv.time, amount: inv.amount, name: inv.name }));
+allEvents.sort((a, b) => a.time > b.time ? 1 : a.time < b.time ? -1 : (a.type === 'investment' ? -1 : 1));
+
 const equityLabels = ["START"];
 const equityData = [INITIAL_CAPITAL];
 const pointBg = ["#22d3ee"];
 const pointR = [5];
 let running = INITIAL_CAPITAL;
+let tradeCount = 0;
 
-// Build base equity from trades
-TRADES.forEach((t, i) => {
-  equityLabels.push("#" + (i+1) + " " + t.symbol);
-  running += t.pnl;
-  equityData.push(parseFloat(running.toFixed(2)));
-  pointBg.push(t.pnl >= 0 ? "#22d3ee" : "#ff3b3b");
-  pointR.push(5);
-});
-
-// Insert investments at the right position
-INVESTMENTS.forEach(inv => {
-  let insertIdx = equityLabels.length - 1; // default: end
-  const invDate = inv.time;
-  for (let i = 0; i < TRADES.length; i++) {
-    if (TRADES[i].time > invDate) {
-      insertIdx = i + 1; // after the trade before this investment
-      break;
-    }
+allEvents.forEach(ev => {
+  if (ev.type === 'trade') {
+    tradeCount++;
+    equityLabels.push("#" + tradeCount + " " + ev.symbol);
+    running += ev.pnl;
+    equityData.push(parseFloat(running.toFixed(2)));
+    pointBg.push(ev.pnl >= 0 ? "#22d3ee" : "#ff3b3b");
+    pointR.push(5);
+  } else {
+    equityLabels.push(ev.name + " +" + ev.amount + "U");
+    running += ev.amount;
+    equityData.push(parseFloat(running.toFixed(2)));
+    pointBg.push("#f5a623");
+    pointR.push(9);
   }
-  // Calculate running total at the insertion point (sum trades up to that point)
-  let runningAtInsert = INITIAL_CAPITAL;
-  for (let j = 0; j < insertIdx - 1; j++) {
-    runningAtInsert += TRADES[j].pnl;
-  }
-  runningAtInsert += inv.amount;
-  equityLabels.splice(insertIdx, 0, inv.name + " +" + inv.amount + "U");
-  equityData.splice(insertIdx, 0, parseFloat(runningAtInsert.toFixed(2)));
-  pointBg.splice(insertIdx, 0, "#f5a623");
-  pointR.splice(insertIdx, 0, 9);
 });
 
 // 盈亏柱状图
