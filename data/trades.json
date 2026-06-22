@@ -207,6 +207,22 @@
       "holdTime": "-",
       "entryReason": "",
       "exitReason": "-"
+    },
+    {
+      "time": "06-22 23:44",
+      "symbol": "AXSUSDT",
+      "side": "long",
+      "entry": 1.0383,
+      "exit": null,
+      "qty": 288,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 1.07,
+      "sl": 1.02,
+      "leverage": 10,
+      "holdTime": "-",
+      "entryReason": "",
+      "exitReason": "-"
     }
   ]
 }
