@@ -50,8 +50,9 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
 .card:hover{border-color:var(--border2)}
 .card-inner{background:var(--bg2);border-radius:13px;padding:18px;height:100%;position:relative}
 .card-inner::before{content:'';position:absolute;inset:0;border-radius:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);pointer-events:none}
-.card-label{font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.card-label{font-size:0.68em;color:var(--t3);letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .card-label .icon{font-size:1.1em}
+.card-label .en{font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--t3);letter-spacing:0.5px;margin-left:2px}
 .card-value{font-family:'JetBrains Mono',monospace;font-size:1.5em;font-weight:700;animation:countUp 0.5s var(--ease) both}
 .card-sub{font-family:'JetBrains Mono',monospace;font-size:0.7em;color:var(--t2);margin-top:4px}
 
@@ -67,15 +68,15 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
 @media(max-width:900px){.chart-grid{grid-template-columns:1fr}}
 .chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;position:relative;overflow:hidden}
 .chart-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent)}
-.chart-title{font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.chart-badge{font-size:0.9em;color:var(--cyan);background:var(--cyan2);padding:2px 8px;border-radius:4px}
+.chart-title{font-size:0.68em;color:var(--t3);letter-spacing:1px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.chart-badge{font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--cyan);background:var(--cyan2);padding:2px 8px;border-radius:4px}
 
 .table-section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px}
 .table-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.table-header h3{font-family:'JetBrains Mono',monospace;font-size:0.65em;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
+.table-header h3{font-size:0.7em;color:var(--t3);letter-spacing:1.5px;font-weight:600}
 .table-count{font-family:'JetBrains Mono',monospace;font-size:0.7em;color:var(--cyan);background:var(--cyan2);padding:3px 10px;border-radius:20px}
 table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:10px 14px;color:var(--t3);font-size:0.58em;text-transform:uppercase;letter-spacing:1.2px;font-family:'JetBrains Mono',monospace;border-bottom:1px solid var(--border);font-weight:600;background:rgba(255,255,255,0.01)}
+th{text-align:left;padding:10px 14px;color:var(--t3);font-size:0.58em;letter-spacing:1px;font-family:'JetBrains Mono',monospace;border-bottom:1px solid var(--border);font-weight:600;background:rgba(255,255,255,0.01)}
 td{padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:0.78em;border-bottom:1px solid rgba(255,255,255,0.02);transition:background 0.2s}
 tr:hover td{background:rgba(255,255,255,0.015)}
 .table-scroll{max-height:500px;overflow-y:auto}
@@ -98,7 +99,7 @@ tr.trade-detail-row{display:none}
 tr.trade-detail-row.open{display:table-row}
 tr.trade-detail-row td{padding:0;border-bottom:2px solid var(--cyan)}
 .detail-panel{background:var(--bg3);padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:10px 28px;animation:fadeUp 0.3s var(--ease) both}
-.detail-panel .dp-title{grid-column:1/-1;font-family:'JetBrains Mono',monospace;font-size:0.65em;color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.detail-panel .dp-title{grid-column:1/-1;font-family:'JetBrains Mono',monospace;font-size:0.65em;color:var(--cyan);letter-spacing:1px;margin-bottom:4px;border-bottom:1px solid var(--border);padding-bottom:8px}
 .detail-panel .dp-item{font-size:0.75em}
 .detail-panel .dp-item .dp-label{color:var(--t3);margin-right:6px}
 .detail-panel .dp-item .dp-value{color:var(--t1);font-family:'JetBrains Mono',monospace}
@@ -125,9 +126,9 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 <div class="topbar">
   <div class="topbar-left">
     <div class="topbar-logo">RUBEN AI</div>
-    <div class="topbar-badge">● LIVE</div>
+    <div class="topbar-badge">● 实时</div>
   </div>
-  <div class="topbar-right">BYBIT USDT PERP · 10x LEVERAGE</div>
+  <div class="topbar-right">Bybit USDT永续 · 10x杠杆</div>
 </div>
 
 <div class="container">
@@ -137,18 +138,18 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
   <div class="chart-section anim-in anim-d4">
     <div class="chart-grid">
       <div class="chart-card">
-        <div class="chart-title"><span>EQUITY CURVE</span><span class="chart-badge">USDT</span></div>
+        <div class="chart-title"><span>📈 资金曲线</span><span class="chart-badge">USDT</span></div>
         <canvas id="equityChart" height="90"></canvas>
       </div>
       <div class="chart-card">
-        <div class="chart-title"><span>P&L BY TRADE</span><span class="chart-badge">PER TRADE</span></div>
+        <div class="chart-title"><span>📊 逐笔盈亏</span><span class="chart-badge">每笔交易</span></div>
         <canvas id="pnlChart" height="90"></canvas>
       </div>
     </div>
   </div>
   <div class="table-section anim-in anim-d5">
     <div class="table-header">
-      <h3>TRADE HISTORY</h3>
+      <h3>📋 交易记录</h3>
       <span class="table-count" id="tradeCount"></span>
     </div>
     <div class="table-scroll">
@@ -186,27 +187,26 @@ function renderAll(){
   const s=calcStats();const ps=s.tp>=0?'+':'';const rs=s.roi>=0?'+':'';
   const ae=[];TRADES.forEach(t=>ae.push({type:'trade',time:t.time,pnl:t.pnl}));INVESTMENTS.forEach(inv=>ae.push({type:'investment',time:inv.time,amount:inv.amount}));ae.sort((a,b)=>a.time>b.time?1:a.time<b.time?-1:(a.type==='investment'?-1:1));
   let bal=INITIAL_CAPITAL,ss=INITIAL_CAPITAL,tp2=1;const ts=[`起始: ${ss.toFixed(2)}U`];ae.forEach(e=>{if(e.type==='trade'){bal+=e.pnl}else{ts.push(`${bal.toFixed(2)}U÷${ss.toFixed(2)}U`);tp2*=(bal/ss);bal+=e.amount;ss=bal;ts.push(`+${e.amount}U→${ss.toFixed(2)}U`)}});ts.push(`${bal.toFixed(2)}U÷${ss.toFixed(2)}U`);tp2*=(bal/ss);const roi=(tp2-1)*100;ts.push(`TWR→${(roi>=0?'+':'')+roi.toFixed(1)}%`);
-  document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">TOTAL EQUITY</div><div class="hero-value ${s.tp>=0?'green':'red'}">${s.cb.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${ts.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% TWR</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">INITIAL CAPITAL</div><div class="hero-mini-value cyan">${INITIAL_CAPITAL.toFixed(2)} U</div><div class="hero-mini-label" style="margin-top:12px">EXTERNAL INVEST</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div></div></div>`;
-  const l10=TRADES.slice(-10);document.getElementById('streakBar').innerHTML=l10.map(t=>{const c=t.result==='tp'?'win':t.result==='sl'?'loss':'hold';return`<div class="streak-dot ${c}"></div>`}).join('')+`<span style="font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t3);margin-left:6px">${s.sk>0?s.sk+' '+s.skt:'—'}</span>`;
+  document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">总权益 · TOTAL EQUITY</div><div class="hero-value ${s.tp>=0?'green':'red'}">${s.cb.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${ts.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% 收益率</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">初始资金</div><div class="hero-mini-value cyan">${INITIAL_CAPITAL.toFixed(2)} U</div><div class="hero-mini-label" style="margin-top:12px">外部投资</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div></div></div>`;
+  const l10=TRADES.slice(-10);document.getElementById('streakBar').innerHTML=l10.map(t=>{const c=t.result==='tp'?'win':t.result==='sl'?'loss':'hold';return`<div class="streak-dot ${c}"></div>`}).join('')+`<span style="font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t3);margin-left:6px">${s.sk>0?'连'+s.sk+(s.skt==='win'?'胜':'负'):'—'}</span>`;
   const pfT=s.pf===Infinity?'∞':s.pf.toFixed(2);
-  const ahT=s.ah>=60?Math.floor(s.ah/60)+'h'+(s.ah%60>0?s.ah%60+'m':''):s.ah+'min';
+  const ahT=s.ah>=60?Math.floor(s.ah/60)+'h'+(s.ah%60>0?s.ah%60+'min':''):s.ah+'min';
   document.getElementById('bentoStats').innerHTML=`
-    <div class="card anim-in anim-d1"><div class="card-inner"><div class="card-label"><span class="icon">📊</span> WIN RATE</div><div class="card-value ${s.wr>=50?'green':'red'}">${s.wr.toFixed(0)}%</div><div class="card-sub">${s.wt}W / ${s.lt}L</div></div></div>
-    <div class="card anim-in anim-d2"><div class="card-inner"><div class="card-label"><span class="icon">💰</span> PROFIT FACTOR</div><div class="card-value ${s.pf>=1?'green':'red'}">${pfT}</div><div class="card-sub">Gross: ${s.wt>0?'+':''}${s.wt>0?(TRADES.filter(t=>t.pnl>0).reduce((a,t)=>a+t.pnl,0)).toFixed(2):'0'}U</div></div></div>
-    <div class="card anim-in anim-d3"><div class="card-inner"><div class="card-label"><span class="icon">⏱</span> AVG HOLD</div><div class="card-value cyan">${ahT}</div><div class="card-sub">${TRADES.filter(t=>t.holdTime&&t.holdTime!=='-').length} trades</div></div></div>
-    <div class="card anim-in anim-d4"><div class="card-inner"><div class="card-label"><span class="icon">📈</span> BEST TRADE</div><div class="card-value green">+${s.bt.toFixed(2)}</div><div class="card-sub">Worst: ${s.wst.toFixed(2)}</div></div></div>
+    <div class="card anim-in anim-d1"><div class="card-inner"><div class="card-label"><span class="icon">🎯</span> 胜率 <span class="en">Win Rate</span></div><div class="card-value ${s.wr>=50?'green':'red'}">${s.wr.toFixed(0)}%</div><div class="card-sub">${s.wt}胜 / ${s.lt}负</div></div></div>
+    <div class="card anim-in anim-d2"><div class="card-inner"><div class="card-label"><span class="icon">💰</span> 盈亏比 <span class="en">P.Factor</span></div><div class="card-value ${s.pf>=1?'green':'red'}">${pfT}</div><div class="card-sub">总盈利: +${s.wt>0?TRADES.filter(t=>t.pnl>0).reduce((a,t)=>a+t.pnl,0).toFixed(2):'0'}U</div></div></div>
+    <div class="card anim-in anim-d3"><div class="card-inner"><div class="card-label"><span class="icon">⏱</span> 平均持仓 <span class="en">Hold Time</span></div><div class="card-value cyan">${ahT}</div><div class="card-sub">${TRADES.filter(t=>t.holdTime&&t.holdTime!=='-').length}笔已平仓</div></div></div>
+    <div class="card anim-in anim-d4"><div class="card-inner"><div class="card-label"><span class="icon">📈</span> 最佳 / 最差 <span class="en">Best / Worst</span></div><div class="card-value green">+${s.bt.toFixed(2)}</div><div class="card-sub">最差: ${s.wst.toFixed(2)}</div></div></div>
   `;
   document.getElementById('investorsRow').innerHTML=INVESTMENTS.map(inv=>`<div class="inv-card"><div class="inv-name">${inv.name}</div><div class="inv-amount">${inv.amount.toFixed(2)} USDT</div><div class="inv-time">${inv.time}</div></div>`).join('');
-  document.getElementById('tradeCount').textContent=TRADES.length+' TRADES';
+  document.getElementById('tradeCount').textContent=TRADES.length+' 笔交易';
   const tb=document.getElementById('tradesBody');
   [...TRADES].reverse().forEach((t,idx)=>{
-    const sc=t.side==='long'?'long':'short';const st=t.side==='long'?'LONG':'SHORT';
-    const rc=t.result==='tp'?'tp':t.result==='sl'?'sl':'hold';const rt=t.result==='tp'?'TP':t.result==='sl'?'SL':'HOLD';
+    const sc=t.side==='long'?'long':'short';const st=t.side==='long'?'做多':'做空';
+    const rc=t.result==='tp'?'tp':t.result==='sl'?'sl':'hold';const rt=t.result==='tp'?'止盈':t.result==='sl'?'止损':'持仓中';
     const pc=t.pnl>=0?'pnl-pos':'pnl-neg';const pt=(t.pnl>=0?'+':'')+t.pnl.toFixed(2);
     const et=t.exit?t.exit:'-';const id='trade-'+idx;
     tb.innerHTML+=`<tr class="trade-row" onclick="toggleDetail('${id}')"><td>${t.time}</td><td>${t.symbol}</td><td><span class="badge ${sc}">${st}</span></td><td>${t.entry}</td><td>${et}</td><td>${t.qty}</td><td><span class="badge ${rc}">${rt}</span></td><td class="${pc}">${pt}</td><td class="expand-icon">▶</td></tr><tr class="trade-detail-row" id="${id}"><td colspan="9"><div class="detail-panel"><div class="dp-title">交易详情</div><div class="dp-item"><span class="dp-label">杠杆:</span><span class="dp-value">${t.leverage||'-'}x</span></div><div class="dp-item"><span class="dp-label">持仓时间:</span><span class="dp-value">${t.holdTime||'-'}</span></div><div class="dp-item"><span class="dp-label">止盈价:</span><span class="dp-value">${t.tp||'-'}</span></div><div class="dp-item"><span class="dp-label">止损价:</span><span class="dp-value">${t.sl||'-'}</span></div><div class="dp-reason"><span class="dp-label">📈 入场逻辑:</span><span class="dp-value">${t.entryReason||'-'}</span></div><div class="dp-reason"><span class="dp-label">📤 平仓原因:</span><span class="dp-value">${t.exitReason||'-'}</span></div></div></td></tr>`;
   });
-  // Equity chart
   const al=[];TRADES.forEach(t=>al.push({type:'trade',time:t.time,pnl:t.pnl,symbol:t.symbol}));INVESTMENTS.forEach(inv=>al.push({type:'investment',time:inv.time,amount:inv.amount,name:inv.name}));al.sort((a,b)=>a.time>b.time?1:a.time<b.time?-1:(a.type==='investment'?-1:1));
   const el=["START"],ed=[INITIAL_CAPITAL],pb=["#22d3ee"],pr=[5];let running=INITIAL_CAPITAL,tc=0;
   al.forEach(e=>{if(e.type==='trade'){tc++;el.push("#"+tc+" "+e.symbol);running+=e.pnl;ed.push(parseFloat(running.toFixed(2)));pb.push(e.pnl>=0?"#22d3ee":"#ff3b3b");pr.push(5)}else{el.push(e.name+" +"+e.amount+"U");running+=e.amount;ed.push(parseFloat(running.toFixed(2)));pb.push("#f5a623");pr.push(9)}});
@@ -216,7 +216,7 @@ function renderAll(){
   new Chart(document.getElementById("equityChart"),{type:"line",data:{labels:el,datasets:[{data:ed,borderColor:"#22d3ee",backgroundColor:"rgba(34,211,238,0.04)",borderWidth:2,pointBackgroundColor:pb,pointBorderColor:"transparent",pointRadius:pr,pointHoverRadius:8,fill:true,tension:0.3}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...ts2,callbacks:{label:c=>c.parsed.y.toFixed(2)+" USDT"}}},scales:{x:gx,y:gy}}});
   const pl=TRADES.map((t,i)=>"#"+(i+1)+" "+t.symbol);const pv=TRADES.map(t=>t.pnl);const pc2=pv.map(v=>v>=0?"rgba(0,230,118,0.7)":"rgba(255,59,59,0.7)");const pb2=pv.map(v=>v>=0?"#00e676":"#ff3b3b");
   new Chart(document.getElementById("pnlChart"),{type:"bar",data:{labels:pl,datasets:[{data:pv,backgroundColor:pc2,borderColor:pb2,borderWidth:1,borderRadius:4,borderSkipped:false}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...ts2,callbacks:{label:c=>(c.parsed.y>=0?"+":"")+c.parsed.y.toFixed(2)+" USDT"}}},scales:{x:gx,y:{...gy,beginAtZero:true}}}});
-  document.getElementById("footer").textContent="RUBEN AI · BYBIT USDT PERP · LAST UPDATE: "+lastUpdate;
+  document.getElementById("footer").textContent="RUBEN AI · BYBIT USDT永续 · 最后更新: "+lastUpdate;
 }
 loadTrades();
 </script>
