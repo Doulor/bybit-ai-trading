@@ -1,9 +1,17 @@
 {
   "config": {
-    "initial_capital": 7.00,
+    "initial_capital": 7.0,
     "investments": [
-      { "name": "虫洞", "amount": 2.00, "time": "06-20 21:18" },
-      { "name": "三三终得玖", "amount": 9.00, "time": "06-22 01:00" }
+      {
+        "name": "虫洞",
+        "amount": 2.0,
+        "time": "06-20 21:18"
+      },
+      {
+        "name": "三三终得玖",
+        "amount": 9.0,
+        "time": "06-22 01:00"
+      }
     ],
     "note": "初始资金7U来自歪头，Doulor(喜忧半半开)是管理者不是出资人"
   },
@@ -18,7 +26,7 @@
       "result": "tp",
       "pnl": 2.23,
       "tp": 0.4408,
-      "sl": 0.4150,
+      "sl": 0.415,
       "leverage": 9,
       "holdTime": "10min",
       "entryReason": "15m超卖反弹+放量确认，底部企稳信号",
@@ -34,7 +42,7 @@
       "result": "tp",
       "pnl": 1.81,
       "tp": 0.1068,
-      "sl": 0.0980,
+      "sl": 0.098,
       "leverage": 6,
       "holdTime": "35min",
       "entryReason": "15m超卖反弹+3x放量，空头付费-0.1%",
@@ -50,7 +58,7 @@
       "result": "tp",
       "pnl": 0.43,
       "tp": 1735.09,
-      "sl": 1700.00,
+      "sl": 1700.0,
       "leverage": 5,
       "holdTime": "4h",
       "entryReason": "4h级别支撑位反弹+RSI超卖",
@@ -66,7 +74,7 @@
       "result": "tp",
       "pnl": 0.75,
       "tp": 1.166,
-      "sl": 1.120,
+      "sl": 1.12,
       "leverage": 5,
       "holdTime": "2h",
       "entryReason": "15m超卖反弹+温和放量，空头付费-0.46%",
@@ -77,12 +85,12 @@
       "symbol": "EDENUSDT",
       "side": "long",
       "entry": 0.04756,
-      "exit": 0.04730,
+      "exit": 0.0473,
       "qty": 251,
       "result": "sl",
       "pnl": -0.07,
       "tp": 0.0492,
-      "sl": 0.0470,
+      "sl": 0.047,
       "leverage": 5,
       "holdTime": "37min",
       "entryReason": "14:45巨量拉盘至0.04815，回踩0.0476支撑不破",
@@ -141,16 +149,16 @@
       "symbol": "ETHUSDT",
       "side": "long",
       "entry": 1762.37,
-      "exit": null,
+      "exit": 1764.68,
       "qty": 0.06,
-      "result": "hold",
-      "pnl": 0,
+      "result": "tp",
+      "pnl": 0.14,
       "tp": 1790,
       "sl": 1745,
       "leverage": 10,
-      "holdTime": "-",
+      "holdTime": "20min",
       "entryReason": "15m放量突破1756压力位，成交量放大8倍，站稳1760上方",
-      "exitReason": "-"
+      "exitReason": "BTC拉盘ETH不跟，市场分歧，主动止盈避免被砸"
     }
   ]
 }
