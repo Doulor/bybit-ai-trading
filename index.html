@@ -169,6 +169,14 @@ async function loadTrades() {
   renderAll();
 }
 
+// toggleDetail 放全局，inline onclick 才能找到
+function toggleDetail(id) {
+  const el = document.getElementById(id);
+  const row = el.previousElementSibling;
+  el.classList.toggle('open');
+  row.classList.toggle('expanded');
+}
+
 function renderAll() {
 
 const totalInvestment = INVESTMENTS.reduce((s, i) => s + i.amount, 0);
@@ -178,32 +186,36 @@ const winTrades = TRADES.filter(t => t.pnl > 0).length;
 const winRate = TRADES.length > 0 ? (winTrades / TRADES.length * 100) : 0;
 const bestTrade = Math.max(...TRADES.map(t => t.pnl));
 const worstTrade = Math.min(...TRADES.map(t => t.pnl));
+
 // 时间加权收益率 (TWR)
-// Build sorted timeline of all events
 const allEvents2 = [];
-TRADES.forEach((t, i) => allEvents2.push({ type: 'trade', time: t.time, pnl: t.pnl, index: i }));
+TRADES.forEach((t, i) => allEvents2.push({ type: 'trade', time: t.time, pnl: t.pnl }));
 INVESTMENTS.forEach(inv => allEvents2.push({ type: 'investment', time: inv.time, amount: inv.amount }));
 allEvents2.sort((a, b) => a.time > b.time ? 1 : a.time < b.time ? -1 : (a.type === 'investment' ? -1 : 1));
 
-// Walk chronologically, close segment at each investment
 let balance = INITIAL_CAPITAL;
 let segStart = INITIAL_CAPITAL;
 let twrProduct = 1;
+const twrSegs = [`起始资金: ${segStart.toFixed(2)}U`];
 
-allEvents2.forEach((ev) => {
+allEvents2.forEach(ev => {
   if (ev.type === 'trade') {
     balance += ev.pnl;
   } else {
-    // Investment closes current segment, starts new one
-    if (segStart > 0) twrProduct *= (balance / segStart);
+    const segRet = (balance / segStart - 1) * 100;
+    twrSegs.push(`${balance.toFixed(2)}U ÷ ${segStart.toFixed(2)}U = ${(balance/segStart).toFixed(4)} (${segRet >= 0 ? '+' : ''}${segRet.toFixed(1)}%)`);
+    twrProduct *= (balance / segStart);
     balance += ev.amount;
     segStart = balance;
+    twrSegs.push(`💰 投资+${ev.amount}U → 新基数 ${segStart.toFixed(2)}U`);
   }
 });
-// Close last segment
-if (segStart > 0) twrProduct *= (balance / segStart);
+const segRet = (balance / segStart - 1) * 100;
+twrSegs.push(`${balance.toFixed(2)}U ÷ ${segStart.toFixed(2)}U = ${(balance/segStart).toFixed(4)} (${segRet >= 0 ? '+' : ''}${segRet.toFixed(1)}%)`);
+twrProduct *= (balance / segStart);
 const roi = (twrProduct - 1) * 100;
-
+twrSegs.push(`TWR = ${twrProduct.toFixed(4)} → 收益率 ${(roi >= 0 ? '+' : '') + roi.toFixed(1)}%`);
+const twrTooltip = twrSegs.join('\n');
 
 // 统计卡片
 const stats = [
@@ -211,13 +223,13 @@ const stats = [
   { label: "外部投资", value: totalInvestment.toFixed(2), cls: "gold" },
   { label: "当前余额", value: currentBalance.toFixed(2), cls: totalPnl >= 0 ? "green" : "red" },
   { label: "交易盈亏", value: (totalPnl >= 0 ? "+" : "") + totalPnl.toFixed(2), cls: totalPnl >= 0 ? "green" : "red" },
-  { label: "收益率(TWR)", value: (roi >= 0 ? "+" : "") + roi.toFixed(1) + "%", cls: roi >= 0 ? "green" : "red" },
+  { label: "收益率(TWR)", value: (roi >= 0 ? "+" : "") + roi.toFixed(1) + "%", cls: roi >= 0 ? "green" : "red", title: twrTooltip },
   { label: "胜率", value: winRate.toFixed(0) + "%", cls: winRate >= 50 ? "green" : "red" },
   { label: "最佳单", value: "+" + bestTrade.toFixed(2), cls: "green" },
   { label: "最差单", value: worstTrade.toFixed(2), cls: "red" },
 ];
 document.getElementById("statsRow").innerHTML = stats.map(s =>
-  `<div class="stat-card"><div class="label">${s.label}</div><div class="value ${s.cls}">${s.value}</div></div>`
+  `<div class="stat-card"${s.title ? ' title="' + s.title.replace(/"/g, '&quot;') + '" style="cursor:help"' : ''}><div class="label">${s.label}</div><div class="value ${s.cls}">${s.value}</div></div>`
 ).join("");
 
 // 投资人
@@ -261,16 +273,9 @@ const tbody = document.getElementById("tradesBody");
     </tr>`;
 });
 
-function toggleDetail(id) {
-  const el = document.getElementById(id);
-  const row = el.previousElementSibling;
-  el.classList.toggle('open');
-  row.classList.toggle('expanded');
-}
-
-// 资金曲线 - 按时间排序所有事件，统一计算余额
+// 资金曲线 - 按时间排序所有事件
 const allEvents = [];
-TRADES.forEach((t, i) => allEvents.push({ type: 'trade', time: t.time, pnl: t.pnl, symbol: t.symbol, index: i }));
+TRADES.forEach((t, i) => allEvents.push({ type: 'trade', time: t.time, pnl: t.pnl, symbol: t.symbol }));
 INVESTMENTS.forEach(inv => allEvents.push({ type: 'investment', time: inv.time, amount: inv.amount, name: inv.name }));
 allEvents.sort((a, b) => a.time > b.time ? 1 : a.time < b.time ? -1 : (a.type === 'investment' ? -1 : 1));
 
