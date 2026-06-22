@@ -133,16 +133,16 @@
       "symbol": "ASTERUSDT",
       "side": "long",
       "entry": 0.6308,
-      "exit": null,
+      "exit": 0.6415,
       "qty": 237,
-      "result": "hold",
-      "pnl": 0,
+      "result": "sl",
+      "pnl": 3.19,
       "tp": 0.655,
-      "sl": 0.621,
+      "sl": 0.6415,
       "leverage": 10,
-      "holdTime": "-",
+      "holdTime": "9h",
       "entryReason": "4h级别RSI超卖(32)+放量7.5x，从0.66跌到0.6224后企稳，恐慌抛售后吸筹信号",
-      "exitReason": "-"
+      "exitReason": "止损触发"
     },
     {
       "time": "06-22 19:44",
@@ -159,6 +159,54 @@
       "holdTime": "20min",
       "entryReason": "15m放量突破1756压力位，成交量放大8倍，站稳1760上方",
       "exitReason": "BTC拉盘ETH不跟，市场分歧，主动止盈避免被砸"
+    },
+    {
+      "time": "06-22 21:39",
+      "symbol": "BEATUSDT",
+      "side": "long",
+      "entry": 1.6846,
+      "exit": 1.65,
+      "qty": 59,
+      "result": "sl",
+      "pnl": -2.05,
+      "tp": 1.73,
+      "sl": 1.65,
+      "leverage": 10,
+      "holdTime": "49min",
+      "entryReason": "RSI极度超卖(25)，从1.6545反弹企稳，美股开盘后市场波动中寻找超卖反弹机会",
+      "exitReason": "止损触发"
+    },
+    {
+      "time": "06-22 22:24",
+      "symbol": "CHZUSDT",
+      "side": "long",
+      "entry": 0.02029,
+      "exit": null,
+      "qty": 2465,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 0.0215,
+      "sl": 0.0195,
+      "leverage": 10,
+      "holdTime": "-",
+      "entryReason": "",
+      "exitReason": "-"
+    },
+    {
+      "time": "06-22 22:24",
+      "symbol": "BASEDUSDT",
+      "side": "long",
+      "entry": 0.08918,
+      "exit": null,
+      "qty": 2799,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 0.093,
+      "sl": 0.087,
+      "leverage": 10,
+      "holdTime": "-",
+      "entryReason": "",
+      "exitReason": "-"
     }
   ]
 }
