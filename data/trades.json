@@ -183,14 +183,14 @@
       "entry": 0.02029,
       "exit": 0.02043,
       "qty": 2465,
-      "result": "sl",
+      "result": "tp",
       "pnl": 0.34,
       "tp": 0.0215,
       "sl": 0.0195,
       "leverage": 10,
-      "holdTime": "1h30min",
+      "holdTime": "30min",
       "entryReason": "",
-      "exitReason": "止损触发"
+      "exitReason": "止盈触发"
     },
     {
       "time": "06-22 22:24",
