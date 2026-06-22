@@ -106,14 +106,15 @@
   tr.trade-row.expanded .expand-icon { transform:rotate(90deg); }
 
   /* Custom tooltip */
-  .has-tooltip { position:relative; cursor:help; }
+  .has-tooltip { position:relative; cursor:help; overflow:visible; }
   .has-tooltip:hover::after {
     content:attr(data-tip);
-    position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
     background:#1a1a2e; border:1px solid var(--border2); color:var(--t2);
     font-family:'JetBrains Mono',monospace; font-size:0.7em; line-height:1.6;
     white-space:pre; padding:10px 14px; border-radius:8px; z-index:99;
     pointer-events:none; box-shadow:0 4px 20px rgba(0,0,0,0.5);
+    max-height:300px; overflow-y:auto;
   }
 </style>
 </head>
