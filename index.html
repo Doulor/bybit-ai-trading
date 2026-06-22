@@ -104,6 +104,17 @@
   .detail-panel .dp-reason .dp-value { color:var(--t2); line-height:1.5; }
   .expand-icon { font-size:0.7em; color:var(--t3); margin-left:4px; transition:transform 0.2s; }
   tr.trade-row.expanded .expand-icon { transform:rotate(90deg); }
+
+  /* Custom tooltip */
+  .has-tooltip { position:relative; cursor:help; }
+  .has-tooltip:hover::after {
+    content:attr(data-tip);
+    position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    background:#1a1a2e; border:1px solid var(--border2); color:var(--t2);
+    font-family:'JetBrains Mono',monospace; font-size:0.7em; line-height:1.6;
+    white-space:pre; padding:10px 14px; border-radius:8px; z-index:99;
+    pointer-events:none; box-shadow:0 4px 20px rgba(0,0,0,0.5);
+  }
 </style>
 </head>
 <body>
@@ -229,7 +240,7 @@ const stats = [
   { label: "最差单", value: worstTrade.toFixed(2), cls: "red" },
 ];
 document.getElementById("statsRow").innerHTML = stats.map(s =>
-  `<div class="stat-card"${s.title ? ' title="' + s.title.replace(/"/g, '&quot;') + '" style="cursor:help"' : ''}><div class="label">${s.label}</div><div class="value ${s.cls}">${s.value}</div></div>`
+  `<div class="stat-card${s.title ? ' has-tooltip' : ''}"${s.title ? ' data-tip="' + s.title.replace(/"/g, '&quot;') + '"' : ''}><div class="label">${s.label}</div><div class="value ${s.cls}">${s.value}</div></div>`
 ).join("");
 
 // 投资人
