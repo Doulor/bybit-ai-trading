@@ -181,16 +181,16 @@
       "symbol": "CHZUSDT",
       "side": "long",
       "entry": 0.02029,
-      "exit": null,
+      "exit": 0.02043,
       "qty": 2465,
-      "result": "hold",
-      "pnl": 0,
+      "result": "sl",
+      "pnl": 0.34,
       "tp": 0.0215,
       "sl": 0.0195,
       "leverage": 10,
-      "holdTime": "-",
+      "holdTime": "1h30min",
       "entryReason": "",
-      "exitReason": "-"
+      "exitReason": "止损触发"
     },
     {
       "time": "06-22 22:24",
