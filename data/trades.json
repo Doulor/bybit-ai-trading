@@ -135,6 +135,22 @@
       "holdTime": "-",
       "entryReason": "4h级别RSI超卖(32)+放量7.5x，从0.66跌到0.6224后企稳，恐慌抛售后吸筹信号",
       "exitReason": "-"
+    },
+    {
+      "time": "06-22 19:44",
+      "symbol": "ETHUSDT",
+      "side": "long",
+      "entry": 1762.37,
+      "exit": null,
+      "qty": 0.06,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 1790,
+      "sl": 1745,
+      "leverage": 10,
+      "holdTime": "-",
+      "entryReason": "15m放量突破1756压力位，成交量放大8倍，站稳1760上方",
+      "exitReason": "-"
     }
   ]
 }
