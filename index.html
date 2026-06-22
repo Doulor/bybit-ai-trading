@@ -178,7 +178,31 @@ const winTrades = TRADES.filter(t => t.pnl > 0).length;
 const winRate = TRADES.length > 0 ? (winTrades / TRADES.length * 100) : 0;
 const bestTrade = Math.max(...TRADES.map(t => t.pnl));
 const worstTrade = Math.min(...TRADES.map(t => t.pnl));
-const roi = ((currentBalance - INITIAL_CAPITAL) / INITIAL_CAPITAL * 100);
+// 时间加权收益率 (TWR)
+// Build sorted timeline of all events
+const allEvents2 = [];
+TRADES.forEach((t, i) => allEvents2.push({ type: 'trade', time: t.time, pnl: t.pnl, index: i }));
+INVESTMENTS.forEach(inv => allEvents2.push({ type: 'investment', time: inv.time, amount: inv.amount }));
+allEvents2.sort((a, b) => a.time > b.time ? 1 : a.time < b.time ? -1 : (a.type === 'investment' ? -1 : 1));
+
+// Walk chronologically, close segment at each investment
+let balance = INITIAL_CAPITAL;
+let segStart = INITIAL_CAPITAL;
+let twrProduct = 1;
+
+allEvents2.forEach((ev) => {
+  if (ev.type === 'trade') {
+    balance += ev.pnl;
+  } else {
+    // Investment closes current segment, starts new one
+    if (segStart > 0) twrProduct *= (balance / segStart);
+    balance += ev.amount;
+    segStart = balance;
+  }
+});
+// Close last segment
+if (segStart > 0) twrProduct *= (balance / segStart);
+const roi = (twrProduct - 1) * 100;
 
 
 // 统计卡片
@@ -187,7 +211,7 @@ const stats = [
   { label: "外部投资", value: totalInvestment.toFixed(2), cls: "gold" },
   { label: "当前余额", value: currentBalance.toFixed(2), cls: totalPnl >= 0 ? "green" : "red" },
   { label: "交易盈亏", value: (totalPnl >= 0 ? "+" : "") + totalPnl.toFixed(2), cls: totalPnl >= 0 ? "green" : "red" },
-  { label: "收益率", value: (roi >= 0 ? "+" : "") + roi.toFixed(1) + "%", cls: roi >= 0 ? "green" : "red" },
+  { label: "收益率(TWR)", value: (roi >= 0 ? "+" : "") + roi.toFixed(1) + "%", cls: roi >= 0 ? "green" : "red" },
   { label: "胜率", value: winRate.toFixed(0) + "%", cls: winRate >= 50 ? "green" : "red" },
   { label: "最佳单", value: "+" + bestTrade.toFixed(2), cls: "green" },
   { label: "最差单", value: worstTrade.toFixed(2), cls: "red" },
