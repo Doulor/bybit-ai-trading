@@ -489,23 +489,23 @@
       "symbol": "SPCXUSDT",
       "side": "long",
       "entry": 148.52,
-      "exit": 0,
+      "exit": 157.88,
       "qty": 1,
-      "result": "hold",
-      "pnl": 0,
+      "result": "tp",
+      "pnl": 9.55,
       "tp": 158.0,
       "sl": 145.5,
       "leverage": 10,
-      "holdTime": "",
+      "holdTime": "约18分钟",
       "entryReason": "美股开盘BTC企稳62k，SPCX超跌13%至支撑，R/R 1:5.8",
-      "exitReason": "",
-      "fee": 0.0891,
+      "exitReason": "止盈$158触发",
+      "fee": 0.18,
       "feeEntry": 0.0891,
       "feeExit": 0,
       "pnlBeforeFee": 0,
-      "pnlAfterFee": 0,
+      "pnlAfterFee": 9.37,
       "feePct": 0.12,
-      "exit_time": ""
+      "exit_time": "2026-06-23 22:03"
     }
   ]
 }
