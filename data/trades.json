@@ -529,6 +529,29 @@
       "pnlAfterFee": -2.75,
       "feePct": 0.12,
       "exit_time": "2026-06-23 22:23"
+    },
+    {
+      "time": "06-23 22:55",
+      "symbol": "SNDKUSDT",
+      "side": "long",
+      "entry": 2000.28,
+      "exit": 0,
+      "qty": 0.02,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 2055.0,
+      "sl": 1970.0,
+      "leverage": 10,
+      "holdTime": "",
+      "entryReason": "SNDK跌14%至支撑$1983，头仓试探做多，0.02张合约约$4保证金",
+      "exitReason": "",
+      "fee": 0.024,
+      "feeEntry": 0.024,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0.12,
+      "exit_time": ""
     }
   ]
 }
