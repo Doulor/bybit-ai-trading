@@ -334,22 +334,22 @@
       "symbol": "BTWUSDT",
       "side": "short",
       "entry": 0.083205,
-      "exit": null,
+      "exit": 0.0826,
       "qty": 360,
-      "result": "hold",
-      "pnl": 0,
+      "result": "tp",
+      "pnl": 0.2178,
       "tp": 0.0777,
       "sl": 0.0867,
       "leverage": 10,
-      "holdTime": "-",
+      "holdTime": "39min",
       "entryReason": "24h跌14.6%，30m放量下跌趋势明确，从0.10跌到0.083，趋势空头",
-      "exitReason": "",
-      "fee": 0,
-      "feeEntry": 0,
-      "feeExit": 0,
-      "pnlBeforeFee": 0,
-      "pnlAfterFee": 0,
-      "feePct": 0
+      "exitReason": "价格跌至0.0826自动平仓",
+      "fee": 0.0358,
+      "feeEntry": 0.018,
+      "feeExit": 0.0178,
+      "pnlBeforeFee": 0.2178,
+      "pnlAfterFee": 0.182,
+      "feePct": 0.12
     }
   ]
 }
