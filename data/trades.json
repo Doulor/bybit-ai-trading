@@ -372,6 +372,28 @@
       "pnlBeforeFee": 0,
       "pnlAfterFee": 0,
       "feePct": 0
+    },
+    {
+      "time": "06-23 13:45",
+      "symbol": "AAVEUSDT",
+      "side": "long",
+      "entry": 74.02,
+      "exit": null,
+      "qty": 1.1,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 76.98,
+      "sl": 72.69,
+      "leverage": 10,
+      "holdTime": "-",
+      "entryReason": "RSI 31超卖，73.56支撑位双底企稳，蓝筹DeFi反弹首选，放量1.9x",
+      "exitReason": "",
+      "fee": 0,
+      "feeEntry": 0,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0
     }
   ]
 }
