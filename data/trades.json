@@ -575,6 +575,29 @@
       "pnlAfterFee": 0,
       "feePct": 0.12,
       "exit_time": ""
+    },
+    {
+      "time": "06-24 01:56",
+      "symbol": "SPCXUSDT",
+      "side": "short",
+      "entry": 160.87,
+      "exit": 0,
+      "qty": 1,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 152.0,
+      "sl": 166.0,
+      "leverage": 10,
+      "holdTime": "",
+      "entryReason": "SPCX从$164跌到$161，15分钟3连阴放量破位$161。趋势反转做空",
+      "exitReason": "",
+      "fee": 0.0965,
+      "feeEntry": 0.0965,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0.12,
+      "exit_time": ""
     }
   ]
 }
