@@ -438,6 +438,28 @@
       "pnlBeforeFee": 0,
       "pnlAfterFee": 0,
       "feePct": 0
+    },
+    {
+      "time": "06-23 14:50",
+      "symbol": "TRUMPUSDT",
+      "side": "short",
+      "entry": 1.788,
+      "exit": null,
+      "qty": 28,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 1.6807,
+      "sl": 1.8506,
+      "leverage": 10,
+      "holdTime": "-",
+      "entryReason": "15m趋势下跌，跌破1.763支撑放量，继续下探概率大",
+      "exitReason": "",
+      "fee": 0,
+      "feeEntry": 0,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0
     }
   ]
 }
