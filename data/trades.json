@@ -512,23 +512,23 @@
       "symbol": "DEXEUSDT",
       "side": "short",
       "entry": 22.04,
-      "exit": 0,
+      "exit": 22.7,
       "qty": 4,
-      "result": "hold",
-      "pnl": 0,
+      "result": "sl",
+      "pnl": -2.64,
       "tp": 20.0,
       "sl": 22.7,
       "leverage": 10,
-      "holdTime": "",
+      "holdTime": "约18分钟",
       "entryReason": "DEXE逆势涨23%+市场全线暴跌，从$25回落到$22，R/R 1:3.3，做空回归均值",
-      "exitReason": "",
-      "fee": 0.0529,
+      "exitReason": "止损$22.70触发",
+      "fee": 0.11,
       "feeEntry": 0.0529,
       "feeExit": 0,
       "pnlBeforeFee": 0,
-      "pnlAfterFee": 0,
+      "pnlAfterFee": -2.75,
       "feePct": 0.12,
-      "exit_time": ""
+      "exit_time": "2026-06-23 22:23"
     }
   ]
 }
