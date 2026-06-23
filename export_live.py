@@ -1,4 +1,4 @@
-"""Export live Bybit data to JSON for the dashboard."""
+﻿"""Export live Bybit data to JSON for the dashboard."""
 import os, sys, time, json, base64
 from urllib.parse import urlencode
 from cryptography.hazmat.primitives import hashes, serialization
@@ -79,7 +79,7 @@ data = {
     'updated_at': int(time.time() * 1000),
 }
 
-out = r'C:\Users\Doulor\Documents\Bybit AI\data\live.json'
+out = r'C:\Users\Doulor\Documents\BybitAI\data\live.json'
 os.makedirs(os.path.dirname(out), exist_ok=True)
 with open(out, 'w') as f:
     json.dump(data, f, indent=2)
