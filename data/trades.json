@@ -416,6 +416,28 @@
       "pnlBeforeFee": 0,
       "pnlAfterFee": 0,
       "feePct": 0
+    },
+    {
+      "time": "06-23 14:58",
+      "symbol": "EIGENUSDT",
+      "side": "short",
+      "entry": 0.25967,
+      "exit": null,
+      "qty": 308.0,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 0.2415,
+      "sl": 0.2688,
+      "leverage": 10,
+      "holdTime": "-",
+      "entryReason": "24h跌16%趋势延续，15m连续lower high，跌破0.258支撑，反弹无力继续下探",
+      "exitReason": "",
+      "fee": 0,
+      "feeEntry": 0,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0
     }
   ]
 }
