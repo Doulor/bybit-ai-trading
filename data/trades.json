@@ -350,6 +350,28 @@
       "pnlBeforeFee": 0.2178,
       "pnlAfterFee": 0.185,
       "feePct": 0.11
+    },
+    {
+      "time": "06-23 13:20",
+      "symbol": "ATOMUSDT",
+      "side": "long",
+      "entry": 1.7846,
+      "exit": null,
+      "qty": 28.0,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 1.8471,
+      "sl": 1.7632,
+      "leverage": 10,
+      "holdTime": "-",
+      "entryReason": "RSI 38超卖，1.7775支撑位反复测试不破，5m/15m企稳反弹，量能回升",
+      "exitReason": "",
+      "fee": 0,
+      "feeEntry": 0,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0
     }
   ]
 }
