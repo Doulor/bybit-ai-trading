@@ -1,7 +1,13 @@
 {
   "config": {
-    "initial_capital": 7.0,
+    "initial_capital": 0,
     "investments": [
+      {
+        "name": "歪头",
+        "amount": 7.0,
+        "time": "06-20 12:00",
+        "share": 16.1
+      },
       {
         "name": "虫洞",
         "amount": 2.0,
