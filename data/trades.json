@@ -394,6 +394,28 @@
       "pnlBeforeFee": 0,
       "pnlAfterFee": -1.6462,
       "feePct": 0
+    },
+    {
+      "time": "06-23 14:26",
+      "symbol": "APTUSDT",
+      "side": "long",
+      "entry": 0.636,
+      "exit": null,
+      "qty": 78.62,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 0.6614,
+      "sl": 0.6169,
+      "leverage": 10,
+      "holdTime": "-",
+      "entryReason": "RSI 18极度超卖，0.6300强支撑位，放量5x疑似恐慌抛售见底，APT是Move系龙头大品种",
+      "exitReason": "",
+      "fee": 0,
+      "feeEntry": 0,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0
     }
   ]
 }
