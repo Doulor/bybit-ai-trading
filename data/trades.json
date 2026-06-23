@@ -466,22 +466,23 @@
       "symbol": "TRUMPUSDT",
       "side": "short",
       "entry": 1.788,
-      "exit": null,
+      "exit": 1.755,
       "qty": 28,
-      "result": "hold",
-      "pnl": 0,
+      "result": "tp",
+      "pnl": 0.86,
       "tp": 1.6807,
       "sl": 1.8506,
       "leverage": 10,
-      "holdTime": "-",
+      "holdTime": "62min",
       "entryReason": "15m趋势下跌，跌破1.763支撑放量，继续下探概率大",
-      "exitReason": "",
-      "fee": 0,
+      "exitReason": "移动止损触发 1.765",
+      "fee": 0.055,
       "feeEntry": 0,
       "feeExit": 0,
       "pnlBeforeFee": 0,
-      "pnlAfterFee": 0,
-      "feePct": 0
+      "pnlAfterFee": 0.8,
+      "feePct": 0,
+      "exit_time": "2026-06-23 21:16"
     }
   ]
 }
