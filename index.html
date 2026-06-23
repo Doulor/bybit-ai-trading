@@ -172,8 +172,8 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 <div class="footer" id="footer"></div>
 
 <script>
-let TRADES=[];let INITIAL_CAPITAL=7.00;let INVESTMENTS=[];let lastUpdate="";let investorsBarChart=null;let investorsPieChart=null;
-async function loadTrades(){try{const r=await fetch('data/trades.json?t='+Date.now());if(!r.ok)throw new Error('fail');const d=await r.json();TRADES=d.trades||[];INITIAL_CAPITAL=d.config?.initial_capital||7.00;INVESTMENTS=d.config?.investments||[];lastUpdate=TRADES.length>0?TRADES[TRADES.length-1].time:''}catch(e){console.error(e)}renderAll()}
+let TRADES=[];let INITIAL_CAPITAL=0;let INVESTMENTS=[];let lastUpdate="";let investorsBarChart=null;let investorsPieChart=null;
+async function loadTrades(){try{const r=await fetch('data/trades.json?t='+Date.now());if(!r.ok)throw new Error('fail');const d=await r.json();TRADES=d.trades||[];INITIAL_CAPITAL=d.config?.initial_capital||0;INVESTMENTS=d.config?.investments||[];lastUpdate=TRADES.length>0?TRADES[TRADES.length-1].time:''}catch(e){console.error(e)}renderAll()}
 function toggleDetail(id){const el=document.getElementById(id);const row=el.previousElementSibling;el.classList.toggle('open');row.classList.toggle('expanded')}
 function calcStats(){
   const ti=INVESTMENTS.reduce((s,i)=>s+i.amount,0);
