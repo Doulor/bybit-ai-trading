@@ -118,6 +118,15 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 .streak-dot.loss{background:var(--red);box-shadow:0 0 6px rgba(255,59,59,0.4)}
 .streak-dot.hold{background:var(--cyan);box-shadow:0 0 6px rgba(34,211,238,0.3)}
 
+.investors-section{margin-bottom:20px}
+.investors-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:900px){.investors-grid{grid-template-columns:1fr}}
+.investors-bar-card,.investors-pie-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative}
+.investors-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:14px}
+.investor-info-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;border-left:3px solid var(--gold)}
+.investor-info-item .ii-name{font-size:0.68em;color:var(--gold);font-weight:600;margin-bottom:3px}
+.investor-info-item .ii-share{font-family:'JetBrains Mono',monospace;font-size:0.85em;font-weight:700;color:var(--cyan);margin-bottom:2px}
+.investor-info-item .ii-detail{font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t2)}
 .footer{text-align:center;color:var(--t3);padding:20px 0;font-family:'JetBrains Mono',monospace;font-size:0.62em;letter-spacing:0.5px}
 </style>
 </head>
@@ -134,7 +143,7 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 <div class="container">
   <div class="hero anim-in" id="heroCard"></div>
   <div class="bento" id="bentoStats"></div>
-  <div class="investors anim-in anim-d3" id="investorsRow"></div>
+  <div class="investors-section anim-in anim-d3" id="investorsSection"></div>
   <div class="chart-section anim-in anim-d4">
     <div class="chart-grid">
       <div class="chart-card">
@@ -163,7 +172,7 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 <div class="footer" id="footer"></div>
 
 <script>
-let TRADES=[];let INITIAL_CAPITAL=7.00;let INVESTMENTS=[];let lastUpdate="";
+let TRADES=[];let INITIAL_CAPITAL=7.00;let INVESTMENTS=[];let lastUpdate="";let investorsBarChart=null;let investorsPieChart=null;
 async function loadTrades(){try{const r=await fetch('data/trades.json?t='+Date.now());if(!r.ok)throw new Error('fail');const d=await r.json();TRADES=d.trades||[];INITIAL_CAPITAL=d.config?.initial_capital||7.00;INVESTMENTS=d.config?.investments||[];lastUpdate=TRADES.length>0?TRADES[TRADES.length-1].time:''}catch(e){console.error(e)}renderAll()}
 function toggleDetail(id){const el=document.getElementById(id);const row=el.previousElementSibling;el.classList.toggle('open');row.classList.toggle('expanded')}
 function calcStats(){
@@ -198,7 +207,7 @@ function renderAll(){
     <div class="card anim-in anim-d4"><div class="card-inner"><div class="card-label"><span class="icon">⏱</span> 平均持仓 <span class="en">Hold Time</span></div><div class="card-value cyan">${ahT}</div><div class="card-sub">${TRADES.filter(t=>t.holdTime&&t.holdTime!=='-').length}笔已平仓</div></div></div>
     <div class="card anim-in anim-d5"><div class="card-inner"><div class="card-label"><span class="icon">📈</span> 最佳 / 最差 <span class="en">Best / Worst</span></div><div class="card-value green">+${s.bt.toFixed(2)}</div><div class="card-sub">最差: ${s.wst.toFixed(2)}</div></div></div>
   `;
-  document.getElementById('investorsRow').innerHTML=INVESTMENTS.map(inv=>`<div class="inv-card"><div class="inv-name">${inv.name}</div><div class="inv-amount">${inv.amount.toFixed(2)} USDT</div><div class="inv-time">${inv.time}</div></div>`).join('');
+  if(INVESTMENTS.length>0){const ic=['#22d3ee','#f5a623','#a78bfa','#00e676','#3b82f6','#ff6b6b','#fbbf24','#34d399','#f472b6','#818cf8'];const ti2=INVESTMENTS.reduce((s,i)=>s+i.amount,0);const cards=INVESTMENTS.map((inv,i)=>{const sh=inv.share!=null?(inv.share*100).toFixed(1):(inv.amount/ti2*100).toFixed(1);return`<div class="investor-info-item" style="border-left-color:${ic[i%ic.length]}"><div class="ii-name">${inv.name}</div><div class="ii-share">${sh}%</div><div class="ii-detail">${inv.amount.toFixed(2)} USDT · ${inv.time}</div>${inv.balance_at_entry!=null?`<div class="ii-detail">入金余额: ${inv.balance_at_entry.toFixed(2)} U</div>`:''}</div>`}).join('');document.getElementById('investorsSection').innerHTML=`<div class="chart-card"><div class="chart-title"><span>👥 投资记录</span><span class="chart-badge">${INVESTMENTS.length} 位投资者</span></div><div class="investors-grid"><div class="investors-bar-card"><div style="font-size:0.65em;color:var(--t3);letter-spacing:1px;margin-bottom:12px">投资金额分布</div><canvas id="investorsBarChart" height="${Math.max(INVESTMENTS.length*42,140)}"></canvas></div><div class="investors-pie-card"><div style="font-size:0.65em;color:var(--t3);letter-spacing:1px;margin-bottom:12px">投资占比</div><canvas id="investorsPieChart" height="220"></canvas></div></div><div class="investors-info">${cards}</div></div>`}else{document.getElementById('investorsSection').innerHTML=''}
   document.getElementById('tradeCount').textContent=TRADES.length+' 笔交易';
   const tb=document.getElementById('tradesBody');
   [...TRADES].reverse().forEach((t,idx)=>{
@@ -216,7 +225,7 @@ function renderAll(){
   const gy={grid:{color:"rgba(255,255,255,0.03)",drawBorder:false},ticks:{color:"#44445a",font:{...ft,size:10},callback:v=>v.toFixed(2)}};
   new Chart(document.getElementById("equityChart"),{type:"line",data:{labels:el,datasets:[{data:ed,borderColor:"#22d3ee",backgroundColor:"rgba(34,211,238,0.04)",borderWidth:2,pointBackgroundColor:pb,pointBorderColor:"transparent",pointRadius:pr,pointHoverRadius:8,fill:true,tension:0.3}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...ts2,callbacks:{label:c=>c.parsed.y.toFixed(2)+" USDT"}}},scales:{x:gx,y:gy}}});
   const pl=TRADES.map((t,i)=>"#"+(i+1)+" "+t.symbol);const pv=TRADES.map(t=>t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl);const pc2=pv.map(v=>v>=0?"rgba(0,230,118,0.7)":"rgba(255,59,59,0.7)");const pb2=pv.map(v=>v>=0?"#00e676":"#ff3b3b");
-  new Chart(document.getElementById("pnlChart"),{type:"bar",data:{labels:pl,datasets:[{data:pv,backgroundColor:pc2,borderColor:pb2,borderWidth:1,borderRadius:4,borderSkipped:false}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...ts2,callbacks:{label:c=>(c.parsed.y>=0?"+":"")+c.parsed.y.toFixed(2)+" USDT"}}},scales:{x:gx,y:{...gy,beginAtZero:true}}}});
+  new Chart(document.getElementById("pnlChart"),{type:"bar",data:{labels:pl,datasets:[{data:pv,backgroundColor:pc2,borderColor:pb2,borderWidth:1,borderRadius:4,borderSkipped:false}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...ts2,callbacks:{label:c=>(c.parsed.y>=0?"+":"")+c.parsed.y.toFixed(2)+" USDT"}}},scales:{x:gx,y:{...gy,beginAtZero:true}}}});  if(INVESTMENTS.length>0){const ic=['#22d3ee','#f5a623','#a78bfa','#00e676','#3b82f6','#ff6b6b','#fbbf24','#34d399','#f472b6','#818cf8'];const invN=INVESTMENTS.map(inv=>inv.name);const invA=INVESTMENTS.map(inv=>inv.amount);const tot=INVESTMENTS.reduce((s,i)=>s+i.amount,0);const invS=INVESTMENTS.map(inv=>inv.share!=null?(inv.share*100).toFixed(1):(inv.amount/tot*100).toFixed(1));const pD=INVESTMENTS.map(inv=>inv.share!=null?inv.share*100:(inv.amount/tot*100));if(investorsBarChart)investorsBarChart.destroy();if(investorsPieChart)investorsPieChart.destroy();investorsBarChart=new Chart(document.getElementById("investorsBarChart"),{type:"bar",data:{labels:invN,datasets:[{data:invA,backgroundColor:ic.slice(0,INVESTMENTS.length).map(c=>c+'bb'),borderColor:ic.slice(0,INVESTMENTS.length),borderWidth:1,borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{...ts2,callbacks:{label:c=>c.parsed.x.toFixed(2)+" USDT ("+invS[c.dataIndex]+"%)"}}},scales:{x:{...gx,beginAtZero:true},y:{...gy,grid:{display:false}}}}});investorsPieChart=new Chart(document.getElementById("investorsPieChart"),{type:"doughnut",data:{labels:invN,datasets:[{data:pD,backgroundColor:ic.slice(0,INVESTMENTS.length),borderColor:'transparent',borderWidth:2,hoverOffset:8}]},options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#7a7a92',font:{...ft,size:11},padding:12,usePointStyle:true,pointStyleWidth:8}},tooltip:{...ts2,callbacks:{label:c=>c.label+": "+c.parsed.toFixed(1)+"%"}}}}})}
   document.getElementById("footer").textContent="RUBEN AI · BYBIT USDT永续 · 最后更新: "+lastUpdate;
 }
 loadTrades();

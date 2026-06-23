@@ -3,19 +3,44 @@
     "initial_capital": 7.0,
     "investments": [
       {
+        "name": "歪头",
+        "amount": 7.0,
+        "time": "06-20 12:00",
+        "balance_at_entry": 7.0,
+        "total_at_entry": 14.0,
+        "share": 100.0
+      },
+      {
         "name": "虫洞",
         "amount": 2.0,
-        "time": "06-20 21:18"
+        "time": "06-20 21:18",
+        "balance_at_entry": 11.04,
+        "total_at_entry": 20.04,
+        "share": 10.0
       },
       {
         "name": "三三终得玖",
         "amount": 9.0,
-        "time": "06-22 01:00"
+        "time": "06-22 01:00",
+        "balance_at_entry": 12.17,
+        "total_at_entry": 30.17,
+        "share": 29.8
       },
       {
         "name": "喜忧半半开",
-        "amount": 59.0,
-        "time": "06-22 23:14"
+        "amount": 64.0,
+        "time": "06-22 23:14",
+        "balance_at_entry": 19.8,
+        "total_at_entry": 101.8,
+        "share": 62.9
+      },
+      {
+        "name": "夏雨",
+        "amount": 5.0,
+        "time": "06-23 18:55",
+        "balance_at_entry": 28.44,
+        "total_at_entry": 115.44,
+        "share": 4.3
       }
     ],
     "note": "初始资金7U来自歪头，Doulor(喜忧半半开)是管理者不是出资人"
@@ -400,21 +425,21 @@
       "symbol": "APTUSDT",
       "side": "long",
       "entry": 0.636,
-      "exit": null,
+      "exit": 0.6378,
       "qty": 78.62,
-      "result": "hold",
-      "pnl": 0,
+      "result": "tp",
+      "pnl": 0.0864,
       "tp": 0.6614,
       "sl": 0.6169,
       "leverage": 10,
-      "holdTime": "-",
+      "holdTime": "45min",
       "entryReason": "RSI 18极度超卖，0.6300强支撑位，放量5x疑似恐慌抛售见底，APT是Move系龙头大品种",
-      "exitReason": "",
-      "fee": 0,
-      "feeEntry": 0,
-      "feeExit": 0,
+      "exitReason": "止盈触发",
+      "fee": 0.0551,
+      "feeEntry": 0.0275,
+      "feeExit": 0.0276,
       "pnlBeforeFee": 0,
-      "pnlAfterFee": 0,
+      "pnlAfterFee": 0.0864,
       "feePct": 0
     },
     {
