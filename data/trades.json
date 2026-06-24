@@ -768,6 +768,29 @@
       "pnlAfterFee": 0,
       "feePct": 0.12,
       "exit_time": ""
+    },
+    {
+      "time": "06-25 01:53",
+      "symbol": "SLXUSDT",
+      "side": "short",
+      "entry": 0.2685,
+      "exit": 0,
+      "qty": 50,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 0.245,
+      "sl": 0.28,
+      "leverage": 5,
+      "holdTime": "",
+      "entryReason": "暴涨35%后0.270支撑破位，5m连续阴线，BTC跌到59345空头市场，获利盘出逃，R/R 1:1.9",
+      "exitReason": "",
+      "fee": 0.009,
+      "feeEntry": 0.009,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0.12,
+      "exit_time": ""
     }
   ]
 }
