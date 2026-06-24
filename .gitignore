@@ -8,4 +8,5 @@
 !data.json
 !functions/
 !functions/**
-
+!data/
+!data/**
