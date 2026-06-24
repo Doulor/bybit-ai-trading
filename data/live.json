@@ -1,35 +1,20 @@
 {
-  "wallet": 14.17393926,
-  "equity": 14.18397926,
+  "wallet": 118.18821957,
+  "equity": 117.60321957,
   "positions": [
     {
-      "symbol": "EDENUSDT",
+      "symbol": "NEARUSDT",
       "side": "Buy",
-      "size": "251",
-      "avgPrice": "0.04756",
-      "unrealisedPnl": "0.01255",
-      "takeProfit": "0.0492",
-      "stopLoss": "0.047",
-      "leverage": "5",
+      "size": "25",
+      "avgPrice": "1.9798",
+      "unrealisedPnl": "-0.585",
+      "takeProfit": "2.2",
+      "stopLoss": "1.9",
+      "leverage": "10",
       "liqPrice": "",
-      "markPrice": "0.04761"
+      "markPrice": "1.9564"
     }
   ],
-  "openOrders": [
-    {
-      "symbol": "EDENUSDT",
-      "side": "Sell",
-      "orderType": "Market",
-      "qty": "251",
-      "price": "0"
-    },
-    {
-      "symbol": "EDENUSDT",
-      "side": "Sell",
-      "orderType": "Market",
-      "qty": "251",
-      "price": "0"
-    }
-  ],
-  "updated_at": 1782029600375
+  "openOrders": [],
+  "updated_at": 1782289747009
 }
