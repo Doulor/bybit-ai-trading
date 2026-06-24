@@ -271,26 +271,12 @@ async function loadTrades(){
 }
 
 async function loadLive(){
-  try{
-    // Try live API first (Cloudflare Function)
-    const r=await fetch('/api/bybit?t='+Date.now());
-    if(r.ok){
-      const d=await r.json();
-      if(!d.error){
-        LIVE_DATA=d;
-        renderLiveStatus();
-        return;
-      }
-    }
-  }catch(e){
-    console.warn('/api/bybit failed, trying live.json:',e);
-  }
-  // Fallback to static live.json (GitHub Actions cached)
+  // Fetch cached live data (updated by local export_live.py or GitHub Actions)
   try{
     const r=await fetch('data/live.json?t='+Date.now());
     if(r.ok) LIVE_DATA=await r.json();
   }catch(e){
-    console.warn('live.json also failed:',e);
+    console.warn('live.json fetch failed:',e);
   }
   renderLiveStatus();
 }

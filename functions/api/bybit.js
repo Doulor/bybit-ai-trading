@@ -39,26 +39,31 @@ async function bybitGet(path, params, apiKey, privateKey) {
   const ts = Date.now().toString();
   const recvWindow = '5000';
   const qs = new URLSearchParams(params).toString();
-  // Bybit V5 RSA: timestamp + apiKey + recvWindow + queryString
   const signStr = ts + apiKey + recvWindow + qs;
   const signature = await signRS256Base64(signStr, privateKey);
 
-  const url = 'https://api.bybit.com' + path + '?' + qs;
-  const resp = await fetch(url, {
-    headers: {
-      'X-BAPI-API-KEY': apiKey,
-      'X-BAPI-TIMESTAMP': ts,
-      'X-BAPI-RECV-WINDOW': recvWindow,
-      'X-BAPI-SIGN': signature,
-      'X-BAPI-SIGN-TYPE': '2',
-    },
-  });
-  const text = await resp.text();
-  try {
-    return JSON.parse(text);
-  } catch {
-    return { retCode: -1, retMsg: 'Invalid response: ' + text.slice(0, 200), result: {} };
+  const hosts = ['api.bybit.com', 'api2.bybit.com'];
+  for (const host of hosts) {
+    const url = `https://${host}${path}?${qs}`;
+    try {
+      const resp = await fetch(url, {
+        headers: {
+          'X-BAPI-API-KEY': apiKey,
+          'X-BAPI-TIMESTAMP': ts,
+          'X-BAPI-RECV-WINDOW': recvWindow,
+          'X-BAPI-SIGN': signature,
+          'X-BAPI-SIGN-TYPE': '2',
+          'User-Agent': 'Mozilla/5.0 RubenAI/1.0',
+        },
+      });
+      const text = await resp.text();
+      try {
+        const data = JSON.parse(text);
+        if (data.retCode !== undefined) return data;
+      } catch {}
+    } catch {}
   }
+  return { retCode: -1, retMsg: 'All Bybit API endpoints failed', result: {} };
 }
 
 export async function onRequestGet(context) {
