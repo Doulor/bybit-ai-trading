@@ -722,6 +722,29 @@
       "pnlAfterFee": 0,
       "feePct": 0.12,
       "exit_time": ""
+    },
+    {
+      "time": "06-25 01:03",
+      "symbol": "IDUSDT",
+      "side": "short",
+      "entry": 0.0379,
+      "exit": 0,
+      "qty": 200,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 0.034,
+      "sl": 0.04,
+      "leverage": 5,
+      "holdTime": "",
+      "entryReason": "暴涨15%后连续5根15m阴线，BTC跌破60000空头市场，获利盘出逃，R/R 1:2",
+      "exitReason": "",
+      "fee": 0.005,
+      "feeEntry": 0.005,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0.12,
+      "exit_time": ""
     }
   ]
 }
