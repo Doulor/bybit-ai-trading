@@ -745,6 +745,29 @@
       "pnlAfterFee": 0,
       "feePct": 0.12,
       "exit_time": ""
+    },
+    {
+      "time": "06-25 01:19",
+      "symbol": "HEIUSDT",
+      "side": "short",
+      "entry": 0.1177,
+      "exit": 0,
+      "qty": 100,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 0.105,
+      "sl": 0.122,
+      "leverage": 5,
+      "holdTime": "",
+      "entryReason": "暴涨27%后连续4根15m阴线，从0.125跌到0.116，获利盘出逃，BTC跌到59675空头市场，R/R 1:2",
+      "exitReason": "",
+      "fee": 0.007,
+      "feeEntry": 0.007,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0.12,
+      "exit_time": ""
     }
   ]
 }
