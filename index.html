@@ -139,18 +139,20 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 
 /* open positions panel */
 .positions-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.pos-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 18px;flex:1;min-width:260px;position:relative;overflow:hidden}
-.pos-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.pos-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 20px;flex:1;min-width:300px;position:relative;overflow:hidden}
+.pos-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .pos-card.long-pos::before{background:var(--green)}
 .pos-card.short-pos::before{background:var(--red)}
-.pos-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.pos-symbol{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:0.85em}
-.pos-side{font-family:'JetBrains Mono',monospace;font-size:0.6em;font-weight:600;padding:2px 6px;border-radius:4px}
+.pos-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.pos-symbol{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.1em}
+.pos-side{font-family:'JetBrains Mono',monospace;font-size:0.72em;font-weight:600;padding:3px 8px;border-radius:4px}
 .pos-side.buy{background:var(--green2);color:var(--green)}
 .pos-side.sell{background:var(--red2);color:var(--red)}
-.pos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.68em}
-.pos-item .pos-label{color:var(--t3);font-size:0.85em}
-.pos-item .pos-val{color:var(--t1);font-weight:600}
+.pos-row{display:flex;gap:16px;flex-wrap:wrap}
+.pos-item{display:flex;gap:6px;align-items:baseline}
+.pos-item .pos-label{color:var(--t3);font-size:0.78em}
+.pos-item .pos-val{font-family:'JetBrains Mono',monospace;font-size:0.88em;font-weight:600;color:var(--t1)}
+.pos-reason{margin-top:8px;font-size:0.72em;color:var(--t2);line-height:1.4}
 
 /* filter bar */
 .filter-bar{padding:10px 22px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -221,6 +223,7 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
       </table>
     </div>
   </div>
+  <div id="symbolBreakdown"></div>
   <div class="investors-section anim-in" id="investorsSection"></div>
 </div>
 <div class="footer" id="footer"></div>
@@ -297,7 +300,6 @@ function renderLiveStatus(){
   if(pos.length===0){el.innerHTML='';return;}
   el.innerHTML='<div class="positions-bar anim-in">'+pos.map(p=>{
     const isLong=p.side==='Buy';
-    const sideCls=isLong?'buy':'sell';
     const cardCls=isLong?'long-pos':'short-pos';
     const upnl=parseFloat(p.unrealisedPnl||0);
     const upnlCls=upnl>=0?'pnl-pos':'pnl-neg';
@@ -305,15 +307,16 @@ function renderLiveStatus(){
     return `<div class="pos-card ${cardCls}">
       <div class="pos-header">
         <span class="pos-symbol">${p.symbol}</span>
-        <span class="pos-side ${sideCls}">${isLong?'多':'空'}</span>
+        <span class="pos-side ${isLong?'buy':'sell'}">${isLong?'做多':'做空'}</span>
+        <span class="pos-val ${upnlCls}" style="font-size:1.1em">${upnlStr} U</span>
       </div>
-      <div class="pos-grid">
-        <div class="pos-item"><div class="pos-label">入场</div><div class="pos-val">${p.avgPrice}</div></div>
-        <div class="pos-item"><div class="pos-label">标记</div><div class="pos-val">${p.markPrice}</div></div>
-        <div class="pos-item"><div class="pos-label">未实现</div><div class="pos-val ${upnlCls}">${upnlStr}U</div></div>
-        <div class="pos-item"><div class="pos-label">数量</div><div class="pos-val">${p.size}</div></div>
-        <div class="pos-item"><div class="pos-label">止盈</div><div class="pos-val" style="color:var(--green)">${p.takeProfit||'-'}</div></div>
-        <div class="pos-item"><div class="pos-label">止损</div><div class="pos-val" style="color:var(--red)">${p.stopLoss||'-'}</div></div>
+      <div class="pos-row">
+        <div class="pos-item"><span class="pos-label">入场</span><span class="pos-val">${p.avgPrice}</span></div>
+        <div class="pos-item"><span class="pos-label">标记</span><span class="pos-val">${p.markPrice}</span></div>
+        <div class="pos-item"><span class="pos-label">数量</span><span class="pos-val">${p.size}</span></div>
+        <div class="pos-item"><span class="pos-label">杠杆</span><span class="pos-val">${p.leverage||'-'}x</span></div>
+        <div class="pos-item"><span class="pos-label">止盈</span><span class="pos-val" style="color:var(--green)">${p.takeProfit||'-'}</span></div>
+        <div class="pos-item"><span class="pos-label">止损</span><span class="pos-val" style="color:var(--red)">${p.stopLoss||'-'}</span></div>
       </div>
     </div>`;
   }).join('')+'</div>';
@@ -499,16 +502,10 @@ function renderAll(){
   // Symbol breakdown
   const symArr=Object.entries(s.symMap).map(([sym,d])=>({...d,symbol:sym})).sort((a,b)=>b.pnl-a.pnl);
   const symColors=symArr.map(s2=>s2.pnl>=0?'var(--green)':'var(--red)');
-  const symSection=document.createElement('div');
-  symSection.className='anim-in';
-  symSection.innerHTML=`<div class="chart-card" style="margin-bottom:20px"><div class="chart-title"><span>🪙 币种分析</span><span class="chart-badge">${symArr.length} 个币种</span></div><div class="symbol-grid">${symArr.map((s2,i)=>{
+  document.getElementById('symbolBreakdown').innerHTML=`<div class="chart-card anim-in" style="margin-bottom:20px"><div class="chart-title"><span>🪙 币种分析</span><span class="chart-badge">${symArr.length} 个币种</span></div><div class="symbol-grid">${symArr.map((s2,i)=>{
     const wr2=s2.wins+s2.losses>0?(s2.wins/(s2.wins+s2.losses)*100).toFixed(0):'-';
     return `<div class="sym-card"><div class="sym-name">${s2.symbol.replace('USDT','')}</div><div class="sym-pnl" style="color:${symColors[i]}">${s2.pnl>=0?'+':''}${s2.pnl.toFixed(2)} U</div><div class="sym-meta">${s2.count}笔 · 胜率${wr2}%</div></div>`;
   }).join('')}</div></div>`;
-  const oldSym=document.querySelector('.symbol-section');
-  if(oldSym) oldSym.remove();
-  symSection.classList.add('symbol-section');
-  document.querySelector('.chart-section').before(symSection);
 
   // Investors section
   if(INVESTMENTS.length>0){
