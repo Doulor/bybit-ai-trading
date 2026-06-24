@@ -130,6 +130,50 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 .investor-info-item .ii-share{font-family:'JetBrains Mono',monospace;font-size:0.85em;font-weight:700;color:var(--cyan);margin-bottom:2px}
 .investor-info-item .ii-detail{font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t2)}
 .footer{text-align:center;color:var(--t3);padding:20px 0;font-family:'JetBrains Mono',monospace;font-size:0.62em;letter-spacing:0.5px}
+
+/* live badge states */
+.topbar-badge.stale{background:rgba(245,166,35,0.08);border-color:rgba(245,166,35,0.2);color:var(--gold)}
+.topbar-badge.stale::before{background:var(--gold)}
+.topbar-badge.offline{background:var(--red2);border-color:rgba(255,59,59,0.2);color:var(--red)}
+.topbar-badge.offline::before{background:var(--red);animation:none}
+
+/* open positions panel */
+.positions-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.pos-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 18px;flex:1;min-width:260px;position:relative;overflow:hidden}
+.pos-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.pos-card.long-pos::before{background:var(--green)}
+.pos-card.short-pos::before{background:var(--red)}
+.pos-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.pos-symbol{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:0.85em}
+.pos-side{font-family:'JetBrains Mono',monospace;font-size:0.6em;font-weight:600;padding:2px 6px;border-radius:4px}
+.pos-side.buy{background:var(--green2);color:var(--green)}
+.pos-side.sell{background:var(--red2);color:var(--red)}
+.pos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.68em}
+.pos-item .pos-label{color:var(--t3);font-size:0.85em}
+.pos-item .pos-val{color:var(--t1);font-weight:600}
+
+/* filter bar */
+.filter-bar{padding:10px 22px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-select,.filter-input{background:var(--bg3);border:1px solid var(--border);color:var(--t1);font-family:'JetBrains Mono',monospace;font-size:0.65em;padding:5px 10px;border-radius:6px;outline:none;transition:border-color 0.2s}
+.filter-select:focus,.filter-input:focus{border-color:var(--cyan)}
+.filter-select{cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:24px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a7a92'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--t2);font-family:'JetBrains Mono',monospace;font-size:0.65em;padding:5px 12px;border-radius:6px;cursor:pointer;transition:all 0.2s}
+.filter-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.filter-info{font-family:'JetBrains Mono',monospace;font-size:0.62em;color:var(--t3);margin-left:auto}
+
+/* error banner */
+.error-banner{text-align:center;padding:48px 20px}
+.error-banner .err-icon{font-size:2.5em;margin-bottom:12px}
+.error-banner .err-msg{color:var(--t2);font-size:0.85em}
+.error-banner .err-detail{color:var(--t3);font-size:0.65em;margin-top:8px;font-family:'JetBrains Mono',monospace}
+
+/* symbol breakdown */
+.symbol-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:20px}
+.sym-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:all 0.3s var(--ease)}
+.sym-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.sym-name{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:0.8em;margin-bottom:6px}
+.sym-pnl{font-family:'JetBrains Mono',monospace;font-size:1.1em;font-weight:700}
+.sym-meta{font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t2);margin-top:4px}
 </style>
 </head>
 <body>
@@ -144,6 +188,7 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 
 <div class="container">
   <div class="hero anim-in" id="heroCard"></div>
+  <div id="openPositions"></div>
   <div class="bento" id="bentoStats"></div>
   <div class="chart-section anim-in anim-d4">
     <div class="chart-grid">
@@ -162,6 +207,13 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
       <h3>📋 交易记录</h3>
       <span class="table-count" id="tradeCount"></span>
     </div>
+    <div class="filter-bar" id="filterBar">
+      <select class="filter-select" id="filterSymbol"><option value="">全部币种</option></select>
+      <select class="filter-select" id="filterSide"><option value="">全部方向</option><option value="long">做多</option><option value="short">做空</option></select>
+      <select class="filter-select" id="filterResult"><option value="">全部结果</option><option value="win">盈利</option><option value="loss">亏损</option><option value="hold">持仓中</option></select>
+      <button class="filter-btn" id="filterReset">重置</button>
+      <span class="filter-info" id="filterInfo"></span>
+    </div>
     <div class="table-scroll">
       <table>
         <thead><tr><th>时间</th><th>币种</th><th>方向</th><th>开仓价</th><th>平仓价</th><th>数量</th><th>结果</th><th>手续费</th><th>净盈亏</th><th></th></tr></thead>
@@ -174,63 +226,342 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 <div class="footer" id="footer"></div>
 
 <script>
-let TRADES=[];let INITIAL_CAPITAL=0;let INVESTMENTS=[];let lastUpdate="";let investorsBarChart=null;let investorsPieChart=null;
-async function loadTrades(){try{const r=await fetch('data/trades.json?t='+Date.now());if(!r.ok)throw new Error('fail');const d=await r.json();TRADES=d.trades||[];INITIAL_CAPITAL=d.config?.initial_capital||0;INVESTMENTS=d.config?.investments||[];lastUpdate=TRADES.length>0?TRADES[TRADES.length-1].time:''}catch(e){console.error(e)}renderAll()}
-function toggleDetail(id){const el=document.getElementById(id);const row=el.previousElementSibling;el.classList.toggle('open');row.classList.toggle('expanded')}
+/* === Globals === */
+let TRADES=[], INITIAL_CAPITAL=0, INVESTMENTS=[], lastUpdate="";
+let equityChart=null, pnlChart=null, investorsBarChart=null, investorsPieChart=null;
+let LIVE_DATA=null, liveTimer=null, tradesTimer=null;
+
+/* === Helpers === */
+const getNet = t => t.pnlAfterFee!=null ? t.pnlAfterFee : t.pnl;
+
+function parseHoldTime(ht){
+  if(!ht||ht==='-') return NaN;
+  const cn=ht.match(/约?(\d+)小?时?(?:(\d+)分[钟]?)?/);
+  if(cn&&(ht.includes('小时')||ht.includes('分钟'))) return parseInt(cn[1]||0)*60+parseInt(cn[2]||0);
+  const en=ht.match(/(?:(\d+)h)?(?:(\d+)min)?/);
+  return parseInt(en[1]||0)*60+parseInt(en[2]||0);
+}
+
+const CHART_FT={family:"'JetBrains Mono',monospace"};
+const CHART_TT={backgroundColor:"#1a1a2e",titleColor:"#e8e8ec",bodyColor:"#888",borderColor:"#2a2a3e",borderWidth:1,cornerRadius:6,padding:10,titleFont:{...CHART_FT,weight:"600"},bodyFont:CHART_FT};
+const CHART_GX={grid:{color:"rgba(255,255,255,0.03)",drawBorder:false},ticks:{color:"#44445a",font:{...CHART_FT,size:10}}};
+const CHART_GY={grid:{color:"rgba(255,255,255,0.03)",drawBorder:false},ticks:{color:"#44445a",font:{...CHART_FT,size:10},callback:v=>v.toFixed(2)}};
+
+/* === Data Loading === */
+async function loadTrades(){
+  try{
+    const r=await fetch('data/trades.json?t='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    TRADES=d.trades||[];
+    INITIAL_CAPITAL=d.config?.initial_capital||0;
+    INVESTMENTS=d.config?.investments||[];
+    lastUpdate=TRADES.length>0?TRADES[TRADES.length-1].time:'';
+  }catch(e){
+    console.error('trades.json load failed:',e);
+    document.getElementById('heroCard').innerHTML='<div class="hero"><div class="error-banner"><div class="err-icon">⚠</div><div class="err-msg">数据加载失败，请刷新页面重试</div><div class="err-detail">'+e.message+'</div></div></div>';
+    return;
+  }
+  renderAll();
+}
+
+async function loadLive(){
+  try{
+    const r=await fetch('data/live.json?t='+Date.now());
+    if(!r.ok) return;
+    LIVE_DATA=await r.json();
+  }catch(e){
+    console.warn('live.json fetch failed (using cached):',e);
+    // keep existing LIVE_DATA as fallback
+  }
+  renderLiveStatus();
+}
+
+/* === Live Status Rendering === */
+function renderLiveStatus(){
+  const badge=document.querySelector('.topbar-badge');
+  if(!LIVE_DATA||!LIVE_DATA.updated_at){
+    badge.className='topbar-badge offline';
+    badge.innerHTML='● 离线';
+    document.getElementById('openPositions').innerHTML='';
+    return;
+  }
+  const age=Math.floor((Date.now()-LIVE_DATA.updated_at)/1000/60);
+  if(age<5){badge.className='topbar-badge';badge.innerHTML='● 实时';}
+  else if(age<15){badge.className='topbar-badge stale';badge.innerHTML='● '+age+'分钟前';}
+  else{badge.className='topbar-badge offline';badge.innerHTML='● '+age+'分钟前';}
+
+  // Open positions
+  const pos=LIVE_DATA.positions||[];
+  const el=document.getElementById('openPositions');
+  if(pos.length===0){el.innerHTML='';return;}
+  el.innerHTML='<div class="positions-bar anim-in">'+pos.map(p=>{
+    const isLong=p.side==='Buy';
+    const sideCls=isLong?'buy':'sell';
+    const cardCls=isLong?'long-pos':'short-pos';
+    const upnl=parseFloat(p.unrealisedPnl||0);
+    const upnlCls=upnl>=0?'pnl-pos':'pnl-neg';
+    const upnlStr=(upnl>=0?'+':'')+upnl.toFixed(4);
+    return `<div class="pos-card ${cardCls}">
+      <div class="pos-header">
+        <span class="pos-symbol">${p.symbol}</span>
+        <span class="pos-side ${sideCls}">${isLong?'多':'空'}</span>
+      </div>
+      <div class="pos-grid">
+        <div class="pos-item"><div class="pos-label">入场</div><div class="pos-val">${p.avgPrice}</div></div>
+        <div class="pos-item"><div class="pos-label">标记</div><div class="pos-val">${p.markPrice}</div></div>
+        <div class="pos-item"><div class="pos-label">未实现</div><div class="pos-val ${upnlCls}">${upnlStr}U</div></div>
+        <div class="pos-item"><div class="pos-label">数量</div><div class="pos-val">${p.size}</div></div>
+        <div class="pos-item"><div class="pos-label">止盈</div><div class="pos-val" style="color:var(--green)">${p.takeProfit||'-'}</div></div>
+        <div class="pos-item"><div class="pos-label">止损</div><div class="pos-val" style="color:var(--red)">${p.stopLoss||'-'}</div></div>
+      </div>
+    </div>`;
+  }).join('')+'</div>';
+}
+
+/* === Stats Calculation === */
 function calcStats(){
   const ti=INVESTMENTS.reduce((s,i)=>s+i.amount,0);
-  const tp=TRADES.reduce((s,t)=>s+(t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl),0);
+  const tp=TRADES.reduce((s,t)=>s+getNet(t),0);
   const cb=INITIAL_CAPITAL+ti+tp;
-  const wt=TRADES.filter(t=>t.pnl>0).length;
-  const lt=TRADES.filter(t=>t.pnl<0).length;
-  const wr=TRADES.length>0?(wt/TRADES.length*100):0;
-  const bt=TRADES.length>0?Math.max(...TRADES.map(t=>t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl)):0;
-  const wst=TRADES.length>0?Math.min(...TRADES.map(t=>t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl)):0;
-  const ae=[];TRADES.forEach(t=>ae.push({type:'trade',time:t.time,pnl:t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl}));INVESTMENTS.forEach(inv=>ae.push({type:'investment',time:inv.time,amount:inv.amount}));ae.sort((a,b)=>a.time>b.time?1:a.time<b.time?-1:(a.type==='investment'?-1:1));
-  let bal=INITIAL_CAPITAL,ss=INITIAL_CAPITAL,tp2=1;ae.forEach(e=>{if(e.type==='trade'){bal+=e.pnl}else{tp2*=(bal/ss);bal+=e.amount;ss=bal}});tp2*=(bal/ss);const roi=(tp2-1)*100;
-  const gp=TRADES.filter(t=>(t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl)>0).reduce((s,t)=>s+(t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl),0);const gl=Math.abs(TRADES.filter(t=>(t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl)<0).reduce((s,t)=>s+(t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl),0));const pf=gl>0?(gp/gl):(gp>0?Infinity:0);
-  const hts=TRADES.filter(t=>t.holdTime&&t.holdTime!=='-').map(t=>{const m=t.holdTime.match(/(?:(\d+)h)?(?:(\d+)min)?/);return(parseInt(m[1]||0)*60+parseInt(m[2]||0))});const ah=hts.length>0?Math.round(hts.reduce((a,b)=>a+b,0)/hts.length):0;
-  let sk=0,skt='';for(let i=TRADES.length-1;i>=0;i--){const r=TRADES[i].result;if(r==='tp'||r==='sl'){const c=r==='tp'?'win':'loss';if(!skt){skt=c;sk=1}else if(skt===c){sk++}else break}}
+  const closed=TRADES.filter(t=>t.result!=='hold');
+  const wt=closed.filter(t=>getNet(t)>0).length;
+  const lt=closed.filter(t=>getNet(t)<0).length;
+  const wr=closed.length>0?(wt/closed.length*100):0;
+  const bt=TRADES.length>0?Math.max(...TRADES.map(getNet)):0;
+  const wst=TRADES.length>0?Math.min(...TRADES.map(getNet)):0;
+
+  // All events for TWR
+  const ae=[];
+  TRADES.forEach(t=>ae.push({type:'trade',time:t.time,pnl:getNet(t)}));
+  INVESTMENTS.forEach(inv=>ae.push({type:'investment',time:inv.time,amount:inv.amount}));
+  ae.sort((a,b)=>a.time>b.time?1:a.time<b.time?-1:(a.type==='investment'?-1:1));
+  let bal=INITIAL_CAPITAL,ss=INITIAL_CAPITAL,tp2=1;
+  const tipLines=[`起始: ${ss.toFixed(2)}U`];
+  // Max drawdown
+  let peak=INITIAL_CAPITAL,maxDD=0,maxDDAbs=0;
+  ae.forEach(e=>{
+    if(e.type==='trade'){
+      bal+=e.pnl;
+    }else{
+      tipLines.push(`${bal.toFixed(2)}U÷${ss.toFixed(2)}U`);
+      tp2*=(bal/ss);bal+=e.amount;ss=bal;
+      tipLines.push(`+${e.amount}U→${ss.toFixed(2)}U`);
+    }
+    if(bal>peak) peak=bal;
+    const dd=peak-bal;
+    if(dd>maxDDAbs){maxDDAbs=dd;maxDD=peak>0?(dd/peak)*100:0;}
+  });
+  tipLines.push(`${bal.toFixed(2)}U÷${ss.toFixed(2)}U`);
+  tp2*=(bal/ss);
+  const roi=(tp2-1)*100;
+  tipLines.push(`TWR→${(roi>=0?'+':'')+roi.toFixed(1)}%`);
+
+  // Profit factor
+  const gp=closed.filter(t=>getNet(t)>0).reduce((s,t)=>s+getNet(t),0);
+  const gl=Math.abs(closed.filter(t=>getNet(t)<0).reduce((s,t)=>s+getNet(t),0));
+  const pf=gl>0?(gp/gl):(gp>0?Infinity:0);
+
+  // Avg hold time
+  const hts=TRADES.filter(t=>t.holdTime&&t.holdTime!=='-').map(t=>parseHoldTime(t.holdTime)).filter(n=>!isNaN(n)&&n>0);
+  const ah=hts.length>0?Math.round(hts.reduce((a,b)=>a+b,0)/hts.length):0;
+
+  // Streak (based on actual PnL, not result field)
+  let sk=0,skt='';
+  for(let i=TRADES.length-1;i>=0;i--){
+    if(TRADES[i].result==='hold') continue;
+    const c=getNet(TRADES[i])>=0?'win':'loss';
+    if(!skt){skt=c;sk=1;}else if(skt===c){sk++;}else break;
+  }
+
+  // Max consecutive losses
+  let maxConsLoss=0,consLoss=0;
+  closed.forEach(t=>{if(getNet(t)<0){consLoss++;maxConsLoss=Math.max(maxConsLoss,consLoss);}else consLoss=0;});
+
+  // Avg win / Avg loss
+  const wins=closed.filter(t=>getNet(t)>0);
+  const losses=closed.filter(t=>getNet(t)<0);
+  const avgWin=wins.length?wins.reduce((s,t)=>s+getNet(t),0)/wins.length:0;
+  const avgLoss=losses.length?losses.reduce((s,t)=>s+getNet(t),0)/losses.length:0;
+
+  // Per-symbol breakdown
+  const symMap={};
+  TRADES.forEach(t=>{
+    if(!symMap[t.symbol]) symMap[t.symbol]={pnl:0,count:0,wins:0,losses:0};
+    symMap[t.symbol].count++;
+    const n=getNet(t);
+    symMap[t.symbol].pnl+=n;
+    if(t.result!=='hold'){
+      if(n>0) symMap[t.symbol].wins++;
+      else if(n<0) symMap[t.symbol].losses++;
+    }
+  });
+
   const hds=TRADES.filter(t=>t.result==='hold');
-  return{ti,tp,cb,wt,lt,wr,bt,wst,roi,pf,ah,sk,skt,hds}
+  return{ti,tp,cb,wt,lt,wr,bt,wst,roi,pf,ah,sk,skt,hds,tipLines,maxDD,maxDDAbs,maxConsLoss,avgWin,avgLoss,symMap}
 }
+
+/* === Toggle Detail === */
+function toggleDetail(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  const row=el.previousElementSibling;
+  el.classList.toggle('open');
+  row.classList.toggle('expanded');
+}
+
+/* === Filter Logic === */
+function getFilteredTrades(){
+  const sym=document.getElementById('filterSymbol').value;
+  const side=document.getElementById('filterSide').value;
+  const result=document.getElementById('filterResult').value;
+  return TRADES.filter(t=>{
+    if(sym&&t.symbol!==sym) return false;
+    if(side&&t.side!==side) return false;
+    if(result==='win'&&getNet(t)<=0) return false;
+    if(result==='loss'&&getNet(t)>=0) return false;
+    if(result==='hold'&&t.result!=='hold') return false;
+    return true;
+  });
+}
+
+function initFilters(){
+  const sel=document.getElementById('filterSymbol');
+  if(sel.dataset.init) return; // prevent duplicate listeners
+  sel.dataset.init='1';
+  const symbols=[...new Set(TRADES.map(t=>t.symbol))].sort();
+  symbols.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o);});
+  sel.addEventListener('change',renderTable);
+  document.getElementById('filterSide').addEventListener('change',renderTable);
+  document.getElementById('filterResult').addEventListener('change',renderTable);
+  document.getElementById('filterReset').addEventListener('click',()=>{
+    document.getElementById('filterSymbol').value='';
+    document.getElementById('filterSide').value='';
+    document.getElementById('filterResult').value='';
+    renderTable();
+  });
+}
+
+/* === Table Rendering === */
+function renderTable(){
+  const filtered=getFilteredTrades();
+  const total=TRADES.length;
+  const shown=filtered.length;
+  document.getElementById('filterInfo').textContent=shown===total?'':shown+'/'+total+' 笔';
+  document.getElementById('tradeCount').textContent=total+' 笔交易';
+  const tb=document.getElementById('tradesBody');
+  const rows=[...filtered].reverse().map((t,idx)=>{
+    const sc=t.side==='long'?'long':'short';const st=t.side==='long'?'做多':'做空';
+    const rc=t.result==='tp'?(t.manualClose?'manual':'tp'):t.result==='sl'?(t.trailingStop?'trailing':t.manualClose?'manual':'sl'):'hold';
+    const rt=t.result==='tp'?(t.manualClose?'手动平仓':'止盈'):t.result==='sl'?(t.trailingStop?'移动止损':t.manualClose?'手动平仓':'止损'):'持仓中';
+    const pn=getNet(t);
+    const pc=pn>=0?'pnl-pos':'pnl-neg';const pt=(pn>=0?'+':'')+pn.toFixed(2);
+    const fc=(t.fee||0)>0?'color:var(--t2)':'';
+    const et=t.exit?t.exit:'-';
+    const id='trade-'+idx;
+    return `<tr class="trade-row" onclick="toggleDetail('${id}')"><td>${t.time}</td><td>${t.symbol}</td><td><span class="badge ${sc}">${st}</span></td><td>${t.entry}</td><td>${et}</td><td>${t.qty}</td><td><span class="badge ${rc}">${rt}</span></td><td style="${fc};font-size:0.72em">-${(t.fee||0).toFixed(2)}U</td><td class="${pc}">${pt}</td><td class="expand-icon">▶</td></tr><tr class="trade-detail-row" id="${id}"><td colspan="9"><div class="detail-panel"><div class="dp-title">交易详情</div><div class="dp-item"><span class="dp-label">杠杆:</span><span class="dp-value">${t.leverage||'-'}x</span></div><div class="dp-item"><span class="dp-label">手续费:</span><span class="dp-value" style="color:var(--t2)">${t.fee?('-'+t.fee.toFixed(4)+'U ('+((t.fee/(t.entry*t.qty))*100).toFixed(2)+'%)'):'-'}</span></div><div class="dp-item"><span class="dp-label">持仓时间:</span><span class="dp-value">${t.holdTime||'-'}</span></div><div class="dp-item"><span class="dp-label">手续费明细:</span><span class="dp-value" style="color:var(--t3);font-size:0.85em">开仓${t.feeEntry?t.feeEntry.toFixed(4)+'U':''} + 平仓${t.feeExit?t.feeExit.toFixed(4)+'U':''}</span></div><div class="dp-item"><span class="dp-label">止盈价:</span><span class="dp-value">${t.tp||'-'}</span></div><div class="dp-item"><span class="dp-label">止损价:</span><span class="dp-value">${t.sl||'-'}</span></div><div class="dp-reason"><span class="dp-label">📈 入场逻辑:</span><span class="dp-value">${t.entryReason||'-'}</span></div><div class="dp-reason"><span class="dp-label">📤 平仓原因:</span><span class="dp-value">${t.exitReason||'-'}</span></div></div></td></tr>`;
+  });
+  tb.innerHTML=rows.join('');
+}
+
+/* === Main Render === */
 function renderAll(){
-  const s=calcStats();let totalFee=TRADES.reduce((s,t)=>s+(t.fee||0),0);const ps=s.tp>=0?'+':'';const rs=s.roi>=0?'+':'';
-  const ae=[];TRADES.forEach(t=>ae.push({type:'trade',time:t.time,pnl:t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl}));INVESTMENTS.forEach(inv=>ae.push({type:'investment',time:inv.time,amount:inv.amount}));ae.sort((a,b)=>a.time>b.time?1:a.time<b.time?-1:(a.type==='investment'?-1:1));
-  let bal=INITIAL_CAPITAL,ss=INITIAL_CAPITAL,tp2=1;const ts=[`起始: ${ss.toFixed(2)}U`];ae.forEach(e=>{if(e.type==='trade'){bal+=e.pnl}else{ts.push(`${bal.toFixed(2)}U÷${ss.toFixed(2)}U`);tp2*=(bal/ss);bal+=e.amount;ss=bal;ts.push(`+${e.amount}U→${ss.toFixed(2)}U`)}});ts.push(`${bal.toFixed(2)}U÷${ss.toFixed(2)}U`);tp2*=(bal/ss);const roi=(tp2-1)*100;ts.push(`TWR→${(roi>=0?'+':'')+roi.toFixed(1)}%`);
-  document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">总权益 · TOTAL EQUITY</div><div class="hero-value ${s.tp>=0?'green':'red'}">${s.cb.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${ts.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% 收益率</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">外部投资</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div></div></div>`;
-  const l10=TRADES.slice(-10);document.getElementById('streakBar').innerHTML=l10.map(t=>{const c=t.result==='tp'?'win':t.result==='sl'?'loss':'hold';return`<div class="streak-dot ${c}"></div>`}).join('')+`<span style="font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t3);margin-left:6px">${s.sk>0?'连'+s.sk+(s.skt==='win'?'胜':'负'):'—'}</span>`;
+  const s=calcStats();
+  let totalFee=TRADES.reduce((s,t)=>s+(t.fee||0),0);
+  const ps=s.tp>=0?'+':'';const rs=s.roi>=0?'+':'';
+
+  // Hero
+  document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">总权益 · TOTAL EQUITY</div><div class="hero-value ${s.tp>=0?'green':'red'}">${s.cb.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${s.tipLines.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% 收益率</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">外部投资</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div></div></div>`;
+
+  // Streak dots (PnL-based, not result-based)
+  const l10=TRADES.slice(-10);
+  document.getElementById('streakBar').innerHTML=l10.map(t=>{
+    const c=t.result==='hold'?'hold':(getNet(t)>=0?'win':'loss');
+    return `<div class="streak-dot ${c}"></div>`;
+  }).join('')+`<span style="font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t3);margin-left:6px">${s.sk>0?'连'+s.sk+(s.skt==='win'?'胜':'负'):'—'}</span>`;
+
+  // Bento stats (8 cards)
   const pfT=s.pf===Infinity?'∞':s.pf.toFixed(2);
   const ahT=s.ah>=60?Math.floor(s.ah/60)+'h'+(s.ah%60>0?s.ah%60+'min':''):s.ah+'min';
+  const grossWin=TRADES.filter(t=>t.pnl>0).reduce((a,t)=>a+t.pnl,0);
+  const feeRatio=grossWin>0?(totalFee/grossWin*100):0;
   document.getElementById('bentoStats').innerHTML=`
     <div class="card anim-in anim-d1"><div class="card-inner"><div class="card-label"><span class="icon">🎯</span> 胜率 <span class="en">Win Rate</span></div><div class="card-value ${s.wr>=50?'green':'red'}">${s.wr.toFixed(0)}%</div><div class="card-sub">${s.wt}胜 / ${s.lt}负</div></div></div>
-    <div class="card anim-in anim-d2"><div class="card-inner"><div class="card-label"><span class="icon">💸</span> 总手续费 <span class="en">Total Fees</span></div><div class="card-value" style="color:var(--t2)">-${totalFee.toFixed(2)}</div><div class="card-sub">占毛利 ${(totalFee/TRADES.filter(t=>t.pnl>0).reduce((a,t)=>a+t.pnl,0)*100).toFixed(1)}%</div></div></div>
+    <div class="card anim-in anim-d2"><div class="card-inner"><div class="card-label"><span class="icon">💸</span> 总手续费 <span class="en">Total Fees</span></div><div class="card-value" style="color:var(--t2)">-${totalFee.toFixed(2)}</div><div class="card-sub">占毛利 ${feeRatio.toFixed(1)}%</div></div></div>
     <div class="card anim-in anim-d3"><div class="card-inner"><div class="card-label"><span class="icon">💰</span> 盈亏比 <span class="en">P.Factor</span></div><div class="card-value ${s.pf>=1?'green':'red'}">${pfT}</div><div class="card-sub">净盈利: +${(s.tp-totalFee).toFixed(2)}U</div></div></div>
     <div class="card anim-in anim-d4"><div class="card-inner"><div class="card-label"><span class="icon">⏱</span> 平均持仓 <span class="en">Hold Time</span></div><div class="card-value cyan">${ahT}</div><div class="card-sub">${TRADES.filter(t=>t.holdTime&&t.holdTime!=='-').length}笔已平仓</div></div></div>
     <div class="card anim-in anim-d5"><div class="card-inner"><div class="card-label"><span class="icon">📈</span> 最佳 / 最差 <span class="en">Best / Worst</span></div><div class="card-value green">+${s.bt.toFixed(2)}</div><div class="card-sub">最差: ${s.wst.toFixed(2)}</div></div></div>
+    <div class="card anim-in anim-d2"><div class="card-inner"><div class="card-label"><span class="icon">📉</span> 最大回撤 <span class="en">Max DD</span></div><div class="card-value ${s.maxDD>10?'red':'green'}">${s.maxDD.toFixed(1)}%</div><div class="card-sub">${s.maxDDAbs.toFixed(2)} USDT</div></div></div>
+    <div class="card anim-in anim-d3"><div class="card-inner"><div class="card-label"><span class="icon">🔥</span> 最大连亏 <span class="en">Max Loss Streak</span></div><div class="card-value ${s.maxConsLoss>=3?'red':'green'}">${s.maxConsLoss} 笔</div><div class="card-sub">连续亏损最多</div></div></div>
+    <div class="card anim-in anim-d4"><div class="card-inner"><div class="card-label"><span class="icon">📊</span> 平均盈亏 <span class="en">Avg Win/Loss</span></div><div class="card-value"><span class="green">+${s.avgWin.toFixed(2)}</span></div><div class="card-sub">亏: ${s.avgLoss.toFixed(2)}</div></div></div>
   `;
-  if(INVESTMENTS.length>0){const ic=['#22d3ee','#f5a623','#a78bfa','#00e676','#3b82f6','#ff6b6b','#fbbf24','#34d399','#f472b6','#818cf8'];const ti2=INVESTMENTS.reduce((s,i)=>s+i.amount,0);const cards=[];const cardSeen={};INVESTMENTS.forEach((inv,i)=>{if(cardSeen[inv.name])return;cardSeen[inv.name]=true;const sh=inv.share!=null?inv.share.toFixed(1):(inv.amount/ti2*100).toFixed(1);const totalAmt=INVESTMENTS.filter(x=>x.name===inv.name).reduce((a,x)=>a+x.amount,0);cards.push(`<div class="investor-info-item" style="border-left-color:${ic[i%ic.length]}"><div class="ii-name">${inv.name}</div><div class="ii-share">${sh}%</div><div class="ii-detail">${totalAmt.toFixed(2)} USDT</div></div>`)});document.getElementById('investorsSection').innerHTML=`<div class="chart-card"><div class="chart-title"><span>👥 投资记录</span><span class="chart-badge">${new Set(INVESTMENTS.map(i=>i.name)).size} 位投资者</span></div><div class="investors-grid"><div class="investors-bar-card"><div style="font-size:0.62em;color:var(--t3);letter-spacing:1px;margin-bottom:10px">投资金额分布</div><canvas id="investorsBarChart" height="${Math.max(INVESTMENTS.length*38,120)}"></canvas></div><div class="investors-pie-card"><div style="font-size:0.62em;color:var(--t3);letter-spacing:1px;margin-bottom:10px">投资占比</div><canvas id="investorsPieChart" height="160"></canvas></div></div><div class="investors-info">${cards.join('')}</div></div>`}else{document.getElementById('investorsSection').innerHTML=''}
-  document.getElementById('tradeCount').textContent=TRADES.length+' 笔交易';
-  const tb=document.getElementById('tradesBody');
-  [...TRADES].reverse().forEach((t,idx)=>{
-    const sc=t.side==='long'?'long':'short';const st=t.side==='long'?'做多':'做空';
-    const rc=t.result==='tp'?(t.manualClose?'manual':'tp'):t.result==='sl'?(t.trailingStop?'trailing':t.manualClose?'manual':'sl'):'hold';const rt=t.result==='tp'?(t.manualClose?'手动平仓':'止盈'):t.result==='sl'?(t.trailingStop?'移动止损':t.manualClose?'手动平仓':'止损'):'持仓中';
-    const pc=t.pnlAfterFee>=0?'pnl-pos':'pnl-neg';const pt=(t.pnlAfterFee>=0?'+':'')+t.pnlAfterFee.toFixed(2);const fc=(t.fee||0)>0?'color:var(--t2)':'';
-    const et=t.exit?t.exit:'-';const id='trade-'+idx;
-    tb.innerHTML+=`<tr class="trade-row" onclick="toggleDetail('${id}')"><td>${t.time}</td><td>${t.symbol}</td><td><span class="badge ${sc}">${st}</span></td><td>${t.entry}</td><td>${et}</td><td>${t.qty}</td><td><span class="badge ${rc}">${rt}</span></td><td style="${fc};font-size:0.72em">-${(t.fee||0).toFixed(2)}U</td><td class="${pc}">${pt}</td><td class="expand-icon">▶</td></tr><tr class="trade-detail-row" id="${id}"><td colspan="9"><div class="detail-panel"><div class="dp-title">交易详情</div><div class="dp-item"><span class="dp-label">杠杆:</span><span class="dp-value">${t.leverage||'-'}x</span></div><div class="dp-item"><span class="dp-label">手续费:</span><span class="dp-value" style="color:var(--t2)">${t.fee?('-'+t.fee.toFixed(4)+'U ('+((t.fee/(t.entry*t.qty))*100).toFixed(2)+'%)'):'-'}</span></div><div class="dp-item"><span class="dp-label">持仓时间:</span><span class="dp-value">${t.holdTime||'-'}</span></div><div class="dp-item"><span class="dp-label">手续费明细:</span><span class="dp-value" style="color:var(--t3);font-size:0.85em">开仓${t.feeEntry?t.feeEntry.toFixed(4)+'U':''} + 平仓${t.feeExit?t.feeExit.toFixed(4)+'U':''}</span></div><div class="dp-item"><span class="dp-label">止盈价:</span><span class="dp-value">${t.tp||'-'}</span></div><div class="dp-item"><span class="dp-label">止损价:</span><span class="dp-value">${t.sl||'-'}</span></div><div class="dp-reason"><span class="dp-label">📈 入场逻辑:</span><span class="dp-value">${t.entryReason||'-'}</span></div><div class="dp-reason"><span class="dp-label">📤 平仓原因:</span><span class="dp-value">${t.exitReason||'-'}</span></div></div></td></tr>`;
-  });
-  const al=[];TRADES.forEach(t=>al.push({type:'trade',time:t.time,pnl:t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl,symbol:t.symbol}));INVESTMENTS.forEach(inv=>al.push({type:'investment',time:inv.time,amount:inv.amount,name:inv.name}));al.sort((a,b)=>a.time>b.time?1:a.time<b.time?-1:(a.type==='investment'?-1:1));
+
+  // Symbol breakdown
+  const symArr=Object.entries(s.symMap).map(([sym,d])=>({...d,symbol:sym})).sort((a,b)=>b.pnl-a.pnl);
+  const symColors=symArr.map(s2=>s2.pnl>=0?'var(--green)':'var(--red)');
+  const symSection=document.createElement('div');
+  symSection.className='anim-in';
+  symSection.innerHTML=`<div class="chart-card" style="margin-bottom:20px"><div class="chart-title"><span>🪙 币种分析</span><span class="chart-badge">${symArr.length} 个币种</span></div><div class="symbol-grid">${symArr.map((s2,i)=>{
+    const wr2=s2.wins+s2.losses>0?(s2.wins/(s2.wins+s2.losses)*100).toFixed(0):'-';
+    return `<div class="sym-card"><div class="sym-name">${s2.symbol.replace('USDT','')}</div><div class="sym-pnl" style="color:${symColors[i]}">${s2.pnl>=0?'+':''}${s2.pnl.toFixed(2)} U</div><div class="sym-meta">${s2.count}笔 · 胜率${wr2}%</div></div>`;
+  }).join('')}</div></div>`;
+  const oldSym=document.querySelector('.symbol-section');
+  if(oldSym) oldSym.remove();
+  symSection.classList.add('symbol-section');
+  document.querySelector('.chart-section').before(symSection);
+
+  // Investors section
+  if(INVESTMENTS.length>0){
+    const ic=['#22d3ee','#f5a623','#a78bfa','#00e676','#3b82f6','#ff6b6b','#fbbf24','#34d399','#f472b6','#818cf8'];
+    const ti2=INVESTMENTS.reduce((s,i)=>s+i.amount,0);
+    const cards=[];const cardSeen={};
+    INVESTMENTS.forEach((inv,i)=>{
+      if(cardSeen[inv.name])return;cardSeen[inv.name]=true;
+      const totalAmt=INVESTMENTS.filter(x=>x.name===inv.name).reduce((a,x)=>a+x.amount,0);
+      const currentShare=s.cb>0?(totalAmt/s.cb*100).toFixed(1):'0.0';
+      cards.push(`<div class="investor-info-item" style="border-left-color:${ic[i%ic.length]}"><div class="ii-name">${inv.name}</div><div class="ii-share">${currentShare}%</div><div class="ii-detail">${totalAmt.toFixed(2)} USDT</div></div>`);
+    });
+    document.getElementById('investorsSection').innerHTML=`<div class="chart-card"><div class="chart-title"><span>👥 投资记录</span><span class="chart-badge">${new Set(INVESTMENTS.map(i=>i.name)).size} 位投资者</span></div><div class="investors-grid"><div class="investors-bar-card"><div style="font-size:0.62em;color:var(--t3);letter-spacing:1px;margin-bottom:10px">投资金额分布</div><canvas id="investorsBarChart" height="${Math.max(INVESTMENTS.length*38,120)}"></canvas></div><div class="investors-pie-card"><div style="font-size:0.62em;color:var(--t3);letter-spacing:1px;margin-bottom:10px">投资占比</div><canvas id="investorsPieChart" height="160"></canvas></div></div><div class="investors-info">${cards.join('')}</div></div>`;
+    // Investor charts
+    const merged={};const invN=[];const invA=[];const pD=[];
+    INVESTMENTS.forEach(inv=>{if(!merged[inv.name]){merged[inv.name]=0;invN.push(inv.name)}merged[inv.name]+=inv.amount});
+    invN.forEach(n=>{invA.push(merged[n]);pD.push(s.cb>0?merged[n]/s.cb*100:0)});
+    if(investorsBarChart)investorsBarChart.destroy();if(investorsPieChart)investorsPieChart.destroy();
+    investorsBarChart=new Chart(document.getElementById("investorsBarChart"),{type:"bar",data:{labels:invN,datasets:[{data:invA,backgroundColor:ic.slice(0,invN.length).map(c=>c+'bb'),borderColor:ic.slice(0,invN.length),borderWidth:1,borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{...CHART_TT,callbacks:{label:c=>c.parsed.x.toFixed(2)+" USDT ("+pD[c.dataIndex].toFixed(1)+"%)"}}},scales:{x:{...CHART_GX,beginAtZero:true},y:{...CHART_GY,grid:{display:false}}}}});
+    investorsPieChart=new Chart(document.getElementById("investorsPieChart"),{type:"pie",data:{labels:invN,datasets:[{data:pD,backgroundColor:ic.slice(0,invN.length),borderColor:'var(--bg2)',borderWidth:2,hoverOffset:8}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#7a7a92',font:{...CHART_FT,size:11},padding:12,usePointStyle:true,pointStyleWidth:8}},tooltip:{...CHART_TT,callbacks:{label:c=>c.label+": "+c.parsed.toFixed(1)+"%"}}}}});
+  }else{document.getElementById('investorsSection').innerHTML=''}
+
+  // Trade table
+  initFilters();
+  renderTable();
+
+  // Equity chart
+  const al=[];
+  TRADES.forEach(t=>al.push({type:'trade',time:t.time,pnl:getNet(t),symbol:t.symbol}));
+  INVESTMENTS.forEach(inv=>al.push({type:'investment',time:inv.time,amount:inv.amount,name:inv.name}));
+  al.sort((a,b)=>a.time>b.time?1:a.time<b.time?-1:(a.type==='investment'?-1:1));
   const el=["START"],ed=[INITIAL_CAPITAL],pb=["#22d3ee"],pr=[5];let running=INITIAL_CAPITAL,tc=0;
   al.forEach(e=>{if(e.type==='trade'){tc++;el.push("#"+tc+" "+e.symbol);running+=e.pnl;ed.push(parseFloat(running.toFixed(2)));pb.push(e.pnl>=0?"#22d3ee":"#ff3b3b");pr.push(5)}else{el.push(e.name+" +"+e.amount+"U");running+=e.amount;ed.push(parseFloat(running.toFixed(2)));pb.push("#f5a623");pr.push(9)}});
-  const ft={family:"'JetBrains Mono',monospace"};const ts2={backgroundColor:"#1a1a2e",titleColor:"#e8e8ec",bodyColor:"#888",borderColor:"#2a2a3e",borderWidth:1,cornerRadius:6,padding:10,titleFont:{...ft,weight:"600"},bodyFont:ft};
-  const gx={grid:{color:"rgba(255,255,255,0.03)",drawBorder:false},ticks:{color:"#44445a",font:{...ft,size:10}}};
-  const gy={grid:{color:"rgba(255,255,255,0.03)",drawBorder:false},ticks:{color:"#44445a",font:{...ft,size:10},callback:v=>v.toFixed(2)}};
-  new Chart(document.getElementById("equityChart"),{type:"line",data:{labels:el,datasets:[{data:ed,borderColor:"#22d3ee",backgroundColor:"rgba(34,211,238,0.04)",borderWidth:2,pointBackgroundColor:pb,pointBorderColor:"transparent",pointRadius:pr,pointHoverRadius:8,fill:true,tension:0.3}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...ts2,callbacks:{label:c=>c.parsed.y.toFixed(2)+" USDT"}}},scales:{x:gx,y:gy}}});
-  const pl=TRADES.map((t,i)=>"#"+(i+1)+" "+t.symbol);const pv=TRADES.map(t=>t.pnlAfterFee!=null?t.pnlAfterFee:t.pnl);const pc2=pv.map(v=>v>=0?"rgba(0,230,118,0.7)":"rgba(255,59,59,0.7)");const pb2=pv.map(v=>v>=0?"#00e676":"#ff3b3b");
-  new Chart(document.getElementById("pnlChart"),{type:"bar",data:{labels:pl,datasets:[{data:pv,backgroundColor:pc2,borderColor:pb2,borderWidth:1,borderRadius:4,borderSkipped:false}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...ts2,callbacks:{label:c=>(c.parsed.y>=0?"+":"")+c.parsed.y.toFixed(2)+" USDT"}}},scales:{x:gx,y:{...gy,beginAtZero:true}}}});  if(INVESTMENTS.length>0){const ic=['#22d3ee','#f5a623','#a78bfa','#00e676','#3b82f6','#ff6b6b','#fbbf24','#34d399','#f472b6','#818cf8'];const invN=[];const invA=[];const invS=[];const pD=[];const merged={};INVESTMENTS.forEach(inv=>{if(!merged[inv.name]){merged[inv.name]={amount:0,share:inv.share,time:inv.time};invN.push(inv.name)}merged[inv.name].amount+=inv.amount;merged[inv.name].share=inv.share});invN.forEach(n=>{invA.push(merged[n].amount);invS.push(merged[n].share.toFixed(1));pD.push(merged[n].share)});if(investorsBarChart)investorsBarChart.destroy();if(investorsPieChart)investorsPieChart.destroy();investorsBarChart=new Chart(document.getElementById("investorsBarChart"),{type:"bar",data:{labels:invN,datasets:[{data:invA,backgroundColor:ic.slice(0,INVESTMENTS.length).map(c=>c+'bb'),borderColor:ic.slice(0,INVESTMENTS.length),borderWidth:1,borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{...ts2,callbacks:{label:c=>c.parsed.x.toFixed(2)+" USDT ("+invS[c.dataIndex]+"%)"}}},scales:{x:{...gx,beginAtZero:true},y:{...gy,grid:{display:false}}}}});investorsPieChart=new Chart(document.getElementById("investorsPieChart"),{type:"pie",data:{labels:invN,datasets:[{data:pD,backgroundColor:ic.slice(0,INVESTMENTS.length),borderColor:'var(--bg2)',borderWidth:2,hoverOffset:8}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#7a7a92',font:{...ft,size:11},padding:12,usePointStyle:true,pointStyleWidth:8}},tooltip:{...ts2,callbacks:{label:c=>c.label+": "+c.parsed.toFixed(1)+"%"}}}}})}
+
+  if(equityChart)equityChart.destroy();
+  equityChart=new Chart(document.getElementById("equityChart"),{type:"line",data:{labels:el,datasets:[{data:ed,borderColor:"#22d3ee",backgroundColor:"rgba(34,211,238,0.04)",borderWidth:2,pointBackgroundColor:pb,pointBorderColor:"transparent",pointRadius:pr,pointHoverRadius:8,fill:true,tension:0.3}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...CHART_TT,callbacks:{label:c=>c.parsed.y.toFixed(2)+" USDT"}}},scales:{x:CHART_GX,y:CHART_GY}}});
+
+  // PnL bar chart
+  const pl=TRADES.map((t,i)=>"#"+(i+1)+" "+t.symbol);
+  const pv=TRADES.map(getNet);
+  const pc2=pv.map(v=>v>=0?"rgba(0,230,118,0.7)":"rgba(255,59,59,0.7)");
+  const pb2=pv.map(v=>v>=0?"#00e676":"#ff3b3b");
+  if(pnlChart)pnlChart.destroy();
+  pnlChart=new Chart(document.getElementById("pnlChart"),{type:"bar",data:{labels:pl,datasets:[{data:pv,backgroundColor:pc2,borderColor:pb2,borderWidth:1,borderRadius:4,borderSkipped:false}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...CHART_TT,callbacks:{label:c=>(c.parsed.y>=0?"+":"")+c.parsed.y.toFixed(2)+" USDT"}}},scales:{x:CHART_GX,y:{...CHART_GY,beginAtZero:true}}}});
+
   document.getElementById("footer").textContent="RUBEN AI · BYBIT USDT永续 · 最后更新: "+lastUpdate;
 }
+
+/* === Init === */
 loadTrades();
+loadLive();
+tradesTimer=setInterval(loadTrades,180000);  // refresh trades every 3 min
+liveTimer=setInterval(loadLive,60000);       // refresh live every 1 min
 </script>
 </body>
 </html>
