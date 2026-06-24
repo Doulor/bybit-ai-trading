@@ -607,6 +607,29 @@
       "feePct": 0.12,
       "exit_time": "2026-06-24 05:40",
       "trailingStop": true
+    },
+    {
+      "time": "06-24 22:45",
+      "symbol": "SPCXUSDT",
+      "side": "short",
+      "entry": 157.3165,
+      "exit": 160.1,
+      "qty": 1,
+      "result": "sl",
+      "pnl": -2.87,
+      "tp": 152.0,
+      "sl": 159.5,
+      "leverage": 10,
+      "holdTime": "约1小时",
+      "entryReason": "SPCX反弹至159.27后反转，信号：['reached_158', 'wick_pressure', 'below_157.5', 'double_top_reject']",
+      "exitReason": "止损160.1触发，突破前高159.27后继续上涨",
+      "fee": 0.0873,
+      "feeEntry": 0.0944,
+      "feeExit": 0,
+      "pnlBeforeFee": -2.78,
+      "pnlAfterFee": -2.87,
+      "feePct": 0.12,
+      "exit_time": "2026-06-24 23:56"
     }
   ]
 }
