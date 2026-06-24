@@ -1,20 +1,20 @@
 {
-  "wallet": 118.18821957,
-  "equity": 117.60321957,
+  "wallet": 116.95190587,
+  "equity": 117.13,
   "positions": [
     {
-      "symbol": "NEARUSDT",
-      "side": "Buy",
-      "size": "25",
-      "avgPrice": "1.9798",
-      "unrealisedPnl": "-0.585",
-      "takeProfit": "2.2",
-      "stopLoss": "1.9",
+      "symbol": "HEIUSDT",
+      "side": "Sell",
+      "size": "100",
+      "avgPrice": "0.1179",
+      "unrealisedPnl": "0.182",
+      "takeProfit": "0.105",
+      "stopLoss": "0.1185",
       "leverage": "10",
       "liqPrice": "",
-      "markPrice": "1.9564"
+      "markPrice": "0.1161"
     }
   ],
   "openOrders": [],
-  "updated_at": 1782289747009
+  "updated_at": 1782325620000
 }
