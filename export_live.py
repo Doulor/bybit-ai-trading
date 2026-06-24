@@ -57,7 +57,11 @@ def req(method, path, params=None):
         h['Content-Type'] = 'application/json'
         body = ps.encode()
     r = requests.request(method, url, data=body, headers=h, timeout=15)
-    return r.json()
+    try:
+        return r.json()
+    except Exception:
+        print(f"ERROR: Non-JSON response from {path}: status={r.status_code} body={r.text[:300]}")
+        return {'retCode': -1, 'retMsg': f'Non-JSON response: {r.status_code}'}
 
 bal = req('GET', '/v5/account/wallet-balance', {'accountType': 'UNIFIED', 'coin': 'USDT'})
 wallet = equity = 0
