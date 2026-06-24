@@ -144,13 +144,14 @@
       "leverage": 5,
       "holdTime": "37min",
       "entryReason": "14:45巨量拉盘至0.04815，回踩0.0476支撑不破",
-      "exitReason": "14:45巨量后无后续支撑，连续4根阴线阴跌，提前认亏",
+      "exitReason": "移动止损触发",
       "fee": 0.0131,
       "feeEntry": 0.0066,
       "feeExit": 0.0065,
       "pnlBeforeFee": -0.08,
       "pnlAfterFee": -0.0764,
-      "feePct": 0.11
+      "feePct": 0.11,
+      "trailingStop": true
     },
     {
       "time": "06-21 20:22",
@@ -238,7 +239,8 @@
       "feeExit": 0.0582,
       "pnlBeforeFee": 0.01,
       "pnlAfterFee": 0.0078,
-      "feePct": 0.11
+      "feePct": 0.11,
+      "manualClose": true
     },
     {
       "time": "06-22 21:39",
@@ -269,20 +271,21 @@
       "entry": 0.02029,
       "exit": 0.02043,
       "qty": 2465,
-      "result": "tp",
+      "result": "sl",
       "pnl": -0.0045,
       "tp": 0.0215,
       "sl": 0.0195,
       "leverage": 10,
       "holdTime": "30min",
       "entryReason": "",
-      "exitReason": "止盈触发",
+      "exitReason": "移动止损触发",
       "fee": 0.5498,
       "feeEntry": 0.2746,
       "feeExit": 0.2752,
       "pnlBeforeFee": 0.29,
       "pnlAfterFee": -0.0045,
-      "feePct": 1.099
+      "feePct": 1.099,
+      "trailingStop": true
     },
     {
       "time": "06-22 22:24",
@@ -313,7 +316,7 @@
       "entry": 1.0383,
       "exit": 1.0413,
       "qty": 288,
-      "result": "tp",
+      "result": "sl",
       "pnl": 0.5479,
       "tp": 1.07,
       "sl": 1.0414,
@@ -326,7 +329,8 @@
       "feeExit": 0.1649,
       "pnlBeforeFee": 0.55,
       "pnlAfterFee": 0.5479,
-      "feePct": 0.11
+      "feePct": 0.11,
+      "trailingStop": true
     },
     {
       "time": "06-23 00:34",
@@ -357,20 +361,21 @@
       "entry": 0.083205,
       "exit": 0.0826,
       "qty": 360,
-      "result": "tp",
+      "result": "sl",
       "pnl": 0.185,
       "tp": 0.0777,
       "sl": 0.0867,
       "leverage": 10,
       "holdTime": "39min",
       "entryReason": "24h跌14.6%，30m放量下跌趋势明确，从0.10跌到0.083，趋势空头",
-      "exitReason": "价格跌至0.0826自动平仓",
+      "exitReason": "移动止损触发",
       "fee": 0.0328,
       "feeEntry": 0.0165,
       "feeExit": 0.0164,
       "pnlBeforeFee": 0.2178,
       "pnlAfterFee": 0.185,
-      "feePct": 0.11
+      "feePct": 0.11,
+      "trailingStop": true
     },
     {
       "time": "06-23 13:20",
@@ -436,7 +441,8 @@
       "feeExit": 0.0276,
       "pnlBeforeFee": 0,
       "pnlAfterFee": 0.0864,
-      "feePct": 0
+      "feePct": 0,
+      "manualClose": true
     },
     {
       "time": "06-23 14:58",
@@ -459,7 +465,8 @@
       "pnlBeforeFee": 0,
       "pnlAfterFee": -0.08,
       "feePct": 0,
-      "exit_time": "2026-06-23 17:05"
+      "exit_time": "2026-06-23 17:05",
+      "manualClose": true
     },
     {
       "time": "06-23 14:50",
@@ -468,7 +475,7 @@
       "entry": 1.788,
       "exit": 1.755,
       "qty": 28,
-      "result": "tp",
+      "result": "sl",
       "pnl": 0.86,
       "tp": 1.6807,
       "sl": 1.8506,
@@ -482,7 +489,8 @@
       "pnlBeforeFee": 0,
       "pnlAfterFee": 0.8,
       "feePct": 0,
-      "exit_time": "2026-06-23 21:16"
+      "exit_time": "2026-06-23 21:16",
+      "trailingStop": true
     },
     {
       "time": "06-23 21:42",
