@@ -699,6 +699,29 @@
       "pnlAfterFee": 0,
       "feePct": 0.12,
       "exit_time": ""
+    },
+    {
+      "time": "06-25 00:50",
+      "symbol": "SAHARAUSDT",
+      "side": "short",
+      "entry": 0.01276,
+      "exit": 0,
+      "qty": 1000,
+      "result": "hold",
+      "pnl": 0,
+      "tp": 0.0115,
+      "sl": 0.0135,
+      "leverage": 5,
+      "holdTime": "",
+      "entryReason": "暴涨12%后15m从0.0137跌到0.01275(-6.7%)，BTC跌破60000空头市场，反弹乏力确认阻力",
+      "exitReason": "",
+      "fee": 0.008,
+      "feeEntry": 0.008,
+      "feeExit": 0,
+      "pnlBeforeFee": 0,
+      "pnlAfterFee": 0,
+      "feePct": 0.12,
+      "exit_time": ""
     }
   ]
 }
