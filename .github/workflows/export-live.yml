@@ -24,6 +24,7 @@ jobs:
         run: |
           mkdir -p data
           python3 export_live.py
+          echo "Done"
           
       - name: Commit and push
         run: |

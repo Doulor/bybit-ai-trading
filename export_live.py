@@ -5,21 +5,37 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 import requests
 
-env_path = r'C:\Users\Doulor\.openclaw\.env'
-api_key = private_key_path = ''
-with open(env_path, 'r', encoding='utf-8') as f:
-    for line in f:
-        line = line.strip()
-        if line.startswith('BYBIT_API_KEY='):
-            api_key = line.split('=', 1)[1]
-        elif line.startswith('BYBIT_API_PRIVATE_KEY_PATH='):
-            private_key_path = line.split('=', 1)[1]
+api_key = os.environ.get('BYBIT_API_KEY', '')
+private_key_pem = os.environ.get('BYBIT_PRIVATE_KEY', '')
 
-with open(private_key_path, 'rb') as f:
-    pem_data = f.read()
+# Local fallback: read from .env file if env vars not set
+if not api_key:
+    env_path = r'C:\Users\Doulor\.openclaw\.env'
+    private_key_path = ''
+    if os.path.exists(env_path):
+        with open(env_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith('BYBIT_API_KEY='):
+                    api_key = line.split('=', 1)[1]
+                elif line.startswith('BYBIT_API_PRIVATE_KEY_PATH='):
+                    private_key_path = line.split('=', 1)[1]
+        if private_key_path and os.path.exists(private_key_path):
+            with open(private_key_path, 'rb') as f:
+                private_key_pem = f.read()
+
+if not api_key:
+    print("ERROR: BYBIT_API_KEY not found in env vars or .env file")
+    sys.exit(1)
+
+if not private_key_pem:
+    print("ERROR: BYBIT_PRIVATE_KEY not found in env vars or .env file")
+    sys.exit(1)
 
 _pw = bytes()
-pk = serialization.load_pem_private_key(pem_data, password=_pw if _pw else None)
+if isinstance(private_key_pem, str):
+    private_key_pem = private_key_pem.encode()
+pk = serialization.load_pem_private_key(private_key_pem, password=_pw if _pw else None)
 
 base = 'https://api.bybit.com'
 
@@ -79,7 +95,7 @@ data = {
     'updated_at': int(time.time() * 1000),
 }
 
-out = r'C:\Users\Doulor\Documents\BybitAI\data\live.json'
+out = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'live.json')
 os.makedirs(os.path.dirname(out), exist_ok=True)
 with open(out, 'w') as f:
     json.dump(data, f, indent=2)

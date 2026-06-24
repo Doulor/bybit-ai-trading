@@ -138,21 +138,23 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 .topbar-badge.offline::before{background:var(--red);animation:none}
 
 /* open positions panel */
-.positions-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.pos-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 20px;flex:1;min-width:300px;position:relative;overflow:hidden}
-.pos-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.pos-card.long-pos::before{background:var(--green)}
-.pos-card.short-pos::before{background:var(--red)}
-.pos-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.positions-bar{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:20px}
+.pos-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1px;position:relative;overflow:hidden;transition:all 0.4s var(--ease)}
+.pos-card:hover{border-color:var(--border2)}
+.pos-card-inner{background:var(--bg2);border-radius:13px;padding:18px;height:100%;position:relative}
+.pos-card-inner::before{content:'';position:absolute;inset:0;border-radius:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);pointer-events:none}
+.pos-card.long-pos{border-top:3px solid var(--green)}
+.pos-card.short-pos{border-top:3px solid var(--red)}
+.pos-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .pos-symbol{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.1em}
 .pos-side{font-family:'JetBrains Mono',monospace;font-size:0.72em;font-weight:600;padding:3px 8px;border-radius:4px}
 .pos-side.buy{background:var(--green2);color:var(--green)}
 .pos-side.sell{background:var(--red2);color:var(--red)}
-.pos-row{display:flex;gap:16px;flex-wrap:wrap}
+.pos-upnl{font-family:'JetBrains Mono',monospace;font-size:1.5em;font-weight:700}
+.pos-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}
 .pos-item{display:flex;gap:6px;align-items:baseline}
-.pos-item .pos-label{color:var(--t3);font-size:0.78em}
+.pos-item .pos-label{color:var(--t3);font-size:0.72em}
 .pos-item .pos-val{font-family:'JetBrains Mono',monospace;font-size:0.88em;font-weight:600;color:var(--t1)}
-.pos-reason{margin-top:8px;font-size:0.72em;color:var(--t2);line-height:1.4}
 
 /* filter bar */
 .filter-bar{padding:10px 22px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -305,18 +307,20 @@ function renderLiveStatus(){
     const upnlCls=upnl>=0?'pnl-pos':'pnl-neg';
     const upnlStr=(upnl>=0?'+':'')+upnl.toFixed(4);
     return `<div class="pos-card ${cardCls}">
-      <div class="pos-header">
-        <span class="pos-symbol">${p.symbol}</span>
-        <span class="pos-side ${isLong?'buy':'sell'}">${isLong?'做多':'做空'}</span>
-        <span class="pos-val ${upnlCls}" style="font-size:1.1em">${upnlStr} U</span>
-      </div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">入场</span><span class="pos-val">${p.avgPrice}</span></div>
-        <div class="pos-item"><span class="pos-label">标记</span><span class="pos-val">${p.markPrice}</span></div>
-        <div class="pos-item"><span class="pos-label">数量</span><span class="pos-val">${p.size}</span></div>
-        <div class="pos-item"><span class="pos-label">杠杆</span><span class="pos-val">${p.leverage||'-'}x</span></div>
-        <div class="pos-item"><span class="pos-label">止盈</span><span class="pos-val" style="color:var(--green)">${p.takeProfit||'-'}</span></div>
-        <div class="pos-item"><span class="pos-label">止损</span><span class="pos-val" style="color:var(--red)">${p.stopLoss||'-'}</span></div>
+      <div class="pos-card-inner">
+        <div class="pos-header">
+          <span class="pos-symbol">${p.symbol}</span>
+          <span class="pos-side ${isLong?'buy':'sell'}">${isLong?'做多':'做空'}</span>
+        </div>
+        <div class="pos-upnl ${upnlCls}">${upnlStr} U</div>
+        <div class="pos-row">
+          <div class="pos-item"><span class="pos-label">入场</span><span class="pos-val">${p.avgPrice}</span></div>
+          <div class="pos-item"><span class="pos-label">标记</span><span class="pos-val">${p.markPrice}</span></div>
+          <div class="pos-item"><span class="pos-label">数量</span><span class="pos-val">${p.size}</span></div>
+          <div class="pos-item"><span class="pos-label">杠杆</span><span class="pos-val">${p.leverage||'-'}x</span></div>
+          <div class="pos-item"><span class="pos-label">止盈</span><span class="pos-val" style="color:var(--green)">${p.takeProfit||'-'}</span></div>
+          <div class="pos-item"><span class="pos-label">止损</span><span class="pos-val" style="color:var(--red)">${p.stopLoss||'-'}</span></div>
+        </div>
       </div>
     </div>`;
   }).join('')+'</div>';
