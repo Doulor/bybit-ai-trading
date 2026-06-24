@@ -89,6 +89,8 @@ tr:hover td{background:rgba(255,255,255,0.015)}
 .badge.short{background:var(--red2);color:var(--red);border:1px solid rgba(255,59,59,0.15)}
 .badge.tp{background:var(--green2);color:var(--green);border:1px solid rgba(0,230,118,0.15)}
 .badge.sl{background:var(--red2);color:var(--red);border:1px solid rgba(255,59,59,0.15)}
+.badge.trailing{background:var(--gold2);color:var(--gold);border:1px solid rgba(245,166,35,0.15)}
+.badge.manual{background:rgba(167,139,250,0.08);color:var(--purple);border:1px solid rgba(167,139,250,0.15)}
 .badge.hold{background:var(--cyan2);color:var(--cyan);border:1px solid rgba(34,211,238,0.15)}
 .pnl-pos{color:var(--green);font-weight:600}
 .pnl-neg{color:var(--red);font-weight:600}
@@ -212,7 +214,7 @@ function renderAll(){
   const tb=document.getElementById('tradesBody');
   [...TRADES].reverse().forEach((t,idx)=>{
     const sc=t.side==='long'?'long':'short';const st=t.side==='long'?'做多':'做空';
-    const rc=t.result==='tp'?'tp':t.result==='sl'?'sl':'hold';const rt=t.result==='tp'?(t.manualClose?'手动平仓':'止盈'):t.result==='sl'?(t.trailingStop?'移动止损':t.manualClose?'手动平仓':'止损'):'持仓中';
+    const rc=t.result==='tp'?(t.manualClose?'manual':'tp'):t.result==='sl'?(t.trailingStop?'trailing':t.manualClose?'manual':'sl'):'hold';const rt=t.result==='tp'?(t.manualClose?'手动平仓':'止盈'):t.result==='sl'?(t.trailingStop?'移动止损':t.manualClose?'手动平仓':'止损'):'持仓中';
     const pc=t.pnlAfterFee>=0?'pnl-pos':'pnl-neg';const pt=(t.pnlAfterFee>=0?'+':'')+t.pnlAfterFee.toFixed(2);const fc=(t.fee||0)>0?'color:var(--t2)':'';
     const et=t.exit?t.exit:'-';const id='trade-'+idx;
     tb.innerHTML+=`<tr class="trade-row" onclick="toggleDetail('${id}')"><td>${t.time}</td><td>${t.symbol}</td><td><span class="badge ${sc}">${st}</span></td><td>${t.entry}</td><td>${et}</td><td>${t.qty}</td><td><span class="badge ${rc}">${rt}</span></td><td style="${fc};font-size:0.72em">-${(t.fee||0).toFixed(2)}U</td><td class="${pc}">${pt}</td><td class="expand-icon">▶</td></tr><tr class="trade-detail-row" id="${id}"><td colspan="9"><div class="detail-panel"><div class="dp-title">交易详情</div><div class="dp-item"><span class="dp-label">杠杆:</span><span class="dp-value">${t.leverage||'-'}x</span></div><div class="dp-item"><span class="dp-label">手续费:</span><span class="dp-value" style="color:var(--t2)">${t.fee?('-'+t.fee.toFixed(4)+'U ('+((t.fee/(t.entry*t.qty))*100).toFixed(2)+'%)'):'-'}</span></div><div class="dp-item"><span class="dp-label">持仓时间:</span><span class="dp-value">${t.holdTime||'-'}</span></div><div class="dp-item"><span class="dp-label">手续费明细:</span><span class="dp-value" style="color:var(--t3);font-size:0.85em">开仓${t.feeEntry?t.feeEntry.toFixed(4)+'U':''} + 平仓${t.feeExit?t.feeExit.toFixed(4)+'U':''}</span></div><div class="dp-item"><span class="dp-label">止盈价:</span><span class="dp-value">${t.tp||'-'}</span></div><div class="dp-item"><span class="dp-label">止损价:</span><span class="dp-value">${t.sl||'-'}</span></div><div class="dp-reason"><span class="dp-label">📈 入场逻辑:</span><span class="dp-value">${t.entryReason||'-'}</span></div><div class="dp-reason"><span class="dp-label">📤 平仓原因:</span><span class="dp-value">${t.exitReason||'-'}</span></div></div></td></tr>`;
