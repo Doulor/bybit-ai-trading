@@ -289,42 +289,13 @@ function renderLiveStatus(){
   if(!LIVE_DATA||!LIVE_DATA.updated_at){
     badge.className='topbar-badge offline';
     badge.innerHTML='● 离线';
-    document.getElementById('openPositions').innerHTML='';
     return;
   }
   const age=Math.floor((Date.now()-LIVE_DATA.updated_at)/1000/60);
   if(age<5){badge.className='topbar-badge';badge.innerHTML='● 实时';}
   else if(age<15){badge.className='topbar-badge stale';badge.innerHTML='● '+age+'分钟前';}
   else{badge.className='topbar-badge offline';badge.innerHTML='● '+age+'分钟前';}
-
-  // Open positions
-  const pos=LIVE_DATA.positions||[];
-  const el=document.getElementById('openPositions');
-  if(pos.length===0){el.innerHTML='';return;}
-  el.innerHTML='<div class="positions-bar anim-in">'+pos.map(p=>{
-    const isLong=p.side==='Buy';
-    const cardCls=isLong?'long-pos':'short-pos';
-    const upnl=parseFloat(p.unrealisedPnl||0);
-    const upnlCls=upnl>=0?'pnl-pos':'pnl-neg';
-    const upnlStr=(upnl>=0?'+':'')+upnl.toFixed(4);
-    return `<div class="pos-card ${cardCls}">
-      <div class="pos-card-inner">
-        <div class="pos-header">
-          <span class="pos-symbol">${p.symbol}</span>
-          <span class="pos-side ${isLong?'buy':'sell'}">${isLong?'做多':'做空'}</span>
-        </div>
-        <div class="pos-upnl ${upnlCls}">${upnlStr} U</div>
-        <div class="pos-row">
-          <div class="pos-item"><span class="pos-label">入场</span><span class="pos-val">${p.avgPrice}</span></div>
-          <div class="pos-item"><span class="pos-label">标记</span><span class="pos-val">${p.markPrice}</span></div>
-          <div class="pos-item"><span class="pos-label">数量</span><span class="pos-val">${p.size}</span></div>
-          <div class="pos-item"><span class="pos-label">杠杆</span><span class="pos-val">${p.leverage||'-'}x</span></div>
-          <div class="pos-item"><span class="pos-label">止盈</span><span class="pos-val" style="color:var(--green)">${p.takeProfit||'-'}</span></div>
-          <div class="pos-item"><span class="pos-label">止损</span><span class="pos-val" style="color:var(--red)">${p.stopLoss||'-'}</span></div>
-        </div>
-      </div>
-    </div>`;
-  }).join('')+'</div>';
+  startRealtime();
 }
 
 /* === Stats Calculation === */
