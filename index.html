@@ -564,7 +564,7 @@ function fetchRealtimePrices(){
   var pos=(LIVE_DATA&&LIVE_DATA.positions)?LIVE_DATA.positions:[];
   if(pos.length===0) return;
   var promises=pos.map(function(p){
-    return fetch('https://api.bybit.com/v5/market/tickers?category=linear&symbol='+p.symbol)
+    return fetch('https://api.bybit.com/v5/market/tickers?category=linear&symbol='+p.symbol+'&t='+Date.now())
       .then(function(r){return r.json()})
       .then(function(d){
         if(d.result&&d.result.list&&d.result.list[0]){
