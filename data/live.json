@@ -1,23 +1,8 @@
 {
-  "wallet": 116.2674,
-  "equity": 117.0494,
-  "positions": [
-    {
-      "symbol": "BILLUSDT",
-      "side": "Sell",
-      "size": "680",
-      "avgPrice": "0.0435",
-      "unrealisedPnl": "0.782",
-      "leverage": "10",
-      "liqPrice": "0.21427923",
-      "stopLoss": "0.043",
-      "takeProfit": "0.0412",
-      "markPrice": "0.04235",
-      "createdTime": "1782370974849",
-      "positionIdx": 0
-    }
-  ],
+  "wallet": 117.3981,
+  "equity": 117.3981,
+  "positions": [],
   "openOrders": [],
-  "updated_at": 1782379925966,
-  "updated_local": "2026-06-25 17:32:05"
+  "updated_at": 1782385686162,
+  "updated_local": "2026-06-25 19:08:06"
 }

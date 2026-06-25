@@ -272,7 +272,7 @@ async function loadTrades(){
 
 async function loadLive(){
   // Fetch live.json from live-data branch (force-pushed, no extra commits)
-  const url='https://raw.githubusercontent.com/Doulor/bybit-ai-trading/live-data/data/live.json?t='+Date.now();
+  const url='https://raw.githubusercontent.com/Doulor/bybit-ai-trading/main/data/live.json?t='+Date.now();
   try{
     const r=await fetch(url);
     if(r.ok) LIVE_DATA=await r.json();
