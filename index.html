@@ -325,10 +325,8 @@ function renderRealtimePositions(){
   });
   html+='</div>';
   document.getElementById('openPositions').innerHTML=html;
-  var wallet=(LIVE_DATA&&LIVE_DATA.wallet)?parseFloat(LIVE_DATA.wallet):0;
-  var ve=wallet+totalUpnl;
   var hv=document.querySelector('.hero-value');
-  if(hv){hv.textContent='';var sp=document.createElement('span');sp.textContent=ve.toFixed(2);hv.appendChild(sp);var sm=document.createElement('span');sm.style.cssText='font-size:0.4em;color:var(--t2);margin-left:4px';sm.textContent='USDT';hv.appendChild(sm);}
+  if(hv){hv.textContent='';var sp=document.createElement('span');sp.textContent=(LIVE_DATA&&LIVE_DATA.equity?parseFloat(LIVE_DATA.equity):0).toFixed(2);hv.appendChild(sp);var sm=document.createElement('span');sm.style.cssText='font-size:0.4em;color:var(--t2);margin-left:4px';sm.textContent='USDT';hv.appendChild(sm);}
 }
 
 function renderLiveStatus(){
