@@ -235,6 +235,7 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 let TRADES=[], INITIAL_CAPITAL=0, INVESTMENTS=[], lastUpdate="";
 let equityChart=null, pnlChart=null, investorsBarChart=null, investorsPieChart=null;
 let LIVE_DATA=null, liveTimer=null, tradesTimer=null;
+let REALTIME_TIMER=null, REALTIME_PRICES={};
 
 /* === Helpers === */
 const getNet = t => t.pnlAfterFee!=null ? t.pnlAfterFee : t.pnl;
@@ -558,11 +559,96 @@ function renderAll(){
   document.getElementById("footer").textContent="RUBEN AI · BYBIT USDT永续 · 最后更新: "+lastUpdate;
 }
 
+/* === Real-time Price Engine === */
+function fetchRealtimePrices(){
+  var pos=(LIVE_DATA&&LIVE_DATA.positions)?LIVE_DATA.positions:[];
+  if(pos.length===0) return;
+  var promises=pos.map(function(p){
+    return fetch('https://api.bybit.com/v5/market/tickers?category=linear&symbol='+p.symbol)
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d.result&&d.result.list&&d.result.list[0]){
+          REALTIME_PRICES[p.symbol]=parseFloat(d.result.list[0].lastPrice);
+        }
+      })
+      .catch(function(){});
+  });
+  Promise.all(promises).then(function(){renderRealtimePositions();});
+}
+
+function renderRealtimePositions(){
+  var pos=(LIVE_DATA&&LIVE_DATA.positions)?LIVE_DATA.positions:[];
+  if(pos.length===0){document.getElementById('openPositions').innerHTML='';return;}
+  var totalUpnl=0;
+  var html='<div class="positions-bar anim-in">';
+  pos.forEach(function(p){
+    var isLong=(p.side==='Buy'||p.side==='buy');
+    var cardCls=isLong?'long-pos':'short-pos';
+    var entry=parseFloat(p.avgPrice);
+    var size=parseFloat(p.size);
+    var leverage=parseInt(p.leverage)||1;
+    var currentPrice=REALTIME_PRICES[p.symbol]||parseFloat(p.markPrice)||entry;
+    var upnl=isLong?(currentPrice-entry)*size:(entry-currentPrice)*size;
+    totalUpnl+=upnl;
+    var upnlCls=upnl>=0?'pnl-pos':'pnl-neg';
+    var upnlStr=(upnl>=0?'+':'')+upnl.toFixed(4);
+    var priceChg=isLong?((currentPrice-entry)/entry*100):((entry-currentPrice)/entry*100);
+    var chgCls=priceChg>=0?'pnl-pos':'pnl-neg';
+    var createdMs=parseInt(p.createdTime)||0;
+    var holdMin=createdMs>0?Math.floor((Date.now()-createdMs)/1000/60):0;
+    var holdText=holdMin>=60?Math.floor(holdMin/60)+'h'+(holdMin%60)+'m':holdMin+'m';
+    html+='<div class="pos-card '+cardCls+'">'+
+      '<div class="pos-card-inner">'+
+        '<div class="pos-header">'+
+          '<span class="pos-symbol">'+p.symbol+'</span>'+
+          '<span class="pos-side '+(isLong?'buy':'sell')+'">'+(isLong?'做多':'做空')+' '+leverage+'x</span>'+
+        '</div>'+
+        '<div class="pos-upnl '+upnlCls+'">'+upnlStr+' U <span style="font-size:0.5em;color:var(--t2)" class="'+chgCls+'">'+(priceChg>=0?'+':'')+priceChg.toFixed(2)+'%</span></div>'+
+        '<div class="pos-row">'+
+          '<div class="pos-item"><span class="pos-label">入场</span><span class="pos-val">'+p.avgPrice+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">当前</span><span class="pos-val '+chgCls+'" style="font-weight:700">'+currentPrice.toFixed(5)+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">数量</span><span class="pos-val">'+p.size+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">止盈</span><span class="pos-val" style="color:var(--green)">'+(p.takeProfit||'-')+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">止损</span><span class="pos-val" style="color:var(--red)">'+(p.stopLoss||'-')+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">持仓</span><span class="pos-val">'+holdText+'</span></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  });
+  html+='</div>';
+  document.getElementById('openPositions').innerHTML=html;
+  /* Update hero equity = wallet + real-time PnL */
+  var wallet=(LIVE_DATA&&LIVE_DATA.wallet)?parseFloat(LIVE_DATA.wallet):0;
+  var ve=wallet+totalUpnl;
+  var hv=document.querySelector('.hero-value');
+  if(hv){
+    hv.textContent='';
+    var sp=document.createElement('span');
+    sp.textContent=ve.toFixed(2);
+    hv.appendChild(sp);
+    var sm=document.createElement('span');
+    sm.style.cssText='font-size:0.4em;color:var(--t2);margin-left:4px';
+    sm.textContent='USDT';
+    hv.appendChild(sm);
+  }
+}
+
+function startRealtime(){
+  if(REALTIME_TIMER) clearInterval(REALTIME_TIMER);
+  fetchRealtimePrices();
+  REALTIME_TIMER=setInterval(fetchRealtimePrices,3000);
+}
+function stopRealtime(){
+  if(REALTIME_TIMER){clearInterval(REALTIME_TIMER);REALTIME_TIMER=null;}
+}
+
 /* === Init === */
 loadTrades();
 loadLive();
 tradesTimer=setInterval(loadTrades,180000);  // refresh trades every 3 min
-liveTimer=setInterval(loadLive,60000);       // refresh live every 1 min
+liveTimer=setInterval(loadLive,300000);       // refresh live every 5 min
+setInterval(fetchRealtimePrices,3000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)fetchRealtimePrices();});
 </script>
 </body>
 </html>
