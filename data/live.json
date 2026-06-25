@@ -1,37 +1,23 @@
 {
-  "wallet": 117.3539,
-  "equity": 117.0904,
+  "wallet": 115.9559,
+  "equity": 116.2078,
   "positions": [
     {
       "symbol": "ALICEUSDT",
       "side": "Buy",
       "size": "247",
       "avgPrice": "0.12152",
-      "unrealisedPnl": "-0.0494",
+      "unrealisedPnl": "0.25194",
       "leverage": "10",
       "liqPrice": "",
       "stopLoss": "0.118",
       "takeProfit": "0.128",
-      "markPrice": "0.12132",
+      "markPrice": "0.12254",
       "createdTime": "1782388069376",
-      "positionIdx": 0
-    },
-    {
-      "symbol": "REUSDT",
-      "side": "Buy",
-      "size": "86",
-      "avgPrice": "0.58488953",
-      "unrealisedPnl": "-0.2141",
-      "leverage": "10",
-      "liqPrice": "",
-      "stopLoss": "0.57",
-      "takeProfit": "0.62",
-      "markPrice": "0.5824",
-      "createdTime": "1782386030597",
       "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782388386044,
-  "updated_local": "2026-06-25 19:53:06"
+  "updated_at": 1782388987306,
+  "updated_local": "2026-06-25 20:03:07"
 }

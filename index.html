@@ -351,11 +351,6 @@ function renderLiveStatus(){
   if(ageMin<5){badge.className='topbar-badge';badge.innerHTML='● 实时 '+ageText;}
   else if(ageMin<60){badge.className='topbar-badge stale';badge.innerHTML='● '+ageText;}
   else{badge.className='topbar-badge offline';badge.innerHTML='● '+ageText;}
-  // Update hero with live equity if data is fresh (<1 day)
-  if(ageDay<1&&LIVE_DATA.equity){
-    var hv=document.querySelector('.hero-value');
-    if(hv){hv.textContent='';var sp=document.createElement('span');sp.textContent=parseFloat(LIVE_DATA.equity).toFixed(2);hv.appendChild(sp);var sm=document.createElement('span');sm.style.cssText='font-size:0.4em;color:var(--t2);margin-left:4px';sm.textContent='USDT';hv.appendChild(sm);}
-  }
   renderRealtimePositions();
 }
 
@@ -511,7 +506,15 @@ function renderAll(){
   const ps=s.tp>=0?'+':'';const rs=s.roi>=0?'+':'';
 
   // Hero
-  document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">总权益 · TOTAL EQUITY</div><div class="hero-value ${s.tp>=0?'green':'red'}">${s.cb.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${s.tipLines.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% 收益率</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">外部投资</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div></div></div>`;
+  // Use live equity if available and fresh (<1 day)
+var liveEquity=s.cb;
+var liveFresh=false;
+if(LIVE_DATA&&LIVE_DATA.equity&&LIVE_DATA.updated_at){
+  var ageMs2=Date.now()-LIVE_DATA.updated_at;
+  if(ageMs2<86400000){liveEquity=parseFloat(LIVE_DATA.equity);liveFresh=true;}
+}
+var eColor=liveEquity>=INITIAL_CAPITAL+INVESTMENTS.reduce((a,i)=>a+i.amount,0)?'green':'red';
+document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">总权益 · TOTAL EQUITY</div><div class="hero-value ${eColor}">${liveEquity.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${s.tipLines.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% 收益率</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">外部投资</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div></div></div>`;
 
   // Streak dots (PnL-based, not result-based)
   const l10=TRADES.slice(-10);
@@ -592,10 +595,16 @@ function renderAll(){
 }
 
 /* === Init === */
-loadTrades();
-loadLive();
-tradesTimer=setInterval(loadTrades,180000);  // refresh trades every 3 min
-liveTimer=setInterval(loadLive,300000);       // refresh live every 1 min
+async function initAll(){
+  try{
+    var r=await fetch('https://raw.githubusercontent.com/Doulor/bybit-ai-trading/main/data/live.json?t='+Date.now());
+    if(r.ok) LIVE_DATA=await r.json();
+  }catch(e){}
+  await loadTrades();
+  tradesTimer=setInterval(loadTrades,180000);
+  liveTimer=setInterval(loadLive,60000);
+}
+initAll();
 </script>
 </body>
 </html>
