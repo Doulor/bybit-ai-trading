@@ -270,7 +270,6 @@ async function loadTrades(){
     document.getElementById('heroCard').innerHTML='<div class="hero"><div class="error-banner"><div class="err-icon">⚠</div><div class="err-msg">数据加载失败，请刷新页面重试</div><div class="err-detail">'+e.message+'</div></div></div>';
     return;
   }
-  renderAll();
 }
 
 async function loadLive(){
@@ -596,13 +595,15 @@ document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div 
 
 /* === Init === */
 async function initAll(){
-  try{
-    var r=await fetch('https://raw.githubusercontent.com/Doulor/bybit-ai-trading/main/data/live.json?t='+Date.now());
-    if(r.ok) LIVE_DATA=await r.json();
-  }catch(e){}
+  // Load trades first (fast, local) - show data immediately
   await loadTrades();
+  renderAll();
   renderLiveStatus();
-  tradesTimer=setInterval(loadTrades,180000);
+  // Then load live.json in background and update hero
+  fetch('https://raw.githubusercontent.com/Doulor/bybit-ai-trading/main/data/live.json?t='+Date.now()).then(r=>r.ok?r.json():null).catch(()=>null).then(function(d){
+    if(d){LIVE_DATA=d;renderAll();renderLiveStatus();}
+  });
+  tradesTimer=setInterval(function(){loadTrades().then(function(){renderAll();});},180000);
   liveTimer=setInterval(loadLive,60000);
 }
 initAll();
