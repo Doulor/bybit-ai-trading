@@ -235,7 +235,6 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 let TRADES=[], INITIAL_CAPITAL=0, INVESTMENTS=[], lastUpdate="";
 let equityChart=null, pnlChart=null, investorsBarChart=null, investorsPieChart=null;
 let LIVE_DATA=null, liveTimer=null, tradesTimer=null;
-let REALTIME_TIMER=null, REALTIME_PRICES={};
 
 /* === Helpers === */
 const getNet = t => t.pnlAfterFee!=null ? t.pnlAfterFee : t.pnl;
@@ -284,6 +283,54 @@ async function loadLive(){
 }
 
 /* === Live Status Rendering === */
+/* === Position Renderer (uses cached live.json data) === */
+function renderRealtimePositions(){
+  var pos=(LIVE_DATA&&LIVE_DATA.positions)?LIVE_DATA.positions:[];
+  if(pos.length===0){document.getElementById('openPositions').innerHTML='';return;}
+  var totalUpnl=0;
+  var html='<div class="positions-bar anim-in">';
+  pos.forEach(function(p){
+    var isLong=(p.side==='Buy'||p.side==='buy');
+    var cardCls=isLong?'long-pos':'short-pos';
+    var entry=parseFloat(p.avgPrice);
+    var size=parseFloat(p.size);
+    var leverage=parseInt(p.leverage)||1;
+    var mark=parseFloat(p.markPrice)||entry;
+    var upnl=parseFloat(p.unrealisedPnl)||0;
+    totalUpnl+=upnl;
+    var upnlCls=upnl>=0?'pnl-pos':'pnl-neg';
+    var upnlStr=(upnl>=0?'+':'')+upnl.toFixed(4);
+    var priceChg=isLong?((mark-entry)/entry*100):((entry-mark)/entry*100);
+    var chgCls=priceChg>=0?'pnl-pos':'pnl-neg';
+    var createdMs=parseInt(p.createdTime)||0;
+    var holdMin=createdMs>0?Math.floor((Date.now()-createdMs)/1000/60):0;
+    var holdText=holdMin>=60?Math.floor(holdMin/60)+'h'+(holdMin%60)+'m':holdMin+'m';
+    html+='<div class="pos-card '+cardCls+'">'+
+      '<div class="pos-card-inner">'+
+        '<div class="pos-header">'+
+          '<span class="pos-symbol">'+p.symbol+'</span>'+
+          '<span class="pos-side '+(isLong?'buy':'sell')+'">'+(isLong?'\u505a\u591a':'\u505a\u7a7a')+' '+leverage+'x</span>'+
+        '</div>'+
+        '<div class="pos-upnl '+upnlCls+'">'+upnlStr+' U <span style="font-size:0.5em;color:var(--t2)" class="'+chgCls+'">'+(priceChg>=0?'+':'')+priceChg.toFixed(2)+'%</span></div>'+
+        '<div class="pos-row">'+
+          '<div class="pos-item"><span class="pos-label">\u5165\u573a</span><span class="pos-val">'+p.avgPrice+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u5f53\u524d</span><span class="pos-val '+chgCls+'" style="font-weight:700">'+mark.toFixed(5)+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u6570\u91cf</span><span class="pos-val">'+p.size+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u6b62\u76c8</span><span class="pos-val" style="color:var(--green)">'+(p.takeProfit||'-')+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u6b62\u635f</span><span class="pos-val" style="color:var(--red)">'+(p.stopLoss||'-')+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u6301\u4ed3</span><span class="pos-val">'+holdText+'</span></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  });
+  html+='</div>';
+  document.getElementById('openPositions').innerHTML=html;
+  var wallet=(LIVE_DATA&&LIVE_DATA.wallet)?parseFloat(LIVE_DATA.wallet):0;
+  var ve=wallet+totalUpnl;
+  var hv=document.querySelector('.hero-value');
+  if(hv){hv.textContent='';var sp=document.createElement('span');sp.textContent=ve.toFixed(2);hv.appendChild(sp);var sm=document.createElement('span');sm.style.cssText='font-size:0.4em;color:var(--t2);margin-left:4px';sm.textContent='USDT';hv.appendChild(sm);}
+}
+
 function renderLiveStatus(){
   const badge=document.querySelector('.topbar-badge');
   if(!LIVE_DATA||!LIVE_DATA.updated_at){
@@ -295,7 +342,35 @@ function renderLiveStatus(){
   if(age<5){badge.className='topbar-badge';badge.innerHTML='● 实时';}
   else if(age<15){badge.className='topbar-badge stale';badge.innerHTML='● '+age+'分钟前';}
   else{badge.className='topbar-badge offline';badge.innerHTML='● '+age+'分钟前';}
-  startRealtime();
+  renderRealtimePositions();
+  return;
+  const pos=LIVE_DATA.positions||[];
+  const el=document.getElementById('openPositions');
+  if(pos.length===0){el.innerHTML='';return;}
+  el.innerHTML='<div class="positions-bar anim-in">'+pos.map(p=>{
+    const isLong=p.side==='Buy';
+    const cardCls=isLong?'long-pos':'short-pos';
+    const upnl=parseFloat(p.unrealisedPnl||0);
+    const upnlCls=upnl>=0?'pnl-pos':'pnl-neg';
+    const upnlStr=(upnl>=0?'+':'')+upnl.toFixed(4);
+    return `<div class="pos-card ${cardCls}">
+      <div class="pos-card-inner">
+        <div class="pos-header">
+          <span class="pos-symbol">${p.symbol}</span>
+          <span class="pos-side ${isLong?'buy':'sell'}">${isLong?'做多':'做空'}</span>
+        </div>
+        <div class="pos-upnl ${upnlCls}">${upnlStr} U</div>
+        <div class="pos-row">
+          <div class="pos-item"><span class="pos-label">入场</span><span class="pos-val">${p.avgPrice}</span></div>
+          <div class="pos-item"><span class="pos-label">标记</span><span class="pos-val">${p.markPrice}</span></div>
+          <div class="pos-item"><span class="pos-label">数量</span><span class="pos-val">${p.size}</span></div>
+          <div class="pos-item"><span class="pos-label">杠杆</span><span class="pos-val">${p.leverage||'-'}x</span></div>
+          <div class="pos-item"><span class="pos-label">止盈</span><span class="pos-val" style="color:var(--green)">${p.takeProfit||'-'}</span></div>
+          <div class="pos-item"><span class="pos-label">止损</span><span class="pos-val" style="color:var(--red)">${p.stopLoss||'-'}</span></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('')+'</div>';
 }
 
 /* === Stats Calculation === */
@@ -530,106 +605,11 @@ function renderAll(){
   document.getElementById("footer").textContent="RUBEN AI · BYBIT USDT永续 · 最后更新: "+lastUpdate;
 }
 
-/* === Real-time Price Engine (WebSocket - no CORS) === */
-var ws=null, wsReconnectTimer=null;
-
-function initWebSocket(){
-  if(ws && ws.readyState<=1) return; // already connected or connecting
-  try{
-    ws=new WebSocket('wss://stream.bybit.com/v5/public/linear');
-    ws.onopen=function(){
-      console.log('[RT] WS connected');
-      subscribeWS();
-    };
-    ws.onmessage=function(evt){
-      try{
-        var msg=JSON.parse(evt.data);
-        if(msg.topic && msg.topic.indexOf('tickers.')===0 && msg.data){
-          REALTIME_PRICES[msg.data.symbol]=parseFloat(msg.data.lastPrice);
-          renderRealtimePositions();
-        }
-      }catch(e){}
-    };
-    ws.onclose=function(){
-      console.log('[RT] WS closed, reconnecting in 3s');
-      wsReconnectTimer=setTimeout(initWebSocket,3000);
-    };
-    ws.onerror=function(e){console.log('[RT] WS error');};
-  }catch(e){console.log('[RT] WS init error:',e);}
-}
-
-function subscribeWS(){
-  var pos=(LIVE_DATA&&LIVE_DATA.positions)?LIVE_DATA.positions:[];
-  if(!ws||ws.readyState!==1||pos.length===0) return;
-  var args=pos.map(function(p){return 'tickers.'+p.symbol;});
-  ws.send(JSON.stringify({op:'subscribe',args:args}));
-  console.log('[RT] Subscribed to '+args.join(','));
-}
-
-function renderRealtimePositions(){
-  var pos=(LIVE_DATA&&LIVE_DATA.positions)?LIVE_DATA.positions:[];
-  if(pos.length===0){document.getElementById('openPositions').innerHTML='';return;}
-  var totalUpnl=0;
-  var html='<div class="positions-bar anim-in">';
-  pos.forEach(function(p){
-    var isLong=(p.side==='Buy'||p.side==='buy');
-    var cardCls=isLong?'long-pos':'short-pos';
-    var entry=parseFloat(p.avgPrice);
-    var size=parseFloat(p.size);
-    var leverage=parseInt(p.leverage)||1;
-    var currentPrice=REALTIME_PRICES[p.symbol]||parseFloat(p.markPrice)||entry;
-    var upnl=isLong?(currentPrice-entry)*size:(entry-currentPrice)*size;
-    totalUpnl+=upnl;
-    var upnlCls=upnl>=0?'pnl-pos':'pnl-neg';
-    var upnlStr=(upnl>=0?'+':'')+upnl.toFixed(4);
-    var priceChg=isLong?((currentPrice-entry)/entry*100):((entry-currentPrice)/entry*100);
-    var chgCls=priceChg>=0?'pnl-pos':'pnl-neg';
-    var createdMs=parseInt(p.createdTime)||0;
-    var holdMin=createdMs>0?Math.floor((Date.now()-createdMs)/1000/60):0;
-    var holdText=holdMin>=60?Math.floor(holdMin/60)+'h'+(holdMin%60)+'m':holdMin+'m';
-    html+='<div class="pos-card '+cardCls+'">'+
-      '<div class="pos-card-inner">'+
-        '<div class="pos-header">'+
-          '<span class="pos-symbol">'+p.symbol+'</span>'+
-          '<span class="pos-side '+(isLong?'buy':'sell')+'">'+(isLong?'做多':'做空')+' '+leverage+'x</span>'+
-        '</div>'+
-        '<div class="pos-upnl '+upnlCls+'">'+upnlStr+' U <span style="font-size:0.5em;color:var(--t2)" class="'+chgCls+'">'+(priceChg>=0?'+':'')+priceChg.toFixed(2)+'%</span></div>'+
-        '<div class="pos-row">'+
-          '<div class="pos-item"><span class="pos-label">入场</span><span class="pos-val">'+p.avgPrice+'</span></div>'+
-          '<div class="pos-item"><span class="pos-label">当前</span><span class="pos-val '+chgCls+'" style="font-weight:700">'+currentPrice.toFixed(5)+'</span></div>'+
-          '<div class="pos-item"><span class="pos-label">数量</span><span class="pos-val">'+p.size+'</span></div>'+
-          '<div class="pos-item"><span class="pos-label">止盈</span><span class="pos-val" style="color:var(--green)">'+(p.takeProfit||'-')+'</span></div>'+
-          '<div class="pos-item"><span class="pos-label">止损</span><span class="pos-val" style="color:var(--red)">'+(p.stopLoss||'-')+'</span></div>'+
-          '<div class="pos-item"><span class="pos-label">持仓</span><span class="pos-val">'+holdText+'</span></div>'+
-        '</div>'+
-      '</div>'+
-    '</div>';
-  });
-  html+='</div>';
-  document.getElementById('openPositions').innerHTML=html;
-  var wallet=(LIVE_DATA&&LIVE_DATA.wallet)?parseFloat(LIVE_DATA.wallet):0;
-  var ve=wallet+totalUpnl;
-  var hv=document.querySelector('.hero-value');
-  if(hv){
-    hv.textContent='';
-    var sp=document.createElement('span');sp.textContent=ve.toFixed(2);hv.appendChild(sp);
-    var sm=document.createElement('span');sm.style.cssText='font-size:0.4em;color:var(--t2);margin-left:4px';sm.textContent='USDT';hv.appendChild(sm);
-  }
-}
-
-function startRealtime(){initWebSocket();}
-function stopRealtime(){
-  if(ws){ws.close();ws=null;}
-  if(wsReconnectTimer){clearTimeout(wsReconnectTimer);wsReconnectTimer=null;}
-}
-
 /* === Init === */
 loadTrades();
 loadLive();
 tradesTimer=setInterval(loadTrades,180000);  // refresh trades every 3 min
-liveTimer=setInterval(loadLive,300000);       // refresh live every 5 min
-
-document.addEventListener('visibilitychange',function(){if(!document.hidden)initWebSocket();});
+liveTimer=setInterval(loadLive,300000);       // refresh live every 1 min
 </script>
 </body>
 </html>
