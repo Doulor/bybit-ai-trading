@@ -530,21 +530,40 @@ function renderAll(){
   document.getElementById("footer").textContent="RUBEN AI · BYBIT USDT永续 · 最后更新: "+lastUpdate;
 }
 
-/* === Real-time Price Engine === */
-function fetchRealtimePrices(){
-  var pos=(LIVE_DATA&&LIVE_DATA.positions)?LIVE_DATA.positions:[];
-  if(pos.length===0) return;
-  var promises=pos.map(function(p){
-    return fetch('https://api.bybit.com/v5/market/tickers?category=linear&symbol='+p.symbol+'&t='+Date.now())
-      .then(function(r){return r.json()})
-      .then(function(d){
-        if(d.result&&d.result.list&&d.result.list[0]){
-          REALTIME_PRICES[p.symbol]=parseFloat(d.result.list[0].lastPrice);
+/* === Real-time Price Engine (WebSocket - no CORS) === */
+var ws=null, wsReconnectTimer=null;
+
+function initWebSocket(){
+  if(ws && ws.readyState<=1) return; // already connected or connecting
+  try{
+    ws=new WebSocket('wss://stream.bybit.com/v5/public/linear');
+    ws.onopen=function(){
+      console.log('[RT] WS connected');
+      subscribeWS();
+    };
+    ws.onmessage=function(evt){
+      try{
+        var msg=JSON.parse(evt.data);
+        if(msg.topic && msg.topic.indexOf('tickers.')===0 && msg.data){
+          REALTIME_PRICES[msg.data.symbol]=parseFloat(msg.data.lastPrice);
+          renderRealtimePositions();
         }
-      })
-      .catch(function(){});
-  });
-  Promise.all(promises).then(function(){renderRealtimePositions();});
+      }catch(e){}
+    };
+    ws.onclose=function(){
+      console.log('[RT] WS closed, reconnecting in 3s');
+      wsReconnectTimer=setTimeout(initWebSocket,3000);
+    };
+    ws.onerror=function(e){console.log('[RT] WS error');};
+  }catch(e){console.log('[RT] WS init error:',e);}
+}
+
+function subscribeWS(){
+  var pos=(LIVE_DATA&&LIVE_DATA.positions)?LIVE_DATA.positions:[];
+  if(!ws||ws.readyState!==1||pos.length===0) return;
+  var args=pos.map(function(p){return 'tickers.'+p.symbol;});
+  ws.send(JSON.stringify({op:'subscribe',args:args}));
+  console.log('[RT] Subscribed to '+args.join(','));
 }
 
 function renderRealtimePositions(){
@@ -588,29 +607,20 @@ function renderRealtimePositions(){
   });
   html+='</div>';
   document.getElementById('openPositions').innerHTML=html;
-  /* Update hero equity = wallet + real-time PnL */
   var wallet=(LIVE_DATA&&LIVE_DATA.wallet)?parseFloat(LIVE_DATA.wallet):0;
   var ve=wallet+totalUpnl;
   var hv=document.querySelector('.hero-value');
   if(hv){
     hv.textContent='';
-    var sp=document.createElement('span');
-    sp.textContent=ve.toFixed(2);
-    hv.appendChild(sp);
-    var sm=document.createElement('span');
-    sm.style.cssText='font-size:0.4em;color:var(--t2);margin-left:4px';
-    sm.textContent='USDT';
-    hv.appendChild(sm);
+    var sp=document.createElement('span');sp.textContent=ve.toFixed(2);hv.appendChild(sp);
+    var sm=document.createElement('span');sm.style.cssText='font-size:0.4em;color:var(--t2);margin-left:4px';sm.textContent='USDT';hv.appendChild(sm);
   }
 }
 
-function startRealtime(){
-  if(REALTIME_TIMER) clearInterval(REALTIME_TIMER);
-  fetchRealtimePrices();
-  REALTIME_TIMER=setInterval(fetchRealtimePrices,3000);
-}
+function startRealtime(){initWebSocket();}
 function stopRealtime(){
-  if(REALTIME_TIMER){clearInterval(REALTIME_TIMER);REALTIME_TIMER=null;}
+  if(ws){ws.close();ws=null;}
+  if(wsReconnectTimer){clearTimeout(wsReconnectTimer);wsReconnectTimer=null;}
 }
 
 /* === Init === */
@@ -618,8 +628,8 @@ loadTrades();
 loadLive();
 tradesTimer=setInterval(loadTrades,180000);  // refresh trades every 3 min
 liveTimer=setInterval(loadLive,300000);       // refresh live every 5 min
-setInterval(fetchRealtimePrices,3000);
-document.addEventListener('visibilitychange',function(){if(!document.hidden)fetchRealtimePrices();});
+
+document.addEventListener('visibilitychange',function(){if(!document.hidden)initWebSocket();});
 </script>
 </body>
 </html>
