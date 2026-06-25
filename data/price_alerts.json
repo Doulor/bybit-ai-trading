@@ -1,13 +1,6 @@
 {
   "alerts": [
     {
-      "symbol": "REUSDT",
-      "price": 0.575,
-      "direction": "below",
-      "reason": "RSI14=10极度超卖，支撑位0.5749，锤子线，资金费率-0.218%。如果跌到这里企稳做多，止损0.570，止盈0.620，R/R 1:4",
-      "added_at": "2026-06-25 19:09"
-    },
-    {
       "symbol": "OUSDT",
       "price": 0.586,
       "direction": "below",
