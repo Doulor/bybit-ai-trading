@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>API Debug Test</title></head>
+<body>
+<h3>Bybit API CORS Test</h3>
+<pre id="log"></pre>
+<script>
+var log=document.getElementById('log');
+function appendLog(msg){log.textContent+=msg+'\n';}
+
+appendLog('Testing fetch to Bybit API...');
+
+fetch('https://api.bybit.com/v5/market/tickers?category=linear&symbol=BILLUSDT&t='+Date.now())
+  .then(function(r){
+    appendLog('Response status: '+r.status);
+    appendLog('CORS: '+r.headers.get('Access-Control-Allow-Origin'));
+    return r.json();
+  })
+  .then(function(d){
+    appendLog('retCode: '+d.retCode);
+    var t=d.result.list[0];
+    appendLog('lastPrice: '+t.lastPrice);
+    appendLog('JSON: '+JSON.stringify(t).substring(0,200));
+    appendLog('\n=== SUCCESS ===');
+  })
+  .catch(function(e){
+    appendLog('ERROR: '+e.message);
+    appendLog('\n=== FAILED - CORS or network issue ===');
+  });
+</script>
+</body>
+</html>
