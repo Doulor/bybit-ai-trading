@@ -9,7 +9,7 @@
       "avgPrice": "0.0435",
       "unrealisedPnl": "0.4896",
       "leverage": "10",
-      "liqPrice": "0.21426756",
+      "liqPrice": "0.21426395",
       "stopLoss": "0.0442",
       "takeProfit": "0.0412",
       "markPrice": "0.04278",
@@ -18,6 +18,6 @@
     }
   ],
   "openOrders": [],
-  "updated_at": 1782375863343,
-  "updated_local": "2026-06-25 16:24:23"
+  "updated_at": 1782375917462,
+  "updated_local": "2026-06-25 16:25:17"
 }
