@@ -481,7 +481,7 @@ function renderAll(){
 
   // Hero
   // Hero - use live equity from live.json when available
-  const liveEq=(LIVE_DATA&&LIVE_DATA.equity)?parseFloat(LIVE_DATA.equity):null;
+  const liveEq=(LIVE_DATA&&LIVE_DATA.wallet)?parseFloat(LIVE_DATA.wallet):null;
   const displayBal=liveEq!==null?liveEq:s.cb;
   document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">总权益 · TOTAL EQUITY</div><div class="hero-value ${s.tp>=0?'green':'red'}">${displayBal.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${s.tipLines.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% 收益率</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">外部投资</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div></div></div>`;
 
@@ -640,7 +640,7 @@ function renderRealtimePositions(){
       '</div>'+
     '</div>';
   }).join('')+'</div>';
-  const liveEq=(LIVE_DATA&&LIVE_DATA.equity)?parseFloat(LIVE_DATA.equity):null;
+  const liveEq=(LIVE_DATA&&LIVE_DATA.wallet)?parseFloat(LIVE_DATA.wallet):null;
   if(liveEq!==null){
     const ve=liveEq+totalUpnl;
     const eqEl=document.querySelector('.hero-value');
