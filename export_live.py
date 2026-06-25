@@ -15,9 +15,13 @@ def export():
     bal = get_balance()
     positions = get_positions()
     
+    # Calculate equity = wallet + unrealised PnL
+    total_unrealised = sum(float(p.get('unrealisedPnl', 0)) for p in positions)
+    equity = bal + total_unrealised
+    
     live = {
         'wallet': round(bal, 4),
-        'equity': round(bal, 4),
+        'equity': round(equity, 4),
         'positions': [{'symbol':p['symbol'],'side':p['side'],'size':p['size'],
         'avgPrice':p['avgPrice'],'unrealisedPnl':p['unrealisedPnl'],
         'leverage':p['leverage'],'liqPrice':p.get('liqPrice',''),
