@@ -94,6 +94,9 @@ tr:hover td{background:rgba(255,255,255,0.015)}
 .badge.hold{background:var(--cyan2);color:var(--cyan);border:1px solid rgba(34,211,238,0.15)}
 .pnl-pos{color:var(--green);font-weight:600}
 .pnl-neg{color:var(--red);font-weight:600}
+.pnl-flat{color:var(--t2);font-weight:400}
+.pnl-flat{color:var(--t2);font-weight:400}
+.pnl-flat{color:var(--t2);font-weight:400}
 
 tr.trade-row{cursor:pointer}
 tr.trade-row:hover td{background:rgba(255,255,255,0.025)}
@@ -362,8 +365,8 @@ function calcStats(){
   const tp=TRADES.reduce((s,t)=>s+getNet(t),0);
   const cb=INITIAL_CAPITAL+ti+tp;
   const closed=TRADES.filter(t=>t.result!=='hold');
-  const wt=closed.filter(t=>getNet(t)>0).length;
-  const lt=closed.filter(t=>getNet(t)<0).length;
+  const wt=closed.filter(t=>getNet(t)>0.005).length;
+  const lt=closed.filter(t=>getNet(t)<-0.005).length;
   const wr=closed.length>0?(wt/closed.length*100):0;
   const bt=TRADES.length>0?Math.max(...TRADES.map(getNet)):0;
   const wst=TRADES.length>0?Math.min(...TRADES.map(getNet)):0;
@@ -406,7 +409,7 @@ function calcStats(){
   // Streak (based on actual PnL, not result field)
   let sk=0,skt='';
   for(let i=TRADES.length-1;i>=0;i--){
-    if(TRADES[i].result==='hold') continue;
+    if(TRADES[i].result==='hold'||Math.abs(getNet(TRADES[i]))<0.005) continue;
     const c=getNet(TRADES[i])>=0?'win':'loss';
     if(!skt){skt=c;sk=1;}else if(skt===c){sk++;}else break;
   }
@@ -492,7 +495,7 @@ function renderTable(){
     const rc=t.result==='tp'?(t.manualClose?'manual':'tp'):t.result==='sl'?(t.trailingStop?'trailing':t.manualClose?'manual':'sl'):'hold';
     const rt=t.result==='tp'?(t.manualClose?'手动平仓':'止盈'):t.result==='sl'?(t.trailingStop?'移动止损':t.manualClose?'手动平仓':'止损'):'持仓中';
     const pn=getNet(t);
-    const pc=pn>=0?'pnl-pos':'pnl-neg';const pt=(pn>=0?'+':'')+pn.toFixed(2);
+    const pc=Math.abs(pn)<0.01?'pnl-flat':pn>=0?'pnl-pos':'pnl-neg';const pt=Math.abs(pn)<0.01?'±0.00':((pn>=0?'+':'')+pn.toFixed(2));
     const fc=(t.fee||0)>0?'color:var(--t2)':'';
     const et=t.exit?t.exit:'-';
     const id='trade-'+idx;
