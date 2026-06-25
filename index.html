@@ -235,6 +235,7 @@ tr.trade-row.expanded .expand-icon{transform:rotate(90deg)}
 let TRADES=[], INITIAL_CAPITAL=0, INVESTMENTS=[], lastUpdate="";
 let equityChart=null, pnlChart=null, investorsBarChart=null, investorsPieChart=null;
 let LIVE_DATA=null, liveTimer=null, tradesTimer=null;
+let REALTIME_TIMER=null, REALTIME_PRICES={};
 
 /* === Helpers === */
 const getNet = t => t.pnlAfterFee!=null ? t.pnlAfterFee : t.pnl;
@@ -566,7 +567,90 @@ function renderAll(){
 loadTrades();
 loadLive();
 tradesTimer=setInterval(loadTrades,180000);  // refresh trades every 3 min
-liveTimer=setInterval(loadLive,60000);       // refresh live every 1 min
+liveTimer=setInterval(loadLive,300000);
+  setInterval(fetchRealtimePrices,3000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)fetchRealtimePrices();});       // refresh live every 1 min
+
+/* === Live Status Rendering === */
+function renderLiveStatus(){
+  const badge=document.querySelector('.topbar-badge');
+  if(!LIVE_DATA||!LIVE_DATA.updated_at){
+    badge.className='topbar-badge offline';
+    badge.innerHTML='\u25cf \u79bb\u7ebf';
+    stopRealtime();
+    return;
+  }
+  const age=Math.floor((Date.now()-LIVE_DATA.updated_at)/1000/60);
+  if(age<5){badge.className='topbar-badge';badge.innerHTML='\u25cf \u5b9e\u65f6';}
+  else if(age<15){badge.className='topbar-badge stale';badge.innerHTML='\u25cf '+age+'\u5206\u949f\u524d';}
+  else{badge.className='topbar-badge offline';badge.innerHTML='\u25cf '+age+'\u5206\u949f\u524d';}
+  startRealtime();
+}
+
+/* === Real-time Price Engine === */
+async function fetchRealtimePrices(){
+  const pos=LIVE_DATA&&LIVE_DATA.positions?LIVE_DATA.positions:[];
+  if(pos.length===0) return;
+  for(const p of pos){
+    try{
+      const r=await fetch('https://api.bybit.com/v5/market/tickers?category=linear&symbol='+p.symbol);
+      if(r.ok){const d=await r.json();if(d.result&&d.result.list&&d.result.list[0])REALTIME_PRICES[p.symbol]=parseFloat(d.result.list[0].lastPrice);}
+    }catch(e){}
+  }
+  renderRealtimePositions();
+}
+
+function renderRealtimePositions(){
+  const pos=LIVE_DATA&&LIVE_DATA.positions?LIVE_DATA.positions:[];
+  if(pos.length===0){document.getElementById('openPositions').innerHTML='';return;}
+  let totalUpnl=0;
+  const el=document.getElementById('openPositions');
+  el.innerHTML='<div class="positions-bar anim-in">'+pos.map(p=>{
+    const isLong=p.side==='Buy'||p.side==='buy';
+    const cardCls=isLong?'long-pos':'short-pos';
+    const entry=parseFloat(p.avgPrice);
+    const size=parseFloat(p.size);
+    const leverage=parseInt(p.leverage)||1;
+    const currentPrice=REALTIME_PRICES[p.symbol]||parseFloat(p.markPrice)||entry;
+    let upnl=isLong?(currentPrice-entry)*size:(entry-currentPrice)*size;
+    totalUpnl+=upnl;
+    const upnlCls=upnl>=0?'pnl-pos':'pnl-neg';
+    const upnlStr=(upnl>=0?'+':'')+upnl.toFixed(4);
+    const priceChg=isLong?((currentPrice-entry)/entry*100):((entry-currentPrice)/entry*100);
+    const chgCls=priceChg>=0?'pnl-pos':'pnl-neg';
+    const createdMs=parseInt(p.createdTime)||0;
+    const holdMin=createdMs>0?Math.floor((Date.now()-createdMs)/1000/60):0;
+    const holdText=holdMin>=60?Math.floor(holdMin/60)+'h'+(holdMin%60)+'m':holdMin+'m';
+    const rt=REALTIME_PRICES[p.symbol]?'+':'\u25bc ';
+    return '<div class="pos-card '+cardCls+'">'+
+      '<div class="pos-card-inner">'+
+        '<div class="pos-header">'+
+          '<span class="pos-symbol">'+rt+' '+p.symbol+'</span>'+
+          '<span class="pos-side '+(isLong?'buy':'sell')+'">'+(isLong?'\u505a\u591a':'\u505a\u7a7a')+' '+leverage+'x</span>'+
+        '</div>'+
+        '<div class="pos-upnl '+upnlCls+'">'+upnlStr+' U <span style="font-size:0.5em;color:var(--t2)" class="'+chgCls+'">'+(priceChg>=0?'+':'')+priceChg.toFixed(2)+'%</span></div>'+
+        '<div class="pos-row">'+
+          '<div class="pos-item"><span class="pos-label">\u5165\u573a</span><span class="pos-val">'+p.avgPrice+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u5f53\u524d</span><span class="pos-val '+chgCls+'" style="font-weight:700">'+currentPrice.toFixed(5)+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u6570\u91cf</span><span class="pos-val">'+p.size+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u6b62\u76c8</span><span class="pos-val" style="color:var(--green)">'+(p.takeProfit||'-')+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u6b62\u635f</span><span class="pos-val" style="color:var(--red)">'+(p.stopLoss||'-')+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">\u6301\u4ed3</span><span class="pos-val">'+holdText+'</span></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('')+'</div>';
+  const liveEq=(LIVE_DATA&&LIVE_DATA.equity)?parseFloat(LIVE_DATA.equity):null;
+  if(liveEq!==null){
+    const ve=liveEq+totalUpnl;
+    const eqEl=document.querySelector('.hero-value');
+    if(eqEl){eqEl.textContent='';const sp=document.createElement('span');sp.textContent=ve.toFixed(2);eqEl.appendChild(sp);const sm=document.createElement('span');sm.style.cssText='font-size:0.4em;color:var(--t2);margin-left:4px';sm.textContent='USDT';eqEl.appendChild(sm);}
+  }
+}
+
+function startRealtime(){if(REALTIME_TIMER)clearInterval(REALTIME_TIMER);fetchRealtimePrices();REALTIME_TIMER=setInterval(fetchRealtimePrices,3000);}
+function stopRealtime(){if(REALTIME_TIMER){clearInterval(REALTIME_TIMER);REALTIME_TIMER=null;}}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopRealtime();else startRealtime();});
 </script>
 </body>
 </html>
