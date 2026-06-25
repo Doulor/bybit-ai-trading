@@ -1,20 +1,23 @@
 {
-  "wallet": 116.95190587,
-  "equity": 117.13,
+  "wallet": 116.519,
+  "equity": 117.0494,
   "positions": [
     {
-      "symbol": "HEIUSDT",
+      "symbol": "BILLUSDT",
       "side": "Sell",
-      "size": "100",
-      "avgPrice": "0.1179",
-      "unrealisedPnl": "0.182",
-      "takeProfit": "0.105",
-      "stopLoss": "0.1185",
+      "size": "680",
+      "avgPrice": "0.0435",
+      "unrealisedPnl": "0.5304",
       "leverage": "10",
-      "liqPrice": "",
-      "markPrice": "0.1161"
+      "liqPrice": "0.21427258",
+      "stopLoss": "0.0442",
+      "takeProfit": "0.0412",
+      "markPrice": "0.04272",
+      "createdTime": "1782370974849",
+      "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782325620000
+  "updated_at": 1782374663331,
+  "updated_local": "2026-06-25 16:04:23"
 }
