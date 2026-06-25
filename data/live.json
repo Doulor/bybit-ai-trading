@@ -1,23 +1,23 @@
 {
   "wallet": 117.3704,
-  "equity": 117.1993,
+  "equity": 117.1133,
   "positions": [
     {
       "symbol": "REUSDT",
       "side": "Buy",
       "size": "86",
       "avgPrice": "0.58488953",
-      "unrealisedPnl": "-0.1711",
+      "unrealisedPnl": "-0.2571",
       "leverage": "10",
       "liqPrice": "",
       "stopLoss": "0.57",
       "takeProfit": "0.62",
-      "markPrice": "0.5829",
+      "markPrice": "0.5819",
       "createdTime": "1782386030597",
       "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782386286980,
-  "updated_local": "2026-06-25 19:18:06"
+  "updated_at": 1782386585314,
+  "updated_local": "2026-06-25 19:23:05"
 }

@@ -774,7 +774,8 @@
       "pnlBeforeFee": 0,
       "pnlAfterFee": 0.1092,
       "feePct": 0.12,
-      "exit_time": "06-25 01:19"
+      "exit_time": "06-25 01:19",
+      "trailingStop": true
     },
     {
       "time": "06-25 01:53",
