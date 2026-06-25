@@ -685,7 +685,7 @@
       "entry": 0.71,
       "exit": 0.70985334,
       "qty": 15,
-      "result": "manual",
+      "result": "sl",
       "pnl": -0.13809888,
       "tp": 0.65,
       "sl": 0.745,
@@ -700,7 +700,8 @@
       "pnlAfterFee": -0.13809888,
       "feePct": 0.12,
       "exit_time": "2026-06-25 02:19",
-      "trailingStop": false
+      "trailingStop": false,
+      "manualClose": true
     },
     {
       "time": "06-25 00:50",
@@ -709,7 +710,7 @@
       "entry": 0.01276,
       "exit": 0.01271,
       "qty": 1000,
-      "result": "manual",
+      "result": "sl",
       "pnl": -0.04296507,
       "tp": 0.0115,
       "sl": 0.0135,
@@ -724,7 +725,8 @@
       "pnlAfterFee": -0.04296507,
       "feePct": 0.12,
       "exit_time": "2026-06-25 02:19",
-      "trailingStop": false
+      "trailingStop": false,
+      "manualClose": true
     },
     {
       "time": "06-25 01:03",
@@ -733,7 +735,7 @@
       "entry": 0.0379,
       "exit": 0.03843,
       "qty": 200,
-      "result": "manual",
+      "result": "sl",
       "pnl": -0.10040402,
       "tp": 0.034,
       "sl": 0.04,
@@ -748,30 +750,31 @@
       "pnlAfterFee": -0.10040402,
       "feePct": 0.12,
       "exit_time": "2026-06-25 02:19",
-      "trailingStop": false
+      "trailingStop": false,
+      "manualClose": true
     },
     {
       "time": "06-25 01:19",
       "symbol": "HEIUSDT",
       "side": "short",
       "entry": 0.1177,
-      "exit": 0,
+      "exit": 0.11655,
       "qty": 100,
-      "result": "hold",
-      "pnl": 0,
+      "result": "sl",
+      "pnl": 0.1221,
       "tp": 0.105,
       "sl": 0.122,
       "leverage": 5,
-      "holdTime": "",
+      "holdTime": "约15分钟",
       "entryReason": "暴涨27%后连续4根15m阴线，从0.125跌到0.116，获利盘出逃，BTC跌到59675空头市场，R/R 1:2",
       "exitReason": "",
-      "fee": 0.007,
+      "fee": 0.0129,
       "feeEntry": 0.007,
       "feeExit": 0,
       "pnlBeforeFee": 0,
-      "pnlAfterFee": 0,
+      "pnlAfterFee": 0.1092,
       "feePct": 0.12,
-      "exit_time": ""
+      "exit_time": "06-25 01:19"
     },
     {
       "time": "06-25 01:53",
