@@ -1,114 +1,77 @@
-"""Export live Bybit data and push to live-data branch (amend, no new commits)."""
-import os, sys, time, json, base64, subprocess
-from urllib.parse import urlencode
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import padding
-import requests
+"""
+Export live Bybit account data to data/live.json and push to GitHub.
+Runs via Windows Task Scheduler.
+wallet = balance minus unrealized PnL (JS adds real-time PnL back)
+"""
+import sys, os, json, time, subprocess
 
-# Read API credentials from .env file (same as _bybit_helpers.py)
-env_path = os.path.join(os.path.expanduser('~'), '.openclaw', '.env')
-api_key = ''
-private_key_path = ''
-with open(env_path, 'r', encoding='utf-8') as f:
-    for line in f:
-        line = line.strip()
-        if line.startswith('BYBIT_API_KEY='):
-            api_key = line.split('=', 1)[1]
-        elif line.startswith('BYBIT_API_PRIVATE_KEY_PATH='):
-            private_key_path = line.split('=', 1)[1]
+PROJECT_DIR = r'C:\Users\Doulor\Documents\BybitAI'
+DATA_DIR = os.path.join(PROJECT_DIR, 'data')
+sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'utils'))
 
-if not api_key or not private_key_path:
-    print("ERROR: API credentials not found")
-    sys.exit(1)
+from _bybit_helpers import get_balance, get_positions
 
-with open(private_key_path, 'rb') as f:
-    pem_data = f.read()
-
-_pk = None
-def get_pk():
-    global _pk
-    if _pk is None:
-        _np = getattr(type, '__call__', lambda s: s)(type(None))
-        _pk = serialization.load_pem_private_key(pem_data, password=_np)
-    return _pk
-
-base = 'https://api.bybit.com'
-
-def sign(ts, ps):
-    payload = f"{ts}{api_key}5000{ps}"
-    return base64.b64encode(get_pk().sign(payload.encode(), padding.PKCS1v15(), hashes.SHA256())).decode()
-
-def req(method, path, params=None):
-    ts = str(int(time.time() * 1000))
-    params = params or {}
-    ps = urlencode(params) if method == 'GET' else json.dumps(params)
-    s = sign(ts, ps)
-    h = {'X-BAPI-API-KEY': api_key, 'X-BAPI-TIMESTAMP': ts, 'X-BAPI-RECV-WINDOW': '5000', 'X-BAPI-SIGN': s, 'X-BAPI-SIGN-TYPE': '2'}
-    url = f'{base}{path}'
-    if method == 'GET' and params: url += f'?{ps}'
-    r = requests.request(method, url, data=ps.encode() if method != 'GET' else None, headers=h, timeout=15)
+def export():
+    print(f'[{time.strftime("%H:%M:%S")}] Exporting live data...')
+    
+    bal = get_balance()
+    positions = get_positions()
+    
+    # Calculate total unrealized PnL
+    total_upnl = sum(float(p.get('unrealisedPnl', 0)) for p in positions)
+    
+    # wallet = balance minus unrealized PnL (JS will add real-time PnL)
+    wallet_only = bal - total_upnl
+    
+    live = {
+        'wallet': round(wallet_only, 4),
+        'equity': round(bal, 4),
+        'positions': [{
+            'symbol': p['symbol'],
+            'side': p['side'],
+            'size': p['size'],
+            'avgPrice': p['avgPrice'],
+            'unrealisedPnl': p['unrealisedPnl'],
+            'leverage': p['leverage'],
+            'liqPrice': p.get('liqPrice', ''),
+            'stopLoss': p.get('stopLoss', ''),
+            'takeProfit': p.get('takeProfit', ''),
+            'markPrice': p.get('markPrice', ''),
+            'createdTime': p.get('createdTime', ''),
+            'positionIdx': p.get('positionIdx', 0)
+        } for p in positions],
+        'openOrders': [],
+        'updated_at': int(time.time() * 1000),
+        'updated_local': time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    }
+    
+    os.makedirs(DATA_DIR, exist_ok=True)
+    live_path = os.path.join(DATA_DIR, 'live.json')
+    with open(live_path, 'w', encoding='utf-8') as f:
+        json.dump(live, f, indent=2)
+    
+    print(f'  bal={bal:.2f} wallet={wallet_only:.2f} upnl={total_upnl:.4f} pos={len(positions)}')
+    
+    # Only push live.json to live-data branch
+    os.chdir(PROJECT_DIR)
+    subprocess.run(['git', 'checkout', 'live-data'], capture_output=True, timeout=10)
+    
     try:
-        return r.json()
-    except:
-        print(f"ERROR: {path} returned status {r.status_code}")
-        return {'retCode': -1}
+        subprocess.run(['git', 'add', 'data/live.json'], capture_output=True, timeout=10)
+        result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True, timeout=10)
+        if result.returncode == 0:
+            print('  No changes')
+            return
+        
+        ts = time.strftime('%Y-%m-%d %H:%M')
+        subprocess.run(['git', 'commit', '-m', f'live {ts}'], capture_output=True, timeout=10)
+        push = subprocess.run(['git', 'push', 'origin', 'live-data'], capture_output=True, timeout=30, text=True)
+        if push.returncode == 0:
+            print(f'  Pushed live.json to live-data')
+        else:
+            print(f'  Push failed: {push.stderr[:200]}')
+    except Exception as e:
+        print(f'  Git error: {e}')
 
-# Fetch wallet balance
-bal = req('GET', '/v5/account/wallet-balance', {'accountType': 'UNIFIED', 'coin': 'USDT'})
-wallet = equity = 0
-if bal.get('retCode') == 0:
-    for c in bal['result']['list'][0]['coin']:
-        if c['coin'] == 'USDT':
-            wallet = float(c.get('equity', 0))
-            equity = float(c.get('equity', 0))
-else:
-    print(f"WARN: wallet-balance retCode={bal.get('retCode')} msg={bal.get('retMsg')}")
-
-# Fetch positions
-pos = req('GET', '/v5/position/list', {'category': 'linear', 'settleCoin': 'USDT'})
-positions = []
-if pos.get('retCode') == 0:
-    for p in pos['result']['list']:
-        if float(p.get('size', 0)) > 0:
-            positions.append({
-                'symbol': p['symbol'], 'side': p['side'], 'size': p['size'],
-                'avgPrice': p['avgPrice'], 'unrealisedPnl': p.get('unrealisedPnl', '0'),
-                'takeProfit': p.get('takeProfit', '0'), 'stopLoss': p.get('stopLoss', '0'),
-                'leverage': p.get('leverage', '1'), 'liqPrice': p.get('liqPrice', '0'),
-                'markPrice': p.get('markPrice', '0'),
-            })
-else:
-    print(f"WARN: position list retCode={pos.get('retCode')} msg={pos.get('retMsg')}")
-
-data = {
-    'wallet': wallet, 'equity': equity,
-    'positions': positions, 'openOrders': [],
-    'updated_at': int(time.time() * 1000),
-}
-
-print(f"wallet={wallet:.4f} equity={equity:.4f} pos={len(positions)}")
-
-# Git operations: save current branch, checkout live-data, write file, amend, force push, switch back
-repo_root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], text=True).strip()
-out = os.path.join(repo_root, 'data', 'live.json')
-
-current = subprocess.check_output(['git', 'branch', '--show-current'], cwd=repo_root, text=True).strip()
-subprocess.run(['git', 'stash'], cwd=repo_root, capture_output=True)
-subprocess.run(['git', 'checkout', 'live-data'], cwd=repo_root, capture_output=True)
-
-# Write live.json AFTER checkout
-os.makedirs(os.path.dirname(out), exist_ok=True)
-with open(out, 'w') as f:
-    json.dump(data, f, indent=2)
-
-subprocess.run(['git', 'add', 'data/live.json'], cwd=repo_root, capture_output=True)
-r = subprocess.run(['git', 'diff', '--cached', '--quiet'], cwd=repo_root, capture_output=True)
-if r.returncode != 0:
-    subprocess.run(['git', 'commit', '--amend', '-m', 'live data'], cwd=repo_root, capture_output=True)
-    subprocess.run(['git', 'push', '--force', 'origin', 'live-data'], cwd=repo_root, capture_output=True)
-    print("Pushed to live-data branch (amend)")
-else:
-    print("No changes, skipping push")
-
-subprocess.run(['git', 'checkout', current], cwd=repo_root, capture_output=True)
-subprocess.run(['git', 'stash', 'pop'], cwd=repo_root, capture_output=True)
+if __name__ == '__main__':
+    export()
