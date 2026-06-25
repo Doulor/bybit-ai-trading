@@ -1,23 +1,8 @@
 {
-  "wallet": 106.4818,
-  "equity": 105.6447,
-  "positions": [
-    {
-      "symbol": "ENAUSDT",
-      "side": "Buy",
-      "size": "611",
-      "avgPrice": "0.08302",
-      "unrealisedPnl": "-0.83707",
-      "leverage": "10",
-      "liqPrice": "",
-      "stopLoss": "0.075",
-      "takeProfit": "0.095",
-      "markPrice": "0.08165",
-      "createdTime": "1782398066658",
-      "positionIdx": 0
-    }
-  ],
+  "wallet": 105.3862,
+  "equity": 105.3862,
+  "positions": [],
   "openOrders": [],
-  "updated_at": 1782399485792,
-  "updated_local": "2026-06-25 22:58:05"
+  "updated_at": 1782405187506,
+  "updated_local": "2026-06-26 00:33:07"
 }

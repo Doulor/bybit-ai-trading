@@ -1,12 +1,16 @@
-{
-  "alerts": [
-    {
-      "symbol": "OUSDT",
-      "price": 0.586,
-      "direction": "below",
-      "reason": "RSI7=8极度超卖，支撑位0.5861，锤子线。跌到这里企稳做多，止损0.580，止盈0.650",
-      "added_at": "2026-06-25 19:09"
-    }
-  ],
-  "last_update": "2026-06-25 19:09"
-}
+[
+  {
+    "symbol": "AEROUSDT",
+    "price": 0.455,
+    "direction": "below",
+    "reason": "AERO暴跌到0.455支撑，RSI 24极度超卖，15m放量阳线反弹确认做多。止损0.445(-2.2%)，止盈0.49(+7.7%)，R/R 1:3.5",
+    "added_at": "2026-06-25 22:48"
+  },
+  {
+    "symbol": "ENAUSDT",
+    "price": 0.081,
+    "direction": "below",
+    "reason": "ENA已持仓多单@0.083，如果跌破0.081加速下跌趋势恶化，考虑止损",
+    "added_at": "2026-06-25 22:48"
+  }
+]
