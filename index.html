@@ -601,6 +601,7 @@ async function initAll(){
     if(r.ok) LIVE_DATA=await r.json();
   }catch(e){}
   await loadTrades();
+  renderLiveStatus();
   tradesTimer=setInterval(loadTrades,180000);
   liveTimer=setInterval(loadLive,60000);
 }

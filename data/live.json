@@ -1,23 +1,23 @@
 {
   "wallet": 115.9559,
-  "equity": 116.2078,
+  "equity": 116.1436,
   "positions": [
     {
       "symbol": "ALICEUSDT",
       "side": "Buy",
       "size": "247",
       "avgPrice": "0.12152",
-      "unrealisedPnl": "0.25194",
+      "unrealisedPnl": "0.18772",
       "leverage": "10",
       "liqPrice": "",
       "stopLoss": "0.118",
       "takeProfit": "0.128",
-      "markPrice": "0.12254",
+      "markPrice": "0.12228",
       "createdTime": "1782388069376",
       "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782388987306,
-  "updated_local": "2026-06-25 20:03:07"
+  "updated_at": 1782389285123,
+  "updated_local": "2026-06-25 20:08:05"
 }
