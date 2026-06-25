@@ -1,5 +1,5 @@
 {
-  "wallet": 116.6278,
+  "wallet": 116.5462,
   "equity": 117.0494,
   "positions": [
     {
@@ -7,17 +7,17 @@
       "side": "Sell",
       "size": "680",
       "avgPrice": "0.0435",
-      "unrealisedPnl": "0.4216",
+      "unrealisedPnl": "0.5032",
       "leverage": "10",
-      "liqPrice": "0.21426949",
+      "liqPrice": "0.21426356",
       "stopLoss": "0.0442",
       "takeProfit": "0.0412",
-      "markPrice": "0.04288",
+      "markPrice": "0.04276",
       "createdTime": "1782370974849",
       "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782377362579,
-  "updated_local": "2026-06-25 16:49:22"
+  "updated_at": 1782377661778,
+  "updated_local": "2026-06-25 16:54:21"
 }
