@@ -2,3 +2,13 @@
 {"time": "2026-06-26 15:55", "positions": "LAB多单持有: 入场18.331→现价18.52201, 浮盈0.19U (0.4R), 未到1R止损不动", "scan": "跑了扫描(Top20), LAB已持仓, ETH评分9但RSI74+24h跌4.5%做空等反弹位, XRP/NEAR评分7不够, ADA已跌到底部不适合空, 无新开仓", "close": "无善后需求"}
 {"time": "2026-06-26 17:55", "positions": "LAB多单在,浮盈0.16U,TP已改18.8", "scan": "心跳触发,LAB持仓中,监控价格提醒", "close": "无善后需求"}
 {"time": "2026-06-26 18:44", "positions": "LAB多单止盈18.76, +0.57U, 无持仓", "scan": "量能权重已调整, ETH 1580做空提醒设好", "close": "LAB止盈, trades.json更新, 邮件发送, git push完成"}
+{"close":"无善后需求","time":"2026-06-26 19:16","scan":"跑了扫描，分析了LAB/1000PEPE/ETH/XRP/SPCX等，LAB评分14但已涨12.8%追高风险大，其余超卖但缩量信号弱，无7成把握机会","positions":"无变化，无持仓"}
+{"time": "2026-06-26 19:40", "positions": "无变化，持仓为空（上次心跳也为空，之前06-25凌晨连亏后清仓）", "scan": "跑了扫描，BTC<EMA50做空环境，分析DOGE/XRP/ZEC/NEAR，DOGE和XRP设置反弹做空提醒", "close": "无善后需求"}
+{"time":"2026-06-26 19:49","positions":"no positions","scan":"watchlist analyzed at 19:35, 4 alerts pending NEAR/XRP/ETH/SOL, waiting for bounce","close":"no close needed"}
+{"time": "2026-06-26 20:58", "positions": "无持仓，空仓", "scan": "跑了5币趋势监控。AAVE多Score=12但止损9.3%超8%限制；ETH空Score=-7但4hRSI=31偏超卖；NEAR空Score=-9但离支撑仅1.5%。均未达7成把握，未开仓。", "close": "无善后需求"}
+{"time": "2026-06-26 21:14", "positions": "无持仓，空仓", "scan": "全市场扫描完成。SOL换为DOGE（Score=12，放量3.9x，三周期空头，BTC顺方向）。设了DOGE 0.155空单提醒。ETH/NEAR/XRP保持，等反弹。", "close": "无善后需求", "watchlist_update": "SOLUSDT替换为DOGEUSDT"}
+{"time": "2026-06-26 23:36", "positions": "空仓，无变化", "scan": "上次心跳已跑trend_monitor，设了4个提醒(NEAR/DOGE/XRP/AAVE)等待触发", "close": "无善后需求"}
+{"time": "2026-06-26 23:41", "positions": "空仓无变化", "scan": "23:37跑了trend_monitor，5币分析完毕。ETH/DOGE/XRP在阻力位附近Score=-3，NEAR Score=-7但价格在区间中间。15m全是多头排列在反弹，无明确拒绝信号，未开仓", "close": "无善后需求", "alerts": "3个提醒待触发：NEAR 1.82 above, DOGE 0.155 above, XRP 1.055 above"}
+{"time": "2026-06-26 23:49", "positions": "空仓无变化", "scan": "23:37已跑trend_monitor，距上次12min，无显著变化，未重跑", "close": "无善后需求", "alerts": "3个提醒待触发：NEAR 1.82, DOGE 0.155, XRP 1.055。监控器运行中"}
+{"time": "2026-06-26 23:59", "positions": "空仓无变化，余额77.49U", "scan": "23:37已跑trend_monitor，15m全多头反弹中，无明确拒绝信号，继续观望", "close": "无善后需求", "patch": "补录2笔ETH止损：06-26 21:52亏-2.25U，06-26 22:51亏-5.83U，合计-8.08U", "alerts": "3个待触发：NEAR 1.82, DOGE 0.155, XRP 1.055"}
+{"time": "2026-06-27 00:14", "positions": "空仓无变化，余额77.49U", "scan": "23:37跑过trend_monitor，5币分析。15m全是多头排列反弹中，无明确拒绝信号，未开仓", "close": "无善后需求，但发现2笔ETH止损(06-25/26)漏记trades.json，已补充记录(-2.25U + -5.83U = -8.07U)", "alerts": "3个提醒待触发：NEAR 1.835 above(00:01更新), XRP 1.055 above, DOGE 0.155 above。WebSocket监控器(pid 59444)已停止，需重启"}
