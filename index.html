@@ -295,16 +295,26 @@ function renderRealtimePositions(){
   // Spot assets first
   spot.forEach(function(a){
     var assetValue=a.value||0;
+    var pnl=a.pnl||0;
+    var pnlPct=a.pnlPct||0;
+    var pnlCls=pnl>=0?'pnl-pos':'pnl-neg';
+    var pnlStr=(pnl>=0?'+':'')+pnl.toFixed(2);
+    var pnlPctStr=(pnlPct>=0?'+':'')+pnlPct.toFixed(2)+'%';
+    var createdMs=a.buyTime?(Date.parse(a.buyTime.replace(' ', 'T'))):0;
+    var holdMin=createdMs>0?Math.floor((Date.now()-createdMs)/60000):0;
+    var holdText=holdMin>=1440?Math.floor(holdMin/1440)+'d'+(Math.floor(holdMin%1440/60)>0?Math.floor(holdMin%1440/60)+'h':''):holdMin>=60?Math.floor(holdMin/60)+'h'+(holdMin%60)+'m':holdMin+'m';
     html+='<div class="pos-card" style="border-top:3px solid var(--gold)">'+
       '<div class="pos-card-inner">'+
         '<div class="pos-header">'+
           '<span class="pos-symbol">'+a.coin+'</span>'+
-          '<span class="pos-side" style="background:var(--gold2);color:var(--gold)">现货</span>'+
+          '<span class="pos-side" style="background:var(--gold2);color:var(--gold)">Spot</span>'+
         '</div>'+
-        '<div class="pos-upnl" style="color:var(--gold)">'+a.qty+' <span style="font-size:0.5em;color:var(--t2)">$'+assetValue.toFixed(2)+'</span></div>'+
+        '<div class="pos-upnl '+pnlCls+'">'+pnlStr+' U <span style="font-size:0.5em;color:var(--t2)">'+pnlPctStr+'</span></div>'+
         '<div class="pos-row">'+
-          '<div class="pos-item"><span class="pos-label">当前价</span><span class="pos-val">$'+a.price.toFixed(2)+'</span></div>'+
-          '<div class="pos-item"><span class="pos-label">类型</span><span class="pos-val" style="color:var(--gold)">Spot</span></div>'+
+          '<div class="pos-item"><span class="pos-label">数量</span><span class="pos-val">'+a.qty+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">购买价</span><span class="pos-val">$'+a.avgPrice.toFixed(2)+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">当前价</span><span class="pos-val" style="font-weight:700">$'+a.price.toFixed(2)+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">持仓</span><span class="pos-val">'+holdText+'</span></div>'+
         '</div>'+
       '</div>'+
     '</div>';
