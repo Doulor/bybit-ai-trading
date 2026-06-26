@@ -1,12 +1,12 @@
 {
   "alerts": [
     {
-      "symbol": "XRPUSDT",
-      "price": 1.04,
+      "symbol": "ETHUSDT",
+      "price": 1580.0,
       "direction": "above",
-      "reason": "XRP反弹到1.040-1.045阻力区做空。1h趋势向下，BTC<EMA50。止损1.055，止盈1.010。",
-      "added_at": "2026-06-26 14:14"
+      "reason": "ETH反弹到1580阻力做空. 4hDOWN趋势, 缩量反弹(0.7x)量价背离, BTC小于EMA50. 止损1600, 止盈1520",
+      "added_at": "2026-06-26 18:42"
     }
   ],
-  "last_update": "2026-06-26 14:14"
+  "last_update": "2026-06-26 18:42"
 }
