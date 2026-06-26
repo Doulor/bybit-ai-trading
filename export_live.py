@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.join(PROJECT, 'scripts', 'utils'))
 from _bybit_helpers import get_balance, get_positions, bybit_req
 
 def get_spot_assets():
-    """Get non-USDT coin assets from unified wallet."""
+    """Get non-USDT coin assets from unified wallet with purchase info."""
     uni = bybit_req('GET', '/v5/account/wallet-balance', {'accountType': 'UNIFIED'})
     assets = []
     for c in uni['result']['list'][0].get('coin', []):
@@ -22,14 +22,37 @@ def get_spot_assets():
             continue
         usd_value = float(c.get('usdValue', 0))
         try:
-            price = usd_value / bal
+            cur_price = usd_value / bal
         except:
-            price = 0
+            cur_price = 0
+
+        # Get avg buy price and buy time from filled orders
+        avg_price = 0
+        buy_time = ''
+        try:
+            orders = bybit_req('GET', '/v5/order/history', {'category': 'spot', 'symbol': f'{coin}USDT', 'limit': '20'})
+            for o in orders.get('result', {}).get('list', []):
+                if o.get('side') == 'Buy' and o.get('orderStatus') == 'Filled':
+                    avg_price = float(o.get('avgPrice', 0)) or float(o.get('price', 0))
+                    buy_time = o.get('createdTime', '')
+                    if buy_time:
+                        buy_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(int(buy_time) / 1000))
+                    break
+        except:
+            pass
+
+        pnl = (cur_price - avg_price) * bal if avg_price > 0 else 0
+        pnl_pct = ((cur_price - avg_price) / avg_price * 100) if avg_price > 0 else 0
+
         assets.append({
             'coin': coin,
             'qty': bal,
-            'price': round(price, 4),
-            'value': round(usd_value, 4)
+            'price': round(cur_price, 4),
+            'value': round(usd_value, 4),
+            'avgPrice': round(avg_price, 4),
+            'buyTime': buy_time,
+            'pnl': round(pnl, 4),
+            'pnlPct': round(pnl_pct, 2)
         })
     return assets
 

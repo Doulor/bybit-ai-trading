@@ -6,31 +6,25 @@
         "name": "歪头",
         "amount": 7.0,
         "time": "06-20 12:00",
-        "share": 8.5
+        "share": 16.5
       },
       {
         "name": "虫洞",
         "amount": 2.0,
         "time": "06-20 21:18",
-        "share": 2.4
+        "share": 3.4
       },
       {
         "name": "三三终得玖",
         "amount": 9.0,
         "time": "06-22 01:00",
-        "share": 11.0
+        "share": 13.8
       },
       {
         "name": "喜忧半半开",
-        "amount": 59.0,
+        "amount": 64.0,
         "time": "06-22 23:14",
-        "share": 72.0
-      },
-      {
-        "name": "夏雨",
-        "amount": 5.0,
-        "time": "06-23 18:55",
-        "share": 6.1
+        "share": 66.4
       }
     ],
     "note": "初始资金7U来自歪头，Doulor(喜忧半半开)是管理者不是出资人"

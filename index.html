@@ -464,6 +464,44 @@ function calcStats(){
   return{ti,tp,cb,wt,lt,wr,bt,wst,roi,pf,ah,sk,skt,hds,tipLines,maxDD,maxDDAbs,maxConsLoss,avgWin,avgLoss,symMap}
 }
 
+/* === Time-Weighted Distribution === */
+function calcDistribution(){
+  // Build timeline of investments and trades
+  const events=[];
+  INVESTMENTS.forEach(inv=>events.push({type:'investment',time:inv.time,name:inv.name,amount:inv.amount}));
+  TRADES.forEach(t=>{
+    const pnl=t.pnlAfterFee!=null?t.pnlAfterFee:(t.pnl||0);
+    events.push({type:'trade',time:t.time,pnl:pnl});
+  });
+  events.sort((a,b)=>a.time>b.time?1:a.time<b.time?-1:0);
+
+  const shares={};
+  let pool=0;
+  events.forEach(ev=>{
+    if(ev.type==='investment'){
+      const oldPool=pool;
+      pool+=ev.amount;
+      // Dilute existing holders
+      for(const n in shares){shares[n]*=(oldPool/pool);}
+      // New holder gets their share
+      shares[ev.name]=(shares[ev.name]||0)+(ev.amount/pool);
+    }else{
+      pool+=ev.pnl;
+      // Shares unchanged - PnL distributed proportionally
+    }
+  });
+
+  const SPOT_VALUE=20.0; // ETH spot approximate
+  const totalAssets=pool+SPOT_VALUE;
+
+  const result=[];
+  for(const name in shares){
+    result.push({name,share:shares[name],equity:shares[name]*totalAssets,invested:INVESTMENTS.filter(i=>i.name===name).reduce((s,i)=>s+i.amount,0)});
+  }
+  result.sort((a,b)=>b.share-a.share);
+  return{result,totalAssets,spotValue:SPOT_VALUE,pool};
+}
+
 /* === Toggle Detail === */
 function toggleDetail(id){
   const el=document.getElementById(id);
@@ -548,7 +586,11 @@ if(LIVE_DATA&&LIVE_DATA.equity&&LIVE_DATA.updated_at){
   if(ageMs2<86400000){liveEquity=parseFloat(LIVE_DATA.equity);liveFresh=true;}
 }
 var eColor=liveEquity>=INITIAL_CAPITAL+INVESTMENTS.reduce((a,i)=>a+i.amount,0)?'green':'red';
-document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">总权益 · TOTAL EQUITY</div><div class="hero-value ${eColor}">${liveEquity.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${s.tipLines.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% 收益率</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">外部投资</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div></div></div>`;
+// Show total assets (contract + ~20U spot)
+const dist=calcDistribution();
+const totalAssetsDisplay=dist.totalAssets;
+const heroLabel=liveFresh?'总权益 · LIVE':'总资产 · TOTAL ASSETS';
+document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">${heroLabel}</div><div class="hero-value ${eColor}">${totalAssetsDisplay.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${s.tipLines.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% 收益率</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">外部投资</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div><div style="font-size:0.55em;color:var(--t3);margin-top:2px">含现货~${dist.spotValue.toFixed(0)}U</div></div></div>`;
 
   // Streak dots (PnL-based, not result-based)
   const l10=TRADES.slice(-10);
@@ -581,22 +623,19 @@ document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div 
     return `<div class="sym-card"><div class="sym-name">${s2.symbol.replace('USDT','')}</div><div class="sym-pnl" style="color:${symColors[i]}">${s2.pnl>=0?'+':''}${s2.pnl.toFixed(2)} U</div><div class="sym-meta">${s2.count}笔 · 胜率${wr2}%</div></div>`;
   }).join('')}</div></div>`;
 
-  // Investors section
-  if(INVESTMENTS.length>0){
+  // Investors section - Time-weighted distribution
+  const dist=calcDistribution();
+  if(dist.result.length>0){
     const ic=['#22d3ee','#f5a623','#a78bfa','#00e676','#3b82f6','#ff6b6b','#fbbf24','#34d399','#f472b6','#818cf8'];
-    const ti2=INVESTMENTS.reduce((s,i)=>s+i.amount,0);
-    const cards=[];const cardSeen={};
-    INVESTMENTS.forEach((inv,i)=>{
-      if(cardSeen[inv.name])return;cardSeen[inv.name]=true;
-      const totalAmt=INVESTMENTS.filter(x=>x.name===inv.name).reduce((a,x)=>a+x.amount,0);
-      const currentShare=s.cb>0?(totalAmt/s.cb*100).toFixed(1):'0.0';
-      cards.push(`<div class="investor-info-item" style="border-left-color:${ic[i%ic.length]}"><div class="ii-name">${inv.name}</div><div class="ii-share">${currentShare}%</div><div class="ii-detail">${totalAmt.toFixed(2)} USDT</div></div>`);
+    const cards=[];
+    dist.result.forEach((d,i)=>{
+      cards.push(`<div class="investor-info-item" style="border-left-color:${ic[i%ic.length]}"><div class="ii-name">${d.name}</div><div class="ii-share">${(d.share*100).toFixed(1)}%</div><div class="ii-detail">权益 ${d.equity.toFixed(2)} USDT</div><div class="ii-detail" style="color:var(--t3)">投入 ${d.invested.toFixed(2)}U</div></div>`);
     });
-    document.getElementById('investorsSection').innerHTML=`<div class="chart-card"><div class="chart-title"><span>👥 投资记录</span><span class="chart-badge">${new Set(INVESTMENTS.map(i=>i.name)).size} 位投资者</span></div><div class="investors-grid"><div class="investors-bar-card"><div style="font-size:0.62em;color:var(--t3);letter-spacing:1px;margin-bottom:10px">投资金额分布</div><canvas id="investorsBarChart" height="${Math.max(INVESTMENTS.length*38,120)}"></canvas></div><div class="investors-pie-card"><div style="font-size:0.62em;color:var(--t3);letter-spacing:1px;margin-bottom:10px">投资占比</div><canvas id="investorsPieChart" height="160"></canvas></div></div><div class="investors-info">${cards.join('')}</div></div>`;
+    document.getElementById('investorsSection').innerHTML=`<div class="chart-card"><div class="chart-title"><span>👥 投资分成</span><span class="chart-badge">${dist.result.length} 位 · 含现货${dist.spotValue.toFixed(0)}U</span></div><div class="investors-grid"><div class="investors-bar-card"><div style="font-size:0.62em;color:var(--t3);letter-spacing:1px;margin-bottom:10px">权益分布（按时间加权）</div><canvas id="investorsBarChart" height="${Math.max(dist.result.length*40,120)}"></canvas></div><div class="investors-pie-card"><div style="font-size:0.62em;color:var(--t3);letter-spacing:1px;margin-bottom:10px">分成占比</div><canvas id="investorsPieChart" height="160"></canvas></div></div><div class="investors-info">${cards.join('')}</div><div style="margin-top:10px;font-size:0.55em;color:var(--t3);font-family:'JetBrains Mono',monospace">⚠ 占比按时间加权计算：每人按当时投入占比分担盈亏，包含合约+现货(≈${dist.spotValue.toFixed(0)}U)</div></div>`;
     // Investor charts
-    const merged={};const invN=[];const invA=[];const pD=[];
-    INVESTMENTS.forEach(inv=>{if(!merged[inv.name]){merged[inv.name]=0;invN.push(inv.name)}merged[inv.name]+=inv.amount});
-    invN.forEach(n=>{invA.push(merged[n]);pD.push(s.cb>0?merged[n]/s.cb*100:0)});
+    const invN=dist.result.map(d=>d.name);
+    const invA=dist.result.map(d=>d.equity);
+    const pD=dist.result.map(d=>d.share*100);
     if(investorsBarChart)investorsBarChart.destroy();if(investorsPieChart)investorsPieChart.destroy();
     investorsBarChart=new Chart(document.getElementById("investorsBarChart"),{type:"bar",data:{labels:invN,datasets:[{data:invA,backgroundColor:ic.slice(0,invN.length).map(c=>c+'bb'),borderColor:ic.slice(0,invN.length),borderWidth:1,borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{...CHART_TT,callbacks:{label:c=>c.parsed.x.toFixed(2)+" USDT ("+pD[c.dataIndex].toFixed(1)+"%)"}}},scales:{x:{...CHART_GX,beginAtZero:true},y:{...CHART_GY,grid:{display:false}}}}});
     investorsPieChart=new Chart(document.getElementById("investorsPieChart"),{type:"pie",data:{labels:invN,datasets:[{data:pD,backgroundColor:ic.slice(0,invN.length),borderColor:'var(--bg2)',borderWidth:2,hoverOffset:8}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#7a7a92',font:{...CHART_FT,size:11},padding:12,usePointStyle:true,pointStyleWidth:8}},tooltip:{...CHART_TT,callbacks:{label:c=>c.label+": "+c.parsed.toFixed(1)+"%"}}}}});
