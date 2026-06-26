@@ -288,9 +288,28 @@ async function loadLive(){
 /* === Position Renderer (uses cached live.json data) === */
 function renderRealtimePositions(){
   var pos=(LIVE_DATA&&LIVE_DATA.positions)?LIVE_DATA.positions:[];
-  if(pos.length===0){document.getElementById('openPositions').innerHTML='';return;}
+  var spot=(LIVE_DATA&&LIVE_DATA.spotAssets)?LIVE_DATA.spotAssets:[];
+  if(pos.length===0&&spot.length===0){document.getElementById('openPositions').innerHTML='';return;}
   var totalUpnl=0;
   var html='<div class="positions-bar anim-in">';
+  // Spot assets first
+  spot.forEach(function(a){
+    var assetValue=a.value||0;
+    html+='<div class="pos-card" style="border-top:3px solid var(--gold)">'+
+      '<div class="pos-card-inner">'+
+        '<div class="pos-header">'+
+          '<span class="pos-symbol">'+a.coin+'</span>'+
+          '<span class="pos-side" style="background:var(--gold2);color:var(--gold)">现货</span>'+
+        '</div>'+
+        '<div class="pos-upnl" style="color:var(--gold)">'+a.qty+' <span style="font-size:0.5em;color:var(--t2)">$'+assetValue.toFixed(2)+'</span></div>'+
+        '<div class="pos-row">'+
+          '<div class="pos-item"><span class="pos-label">当前价</span><span class="pos-val">$'+a.price.toFixed(2)+'</span></div>'+
+          '<div class="pos-item"><span class="pos-label">类型</span><span class="pos-val" style="color:var(--gold)">Spot</span></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  });
+  // Derivatives positions
   pos.forEach(function(p){
     var isLong=(p.side==='Buy'||p.side==='buy');
     var cardCls=isLong?'long-pos':'short-pos';
@@ -493,7 +512,13 @@ function renderTable(){
     const fc=(t.fee||0)>0?'color:var(--t2)':'';
     const et=t.exit?t.exit:'-';
     const id='trade-'+idx;
-    return `<tr class="trade-row" onclick="toggleDetail('${id}')"><td>${t.time}</td><td>${t.symbol}</td><td><span class="badge ${sc}">${st}</span></td><td>${t.entry}</td><td>${et}</td><td>${t.qty}</td><td><span class="badge ${rc}">${rt}</span></td><td style="${fc};font-size:0.72em">-${(t.fee||0).toFixed(2)}U</td><td class="${pc}">${pt}</td><td class="expand-icon">▶</td></tr><tr class="trade-detail-row" id="${id}"><td colspan="9"><div class="detail-panel"><div class="dp-title">交易详情</div><div class="dp-item"><span class="dp-label">杠杆:</span><span class="dp-value">${t.leverage||'-'}x</span></div><div class="dp-item"><span class="dp-label">手续费:</span><span class="dp-value" style="color:var(--t2)">${t.fee?('-'+t.fee.toFixed(4)+'U ('+((t.fee/(t.entry*t.qty))*100).toFixed(2)+'%)'):'-'}</span></div><div class="dp-item"><span class="dp-label">持仓时间:</span><span class="dp-value">${t.holdTime||'-'}</span></div><div class="dp-item"><span class="dp-label">手续费明细:</span><span class="dp-value" style="color:var(--t3);font-size:0.85em">开仓${t.feeEntry?t.feeEntry.toFixed(4)+'U':''} + 平仓${t.feeExit?t.feeExit.toFixed(4)+'U':''}</span></div><div class="dp-item"><span class="dp-label">止盈价:</span><span class="dp-value">${t.tp||'-'}</span></div><div class="dp-item"><span class="dp-label">止损价:</span><span class="dp-value">${t.sl||'-'}</span></div><div class="dp-reason"><span class="dp-label">📈 入场逻辑:</span><span class="dp-value">${t.entryReason||'-'}</span></div><div class="dp-reason"><span class="dp-label">📤 平仓原因:</span><span class="dp-value">${t.exitReason||'-'}</span></div></div></td></tr>`;
+    var btcTag=t.btc_above_ema50!=null?(t.btc_above_ema50?'<div class="dp-item"><span class="dp-label">BTC趋势:</span><span class="dp-value" style="color:var(--green)">多头 ↑</span></div>':'<div class="dp-item"><span class="dp-label">BTC趋势:</span><span class="dp-value" style="color:var(--red)">空头 ↓</span></div>'):'';
+    var scoreTag=t.score!=null?'<div class="dp-item"><span class="dp-label">Score:</span><span class="dp-value" style="color:var(--cyan)">'+t.score+'</span></div>':'';
+    var rrTag=t.rr!=null?'<div class="dp-item"><span class="dp-label">盈亏比:</span><span class="dp-value">'+t.rr+'R</span></div>':'';
+    var stopPctTag=t.stop_pct!=null?'<div class="dp-item"><span class="dp-label">止损距离:</span><span class="dp-value" style="color:var(--t2)">'+t.stop_pct+'%</span></div>':'';
+    var volRatioTag=t.volume_ratio!=null?'<div class="dp-item"><span class="dp-label">量比:</span><span class="dp-value">'+t.volume_ratio+'x</span></div>':'';
+    var riskTag=t.risk_pct!=null?'<div class="dp-item"><span class="dp-label">风险:</span><span class="dp-value">'+t.risk_pct+'% ('+t.margin+'U)</span></div>':'';
+    return `<tr class="trade-row" onclick="toggleDetail('${id}')"><td>${t.time}</td><td>${t.symbol}</td><td><span class="badge ${sc}">${st}</span></td><td>${t.entry}</td><td>${et}</td><td>${t.qty}</td><td><span class="badge ${rc}">${rt}</span></td><td style="${fc};font-size:0.72em">-${(t.fee||0).toFixed(2)}U</td><td class="${pc}">${pt}</td><td class="expand-icon">▶</td></tr><tr class="trade-detail-row" id="${id}"><td colspan="9"><div class="detail-panel"><div class="dp-title">交易详情</div><div class="dp-item"><span class="dp-label">杠杆:</span><span class="dp-value">${t.leverage||'-'}x</span></div><div class="dp-item"><span class="dp-label">手续费:</span><span class="dp-value" style="color:var(--t2)">${t.fee?('-'+t.fee.toFixed(4)+'U ('+((t.fee/(t.entry*t.qty))*100).toFixed(2)+'%)'):'-'}</span></div><div class="dp-item"><span class="dp-label">持仓时间:</span><span class="dp-value">${t.holdTime||'-'}</span></div><div class="dp-item"><span class="dp-label">手续费明细:</span><span class="dp-value" style="color:var(--t3);font-size:0.85em">开仓${t.feeEntry?t.feeEntry.toFixed(4)+'U':''} + 平仓${t.feeExit?t.feeExit.toFixed(4)+'U':''}</span></div><div class="dp-item"><span class="dp-label">止盈价:</span><span class="dp-value">${t.tp||'-'}</span></div><div class="dp-item"><span class="dp-label">止损价:</span><span class="dp-value">${t.sl||'-'}</span></div>${scoreTag}${rrTag}${stopPctTag}${volRatioTag}${btcTag}${riskTag}<div class="dp-reason"><span class="dp-label">📈 入场逻辑:</span><span class="dp-value">${t.entryReason||'-'}</span></div><div class="dp-reason"><span class="dp-label">📤 平仓原因:</span><span class="dp-value">${t.exitReason||'-'}</span></div></div></td></tr>`;
   });
   tb.innerHTML=rows.join('');
 }
