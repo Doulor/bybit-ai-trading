@@ -623,8 +623,7 @@ document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div 
     return `<div class="sym-card"><div class="sym-name">${s2.symbol.replace('USDT','')}</div><div class="sym-pnl" style="color:${symColors[i]}">${s2.pnl>=0?'+':''}${s2.pnl.toFixed(2)} U</div><div class="sym-meta">${s2.count}笔 · 胜率${wr2}%</div></div>`;
   }).join('')}</div></div>`;
 
-  // Investors section - Time-weighted distribution
-  const dist=calcDistribution();
+  // Investors section - Time-weighted distribution (reuse dist from hero)
   if(dist.result.length>0){
     const ic=['#22d3ee','#f5a623','#a78bfa','#00e676','#3b82f6','#ff6b6b','#fbbf24','#34d399','#f472b6','#818cf8'];
     const cards=[];
