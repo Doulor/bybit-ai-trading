@@ -1,15 +1,6 @@
 {
-  "last_heartbeat": "2026-06-26 17:55",
-  "positions": [
-    {
-      "symbol": "LABUSDT",
-      "side": "long",
-      "size": "1",
-      "entry": "18.331",
-      "sl": "17.88",
-      "tp": "18.8"
-    }
-  ],
-  "balance": 84.49,
-  "last_trades_count": 18
+  "last_heartbeat": "2026-06-26 18:44",
+  "positions": [],
+  "balance": 84.96,
+  "last_trades_count": 19
 }

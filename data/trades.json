@@ -938,8 +938,8 @@
       "time": "06-26 15:15",
       "symbol": "LABUSDT",
       "side": "long",
-      "entry": 18.279,
-      "qty": 3,
+      "entry": 18.331,
+      "qty": 1,
       "score": 12,
       "rr": 2.0,
       "stop_pct": 4.3,
@@ -947,14 +947,29 @@
       "btc_above_ema50": false,
       "risk_pct": 0.5,
       "margin": 5.56,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
+      "result": "tp",
+      "pnl": 0.57,
+      "fee": 0.041,
       "sl": 17.5,
       "tp": 19.0,
       "leverage": 10,
       "entryReason": "15m RSI=27超卖，空头付费-0.267%（空头拥挤），17.55支撑位反弹确认，独立行情+3.8%",
-      "funding_rate": -0.267
+      "funding_rate": -0.267,
+      "exit": 18.76,
+      "exit_time": "2026-06-26 18:37",
+      "pnlBeforeFee": 0.61,
+      "pnlAfterFee": 0.57,
+      "exitReason": "止盈18.76触发",
+      "holdTime": "约1.5小时",
+      "notes": "TP hit at 18.76, API confirmed"
     }
-  ]
+  ],
+  "summary": {
+    "total_trades": 40,
+    "wins": 23,
+    "losses": 17,
+    "win_rate": 57.5,
+    "total_pnl": 23.48,
+    "open_positions": 0
+  }
 }

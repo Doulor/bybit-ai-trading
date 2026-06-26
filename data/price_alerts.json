@@ -1,12 +1,4 @@
 {
-  "alerts": [
-    {
-      "symbol": "ETHUSDT",
-      "price": 1580.0,
-      "direction": "above",
-      "reason": "ETH反弹到1580阻力做空. 4hDOWN趋势, 缩量反弹(0.7x)量价背离, BTC小于EMA50. 止损1600, 止盈1520",
-      "added_at": "2026-06-26 18:42"
-    }
-  ],
-  "last_update": "2026-06-26 18:42"
+  "alerts": [],
+  "last_update": ""
 }
