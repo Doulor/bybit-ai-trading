@@ -933,6 +933,28 @@
       "feePct": 0.12,
       "manualClose": true,
       "exit_time": "06-26 00:29"
+    },
+    {
+      "time": "06-26 15:15",
+      "symbol": "LABUSDT",
+      "side": "long",
+      "entry": 18.279,
+      "qty": 3,
+      "score": 12,
+      "rr": 2.0,
+      "stop_pct": 4.3,
+      "volume_ratio": 2.9,
+      "btc_above_ema50": false,
+      "risk_pct": 0.5,
+      "margin": 5.56,
+      "result": "hold",
+      "pnl": 0,
+      "fee": 0,
+      "sl": 17.5,
+      "tp": 19.0,
+      "leverage": 10,
+      "entryReason": "15m RSI=27超卖，空头付费-0.267%（空头拥挤），17.55支撑位反弹确认，独立行情+3.8%",
+      "funding_rate": -0.267
     }
   ]
 }

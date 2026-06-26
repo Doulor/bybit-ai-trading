@@ -1,4 +1,12 @@
 {
-  "alerts": [],
-  "last_update": ""
+  "alerts": [
+    {
+      "symbol": "XRPUSDT",
+      "price": 1.04,
+      "direction": "above",
+      "reason": "XRP反弹到1.040-1.045阻力区做空。1h趋势向下，BTC<EMA50。止损1.055，止盈1.010。",
+      "added_at": "2026-06-26 14:14"
+    }
+  ],
+  "last_update": "2026-06-26 14:14"
 }
