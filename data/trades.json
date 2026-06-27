@@ -1103,14 +1103,17 @@
       "btc_above_ema50": true,
       "risk_pct": 0.5,
       "margin": 6.82,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
+      "result": "sl",
+      "pnl": -0.26401608,
+      "fee": 0.07531608000000001,
       "leverage": 10,
       "entryReason": "RSI71超买,5m动量转负-0.8%,24h涨14.6%,,盈亏比2.5:1",
-      "exitReason": "",
+      "exitReason": "止损触发(入场0.6331→止损0.6347,滑点)",
       "trailingStop": false,
-      "manualClose": false
+      "manualClose": false,
+      "exit": 0.63484723,
+      "pnlAfterFee": -0.33933216,
+      "exitTime": "06-27 23:58"
     }
   ],
   "summary": {
