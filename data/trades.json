@@ -1114,6 +1114,30 @@
       "exit": 0.63484723,
       "pnlAfterFee": -0.33933216,
       "exitTime": "06-27 23:58"
+    },
+    {
+      "time": "06-28 02:07",
+      "symbol": "CARVUSDT",
+      "side": "long",
+      "entry": 0.03842,
+      "sl": 0.036874,
+      "tp": 0.041483,
+      "qty": 638,
+      "score": 15,
+      "rr": 2.0,
+      "stop_pct": 4.0,
+      "volume_ratio": 0.4,
+      "btc_above_ema50": true,
+      "risk_pct": 1.0,
+      "margin": 2.45,
+      "result": "hold",
+      "pnl": 0,
+      "fee": 0,
+      "leverage": 10,
+      "entryReason": "RSI37偏低+极低位pos9%+15m企稳+1.2%转正+1h动量+11.9%转正+空头付费-0.1%+BTC同向+支撑反弹",
+      "exitReason": "",
+      "trailingStop": false,
+      "manualClose": false
     }
   ],
   "summary": {

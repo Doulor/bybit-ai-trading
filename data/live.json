@@ -1,20 +1,35 @@
 {
-  "wallet": 98.1614,
-  "equity": 98.2987,
+  "wallet": 98.1704,
+  "equity": 98.5112,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1587.1903,
-      "value": 0.1373,
+      "price": 1580.4628,
+      "value": 0.1367,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
-      "pnl": 0.0054,
-      "pnlPct": 4.08
+      "pnl": 0.0048,
+      "pnlPct": 3.64
     }
   ],
-  "positions": [],
+  "positions": [
+    {
+      "symbol": "CARVUSDT",
+      "side": "Buy",
+      "size": "638",
+      "avgPrice": "0.03842",
+      "unrealisedPnl": "0.20416",
+      "leverage": "10",
+      "liqPrice": "",
+      "stopLoss": "0.03687",
+      "takeProfit": "0.04148",
+      "markPrice": "0.03874",
+      "createdTime": "1782583631737",
+      "positionIdx": 0
+    }
+  ],
   "openOrders": [],
-  "updated_at": 1782583385925,
-  "updated_local": "2026-06-28 02:03:05"
+  "updated_at": 1782595683645,
+  "updated_local": "2026-06-28 05:28:03"
 }
