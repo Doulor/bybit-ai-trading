@@ -1022,14 +1022,17 @@
       "btc_above_ema50": true,
       "risk_pct": 0.5,
       "margin": 22.2,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
+      "result": "sl",
+      "pnl": -0.02673761,
+      "fee": 0.24416760999999998,
       "leverage": 10,
       "entryReason": "RSI73超买从85回落,15m动量转负-1.2%,最新K线-1.8%放量下跌,高位拒绝形态",
-      "exitReason": "",
+      "exitReason": "减仓触发全平(close_position不支持部分平仓)",
       "trailingStop": false,
-      "manualClose": false
+      "manualClose": false,
+      "exit": 0.51238287,
+      "pnlAfterFee": -0.27090522,
+      "exitTime": "06-27 18:44"
     }
   ],
   "summary": {
