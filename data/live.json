@@ -1,35 +1,20 @@
 {
-  "wallet": 97.4556,
-  "equity": 97.6351,
+  "wallet": 97.3923,
+  "equity": 97.5301,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1589.1602,
-      "value": 0.1375,
+      "price": 1592.6385,
+      "value": 0.1378,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
-      "pnl": 0.0055,
-      "pnlPct": 4.21
+      "pnl": 0.0059,
+      "pnlPct": 4.44
     }
   ],
-  "positions": [
-    {
-      "symbol": "KAITOUSDT",
-      "side": "Sell",
-      "size": "30",
-      "avgPrice": "0.5637",
-      "unrealisedPnl": "0.042",
-      "leverage": "10",
-      "liqPrice": "3.80321039",
-      "stopLoss": "0.5653",
-      "takeProfit": "0.5393",
-      "markPrice": "0.5623",
-      "createdTime": "1782563968484",
-      "positionIdx": 0
-    }
-  ],
+  "positions": [],
   "openOrders": [],
-  "updated_at": 1782568391015,
-  "updated_local": "2026-06-27 21:53:11"
+  "updated_at": 1782571390136,
+  "updated_local": "2026-06-27 22:43:10"
 }

@@ -1049,14 +1049,17 @@
       "btc_above_ema50": true,
       "risk_pct": 0.5,
       "margin": 1.67,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
+      "result": "sl",
+      "pnl": -0.0726318,
+      "fee": 0.0186318,
       "leverage": 10,
       "entryReason": "RSI88极超买回落到75,15m转负-1.5%,最新K线-1.4%放量下跌",
-      "exitReason": "",
-      "trailingStop": false,
-      "manualClose": false
+      "exitReason": "移动止损到保本价0.5653触发",
+      "trailingStop": true,
+      "manualClose": false,
+      "exit": 0.5655,
+      "pnlAfterFee": -0.0912636,
+      "exitTime": "06-27 21:54"
     }
   ],
   "summary": {

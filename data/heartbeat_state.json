@@ -1,6 +1,15 @@
 {
-  "last_heartbeat": "2026-06-27 10:29",
-  "positions": [],
-  "balance": 97.49,
-  "last_trades_count": 17
+  "last_heartbeat": "2026-06-27 20:43",
+  "positions": [
+    {
+      "symbol": "KAITOUSDT",
+      "side": "short",
+      "size": "30",
+      "entry": "0.5637",
+      "sl": "0.5805",
+      "tp": "0.5393"
+    }
+  ],
+  "balance": 97.46,
+  "last_trades_count": 44
 }
