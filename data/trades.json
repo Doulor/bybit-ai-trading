@@ -1033,6 +1033,30 @@
       "exit": 0.51238287,
       "pnlAfterFee": -0.27090522,
       "exitTime": "06-27 18:44"
+    },
+    {
+      "time": "06-27 20:37",
+      "symbol": "KAITOUSDT",
+      "side": "short",
+      "entry": 0.5637,
+      "sl": 0.580536,
+      "tp": 0.5393,
+      "qty": 30,
+      "score": 10,
+      "rr": 1.5,
+      "stop_pct": 2.91,
+      "volume_ratio": 7.9,
+      "btc_above_ema50": true,
+      "risk_pct": 0.5,
+      "margin": 1.67,
+      "result": "hold",
+      "pnl": 0,
+      "fee": 0,
+      "leverage": 10,
+      "entryReason": "RSI88极超买回落到75,15m转负-1.5%,最新K线-1.4%放量下跌",
+      "exitReason": "",
+      "trailingStop": false,
+      "manualClose": false
     }
   ],
   "summary": {
