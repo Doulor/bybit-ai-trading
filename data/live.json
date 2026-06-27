@@ -1,20 +1,35 @@
 {
-  "wallet": 97.3923,
-  "equity": 97.5301,
+  "wallet": 97.2444,
+  "equity": 98.2319,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1592.6385,
-      "value": 0.1378,
+      "price": 1599.9716,
+      "value": 0.1384,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
-      "pnl": 0.0059,
-      "pnlPct": 4.44
+      "pnl": 0.0065,
+      "pnlPct": 4.92
     }
   ],
-  "positions": [],
+  "positions": [
+    {
+      "symbol": "LABUSDT",
+      "side": "Buy",
+      "size": "1",
+      "avgPrice": "15.406",
+      "unrealisedPnl": "0.84907",
+      "leverage": "10",
+      "liqPrice": "",
+      "stopLoss": "15.58",
+      "takeProfit": "16.869",
+      "markPrice": "16.25507",
+      "createdTime": "1782316961518",
+      "positionIdx": 0
+    }
+  ],
   "openOrders": [],
-  "updated_at": 1782571390136,
-  "updated_local": "2026-06-27 22:43:10"
+  "updated_at": 1782577089388,
+  "updated_local": "2026-06-28 00:18:09"
 }
