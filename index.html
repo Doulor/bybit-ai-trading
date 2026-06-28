@@ -387,7 +387,7 @@ function calcStats(){
   const ti=INVESTMENTS.reduce((s,i)=>s+i.amount,0);
   const tp=TRADES.reduce((s,t)=>s+getNet(t),0);
   const cb=INITIAL_CAPITAL+ti+tp;
-  const closed=TRADES.filter(t=>t.result!=='hold');
+  const closed=TRADES.filter(t=>t.result!=='持仓中');
   const wt=closed.filter(t=>getNet(t)>0.005).length;
   const lt=closed.filter(t=>getNet(t)<-0.005).length;
   const wr=closed.length>0?(wt/closed.length*100):0;
@@ -432,7 +432,7 @@ function calcStats(){
   // Streak (based on actual PnL, not result field)
   let sk=0,skt='';
   for(let i=TRADES.length-1;i>=0;i--){
-    if(TRADES[i].result==='hold'||Math.abs(getNet(TRADES[i]))<0.005) continue;
+    if(TRADES[i].result==='持仓中'||Math.abs(getNet(TRADES[i]))<0.005) continue;
     const c=getNet(TRADES[i])>=0?'win':'loss';
     if(!skt){skt=c;sk=1;}else if(skt===c){sk++;}else break;
   }
@@ -454,13 +454,13 @@ function calcStats(){
     symMap[t.symbol].count++;
     const n=getNet(t);
     symMap[t.symbol].pnl+=n;
-    if(t.result!=='hold'){
+    if(t.result!=='持仓中'){
       if(n>0) symMap[t.symbol].wins++;
       else if(n<0) symMap[t.symbol].losses++;
     }
   });
 
-  const hds=TRADES.filter(t=>t.result==='hold');
+  const hds=TRADES.filter(t=>t.result==='持仓中');
   return{ti,tp,cb,wt,lt,wr,bt,wst,roi,pf,ah,sk,skt,hds,tipLines,maxDD,maxDDAbs,maxConsLoss,avgWin,avgLoss,symMap}
 }
 
@@ -521,7 +521,7 @@ function getFilteredTrades(){
     if(side&&t.side!==side) return false;
     if(result==='win'&&getNet(t)<=0) return false;
     if(result==='loss'&&getNet(t)>=0) return false;
-    if(result==='hold'&&t.result!=='hold') return false;
+    if(result==='hold'&&t.result!=='持仓中') return false;
     return true;
   });
 }
@@ -553,8 +553,8 @@ function renderTable(){
   const tb=document.getElementById('tradesBody');
   const rows=[...filtered].reverse().map((t,idx)=>{
     const sc=t.side==='long'?'long':'short';const st=t.side==='long'?'做多':'做空';
-    const rc=t.result==='tp'?(t.manualClose?'manual':'tp'):t.result==='sl'?(t.trailingStop?'trailing':t.manualClose?'manual':'sl'):'hold';
-    const rt=t.result==='tp'?(t.manualClose?'手动平仓':'止盈'):t.result==='sl'?(t.trailingStop?'移动止损':t.manualClose?'手动平仓':'止损'):'持仓中';
+    const rc=t.result==='止盈'?'tp':t.result==='止损'?'sl':t.result==='移动止损'?'trailing':t.result==='手动平仓'?'manual':'hold';
+    const rt=t.result==='止盈'?'止盈':t.result==='止损'?'止损':t.result==='移动止损'?'移动止损':t.result==='手动平仓'?'手动平仓':'持仓中';
     const pn=getNet(t);
     const pc=Math.abs(pn)<0.01?'pnl-flat':pn>=0?'pnl-pos':'pnl-neg';const pt=Math.abs(pn)<0.01?'±0.00':((pn>=0?'+':'')+pn.toFixed(2));
     const fc=(t.fee||0)>0?'color:var(--t2)':'';
@@ -595,7 +595,7 @@ document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div 
   // Streak dots (PnL-based, not result-based)
   const l10=TRADES.slice(-10);
   document.getElementById('streakBar').innerHTML=l10.map(t=>{
-    const c=t.result==='hold'?'hold':(getNet(t)>=0?'win':'loss');
+    const c=t.result==='持仓中'?'hold':(getNet(t)>=0?'win':'loss');
     return `<div class="streak-dot ${c}"></div>`;
   }).join('')+`<span style="font-family:'JetBrains Mono',monospace;font-size:0.6em;color:var(--t3);margin-left:6px">${s.sk>0?'连'+s.sk+(s.skt==='win'?'胜':'负'):'—'}</span>`;
 
