@@ -1130,14 +1130,17 @@
       "btc_above_ema50": true,
       "risk_pct": 1.0,
       "margin": 2.45,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
+      "result": "sl",
+      "pnl": -1.02619122,
+      "fee": 0.0,
       "leverage": 10,
       "entryReason": "RSI37偏低+极低位pos9%+15m企稳+1.2%转正+1h动量+11.9%转正+空头付费-0.1%+BTC同向+支撑反弹",
-      "exitReason": "",
+      "exitReason": "止损触发",
       "trailingStop": false,
-      "manualClose": false
+      "manualClose": false,
+      "exit": 0.0368,
+      "pnlAfterFee": -1.02619122,
+      "exit_time": "2026-06-28 10:15"
     }
   ],
   "summary": {
