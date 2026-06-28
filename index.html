@@ -593,7 +593,7 @@ const heroLabel=liveFresh?'总权益 · LIVE':'总资产 · TOTAL ASSETS';
 document.getElementById('heroCard').innerHTML=`<div class="hero-grid"><div><div class="hero-label">${heroLabel}</div><div class="hero-value ${eColor}">${totalAssetsDisplay.toFixed(2)}<span style="font-size:0.4em;color:var(--t2);margin-left:4px">USDT</span></div><div class="hero-sub"><span class="hero-pnl-badge ${s.tp>=0?'pos':'neg'}">${ps}${s.tp.toFixed(2)} U</span><span style="color:var(--t3)">·</span><span class="has-tooltip ${s.roi>=0?'green':'red'}" data-tip="${s.tipLines.join('\n').replace(/"/g,'&quot;')}" style="font-weight:600">${rs}${s.roi.toFixed(1)}% 收益率</span></div><div class="streak-bar" id="streakBar"></div></div><div class="hero-right"><div class="hero-mini-label">外部投资</div><div class="hero-mini-value gold">${s.ti.toFixed(2)} U</div><div style="font-size:0.55em;color:var(--t3);margin-top:2px">含现货~${dist.spotValue.toFixed(0)}U</div></div></div>`;
 
   // Streak dots (PnL-based, not result-based)
-  const l10=TRADES.slice(-10);
+  const l10=TRADES.slice(0,10);
   document.getElementById('streakBar').innerHTML=l10.map(t=>{
     const c=t.result==='持仓中'?'hold':(getNet(t)>=0?'win':'loss');
     return `<div class="streak-dot ${c}"></div>`;
