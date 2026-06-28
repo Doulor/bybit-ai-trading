@@ -551,7 +551,7 @@ function renderTable(){
   document.getElementById('filterInfo').textContent=shown===total?'':shown+'/'+total+' 笔';
   document.getElementById('tradeCount').textContent=total+' 笔交易';
   const tb=document.getElementById('tradesBody');
-  const rows=[...filtered].reverse().map((t,idx)=>{
+  const rows=[...filtered].map((t,idx)=>{
     const sc=t.side==='long'?'long':'short';const st=t.side==='long'?'做多':'做空';
     const rc=t.result==='止盈'?'tp':t.result==='止损'?'sl':t.result==='移动止损'?'trailing':t.result==='手动平仓'?'manual':'hold';
     const rt=t.result==='止盈'?'止盈':t.result==='止损'?'止损':t.result==='移动止损'?'移动止损':t.result==='手动平仓'?'手动平仓':'持仓中';
