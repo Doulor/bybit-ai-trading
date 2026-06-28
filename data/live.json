@@ -5,16 +5,16 @@
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1578.1084,
+      "price": 1578.6024,
       "value": 0.1365,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
       "pnl": 0.0046,
-      "pnlPct": 3.48
+      "pnlPct": 3.51
     }
   ],
   "positions": [],
   "openOrders": [],
-  "updated_at": 1782656287263,
-  "updated_local": "2026-06-28 22:18:07"
+  "updated_at": 1782661087755,
+  "updated_local": "2026-06-28 23:38:07"
 }
