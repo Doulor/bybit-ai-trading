@@ -89,15 +89,15 @@
       "stop_pct": 2.6,
       "risk_pct": 1.5,
       "margin": 5.37,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
-      "pnlAfterFee": 0,
+      "result": "sl",
+      "pnl": -1.53,
+      "fee": 0.0597,
+      "pnlAfterFee": -1.53,
       "entryReason": "顺趋势做空WLD：空头趋势+EMA距+1.3%反弹到位+15m连续3阴拒绝+15m确认入场时机+RSI61+mom1h转负",
-      "exitReason": "",
-      "exit": 0,
-      "exit_time": "",
-      "holdTime": ""
+      "exitReason": "止损触发",
+      "exit": 0.3901,
+      "exit_time": "07-02 21:54",
+      "holdTime": "约207分钟"
     },
     {
       "time": "07-02 17:15",
