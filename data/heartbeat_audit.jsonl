@@ -39,3 +39,5 @@
 {"time": "2026-07-02 01:50", "positions": "CELO空单浮亏-2.3%,15m RSI=59.6,1h RSI=75.4,持有中", "scan": "凌晨未扫盘，持仓中", "close": "无善后需求"}
 {"time": "2026-07-02 11:29", "positions": "1000PEPE空单浮亏-2.7%,15m RSI=67.0,持有中", "scan": "持仓分析完成", "close": "CELO已止损-0.75U(05:35)，PEPE新开仓"}
 {"time": "2026-07-02 13:06", "positions": "LAB空单浮亏-0.7% 15mRSI=48.4 1hRSI=33.2; PEPE空单浮亏-3.3% 15mRSI=53.2", "scan": "持仓分析完成，LAB和PEPE都空单", "close": "无善后需求"}
+{"time": "2026-07-02 14:24", "positions": "LAB止盈+1.08U已善后; AAVE空浮亏-0.3%; PEPE空浮亏-1.2%", "scan": "LAB已平仓善后完成", "close": "LAB止盈8.994 +1.08U 已更新trades.json 待发邮件"}
+{"time": "2026-07-02 14:25", "positions": "LAB止盈+1.08U已善后; AAVE空-0.08% RSI15m=56.7; PEPE空-0.94% RSI15m=51.2; HYPE空+0.06% RSI15m=55.7; Gmail token过期", "scan": "LAB平仓善后完成(trades.json更新+QQ通知)", "close": "LAB止盈8.994 +1.08U 已更新trades.json QQ通知已发 邮件Gmailtoken过期未发"}
