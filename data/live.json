@@ -1,16 +1,16 @@
 {
-  "wallet": 94.283,
-  "equity": 93.7325,
+  "wallet": 94.4895,
+  "equity": 94.2785,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1649.795,
-      "value": 0.1427,
+      "price": 1660.944,
+      "value": 0.1437,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
-      "pnl": 0.0108,
-      "pnlPct": 8.18
+      "pnl": 0.0118,
+      "pnlPct": 8.91
     }
   ],
   "positions": [
@@ -19,12 +19,12 @@
       "side": "Sell",
       "size": "141",
       "avgPrice": "0.3797",
-      "unrealisedPnl": "-0.1269",
+      "unrealisedPnl": "-0.0282",
       "leverage": "10",
-      "liqPrice": "1.0350425",
+      "liqPrice": "1.03835415",
       "stopLoss": "0.3898",
       "takeProfit": "0.3609",
-      "markPrice": "0.3806",
+      "markPrice": "0.3799",
       "createdTime": "1782988044878",
       "positionIdx": 0
     },
@@ -33,17 +33,17 @@
       "side": "Sell",
       "size": "888",
       "avgPrice": "0.07756227",
-      "unrealisedPnl": "-0.566306",
+      "unrealisedPnl": "-0.326546",
       "leverage": "10",
-      "liqPrice": "0.18211485",
+      "liqPrice": "0.18248184",
       "stopLoss": "0.0792",
       "takeProfit": "0.0744",
-      "markPrice": "0.0782",
+      "markPrice": "0.07793",
       "createdTime": "1782982610089",
       "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782994390671,
-  "updated_local": "2026-07-02 20:13:10"
+  "updated_at": 1782997386920,
+  "updated_local": "2026-07-02 21:03:06"
 }
