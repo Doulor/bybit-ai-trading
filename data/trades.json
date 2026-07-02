@@ -1155,6 +1155,28 @@
       "pnlBeforeFee": 2.09,
       "pnlAfterFee": 2.0937,
       "feePct": 0.224
+    },
+    {
+      "time": "07-02 00:52",
+      "symbol": "CELOUSDT",
+      "side": "short",
+      "entry": 0.06693,
+      "sl": 0.0704,
+      "tp": 0.0614,
+      "qty": 277,
+      "rr": 1.6,
+      "stop_pct": 5.2,
+      "risk_pct": 1.0,
+      "margin": 1.85,
+      "result": "sl",
+      "pnl": -0.75,
+      "fee": 0.0208,
+      "pnlAfterFee": -0.75,
+      "entryReason": "做空CELO：RSI 72.8超买+mom转负+15m阴线+高点回落+趋势多头回调+BB%B 0.78",
+      "exitReason": "止损触发 exit@0.06958",
+      "exit": 0.06958,
+      "exit_time": "07-02 05:35",
+      "holdTime": "约283分钟"
     }
   ],
   "summary": {
