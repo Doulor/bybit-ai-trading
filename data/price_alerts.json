@@ -20,7 +20,14 @@
       "direction": "below",
       "reason": "BTC跌破58900，1H多头趋势确认破位，做空。SL 59500，TP 57500",
       "added_at": "2026-06-29 22:15"
+    },
+    {
+      "symbol": "DYDXUSDT",
+      "price": 0.132,
+      "direction": "below",
+      "reason": "DYDX趋势多头RSI=14超卖，等15m阳线企稳做多。止损0.128，止盈0.145",
+      "added_at": "2026-07-02 11:00"
     }
   ],
-  "last_update": "2026-06-29 22:28:58"
+  "last_update": "2026-07-02 11:00"
 }

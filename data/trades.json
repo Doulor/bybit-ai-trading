@@ -1177,6 +1177,29 @@
       "exit": 0.06958,
       "exit_time": "07-02 05:35",
       "holdTime": "约283分钟"
+    },
+    {
+      "time": "07-02 11:27",
+      "symbol": "1000PEPEUSDT",
+      "side": "short",
+      "entry": 0.0023,
+      "sl": 0.0024,
+      "tp": 0.0022,
+      "qty": 0,
+      "score": 9,
+      "rr": 2.0,
+      "stop_pct": 4.3,
+      "risk_pct": 1.5,
+      "margin": 3.29,
+      "result": "hold",
+      "pnl": 0,
+      "fee": 0,
+      "pnlAfterFee": 0,
+      "entryReason": "趋势做空1000PEPE：空头趋势+反弹EMA20(+1.5%)+15m连续3阴线拒绝+1h动量转负(-0.3%)+RSI=63",
+      "exitReason": "",
+      "exit": 0,
+      "exit_time": "",
+      "holdTime": ""
     }
   ],
   "summary": {

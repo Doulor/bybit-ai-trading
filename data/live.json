@@ -1,20 +1,35 @@
 {
-  "wallet": 95.2452,
-  "equity": 95.3854,
+  "wallet": 95.2272,
+  "equity": 94.7831,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1620.918,
-      "value": 0.1402,
+      "price": 1631.2177,
+      "value": 0.1411,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
-      "pnl": 0.0083,
-      "pnlPct": 6.29
+      "pnl": 0.0092,
+      "pnlPct": 6.97
     }
   ],
-  "positions": [],
+  "positions": [
+    {
+      "symbol": "1000PEPEUSDT",
+      "side": "Sell",
+      "size": "14000",
+      "avgPrice": "0.00234",
+      "unrealisedPnl": "-0.5852",
+      "leverage": "10",
+      "liqPrice": "0.00910896",
+      "stopLoss": "0.0024",
+      "takeProfit": "0.0022",
+      "markPrice": "0.0023818",
+      "createdTime": "1782962821578",
+      "positionIdx": 0
+    }
+  ],
   "openOrders": [],
-  "updated_at": 1782962588588,
-  "updated_local": "2026-07-02 11:23:08"
+  "updated_at": 1782967986771,
+  "updated_local": "2026-07-02 12:53:06"
 }
