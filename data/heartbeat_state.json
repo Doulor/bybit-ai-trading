@@ -1,31 +1,15 @@
 {
-  "last_heartbeat": "2026-07-02 14:25",
+  "last_heartbeat": "2026-07-02 18:12",
   "positions": [
     {
-      "symbol": "AAVEUSDT",
+      "symbol": "ARBUSDT",
       "side": "short",
-      "size": "1",
-      "entry": "85.05",
-      "sl": "87.01",
-      "tp": "80.88"
-    },
-    {
-      "symbol": "1000PEPEUSDT",
-      "side": "short",
-      "size": "14000",
-      "entry": "0.00234",
-      "sl": "0.0024",
-      "tp": "0.0022"
-    },
-    {
-      "symbol": "HYPEUSDT",
-      "side": "short",
-      "size": "1",
-      "entry": "63.392",
-      "sl": "66.5",
-      "tp": "59.0"
+      "size": "888",
+      "entry": "0.07758",
+      "sl": "0.0792",
+      "tp": "0.0744"
     }
   ],
-  "balance": 96.26,
+  "balance": 94.31,
   "last_trades_count": 50
 }
