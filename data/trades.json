@@ -66,15 +66,15 @@
       "stop_pct": 2.4,
       "risk_pct": 1.5,
       "margin": 5.94,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
-      "pnlAfterFee": 0,
+      "result": "tp",
+      "pnl": 0.21,
+      "fee": 0.0934,
+      "pnlAfterFee": 0.21,
       "entryReason": "顺趋势做空AAVE：空头趋势+贴近EMA20(-0.8%)+15m连续3阴拒绝+mom15转负(-0.5%)+RSI=43",
-      "exitReason": "",
-      "exit": 0,
-      "exit_time": "",
-      "holdTime": ""
+      "exitReason": "止盈触发",
+      "exit": 84.75,
+      "exit_time": "07-02 15:47",
+      "holdTime": "约160分钟"
     },
     {
       "time": "07-02 12:57",
