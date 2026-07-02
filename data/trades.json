@@ -1223,6 +1223,29 @@
       "exit": 0,
       "exit_time": "",
       "holdTime": ""
+    },
+    {
+      "time": "07-02 13:07",
+      "symbol": "AAVEUSDT",
+      "side": "short",
+      "entry": 84.97,
+      "sl": 87.0129,
+      "tp": 80.8842,
+      "qty": 0,
+      "score": 8,
+      "rr": 2.0,
+      "stop_pct": 2.4,
+      "risk_pct": 1.5,
+      "margin": 5.94,
+      "result": "hold",
+      "pnl": 0,
+      "fee": 0,
+      "pnlAfterFee": 0,
+      "entryReason": "顺趋势做空AAVE：空头趋势+贴近EMA20(-0.8%)+15m连续3阴拒绝+mom15转负(-0.5%)+RSI=43",
+      "exitReason": "",
+      "exit": 0,
+      "exit_time": "",
+      "holdTime": ""
     }
   ],
   "summary": {

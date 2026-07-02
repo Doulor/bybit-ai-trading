@@ -1,6 +1,14 @@
 {
-  "last_heartbeat": "2026-07-02 11:29",
+  "last_heartbeat": "2026-07-02 13:06",
   "positions": [
+    {
+      "symbol": "LABUSDT",
+      "side": "short",
+      "size": "4",
+      "entry": "9.285",
+      "sl": "10",
+      "tp": "8.99"
+    },
     {
       "symbol": "1000PEPEUSDT",
       "side": "short",
@@ -10,6 +18,6 @@
       "tp": "0.0022"
     }
   ],
-  "balance": 95.23,
+  "balance": 95.19,
   "last_trades_count": 50
 }

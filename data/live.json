@@ -1,16 +1,16 @@
 {
-  "wallet": 95.1863,
-  "equity": 94.6053,
+  "wallet": 95.1395,
+  "equity": 95.9147,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1627.6414,
-      "value": 0.1408,
+      "price": 1624.0972,
+      "value": 0.1405,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
-      "pnl": 0.0089,
-      "pnlPct": 6.73
+      "pnl": 0.0086,
+      "pnlPct": 6.5
     }
   ],
   "positions": [
@@ -19,13 +19,27 @@
       "side": "Sell",
       "size": "4",
       "avgPrice": "9.285",
-      "unrealisedPnl": "-0.229",
+      "unrealisedPnl": "0.83688",
       "leverage": "10",
-      "liqPrice": "32.59811964",
-      "stopLoss": "10",
+      "liqPrice": "32.49553585",
+      "stopLoss": "9.65",
       "takeProfit": "8.99",
-      "markPrice": "9.34225",
+      "markPrice": "9.07578",
       "createdTime": "1782316961518",
+      "positionIdx": 0
+    },
+    {
+      "symbol": "AAVEUSDT",
+      "side": "Sell",
+      "size": "1",
+      "avgPrice": "85.05",
+      "unrealisedPnl": "0.11",
+      "leverage": "10",
+      "liqPrice": "178.61902342",
+      "stopLoss": "87.01",
+      "takeProfit": "80.88",
+      "markPrice": "84.94",
+      "createdTime": "1782193485960",
       "positionIdx": 0
     },
     {
@@ -33,17 +47,17 @@
       "side": "Sell",
       "size": "14000",
       "avgPrice": "0.00234",
-      "unrealisedPnl": "-0.4928",
+      "unrealisedPnl": "-0.3122",
       "leverage": "10",
-      "liqPrice": "0.00901973",
+      "liqPrice": "0.00905365",
       "stopLoss": "0.0024",
       "takeProfit": "0.0022",
-      "markPrice": "0.0023752",
+      "markPrice": "0.0023623",
       "createdTime": "1782962821578",
       "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782968586043,
-  "updated_local": "2026-07-02 13:03:06"
+  "updated_at": 1782972188775,
+  "updated_local": "2026-07-02 14:03:08"
 }
