@@ -43,15 +43,15 @@
       "stop_pct": 1.6,
       "risk_pct": 1.5,
       "margin": 8.64,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
-      "pnlAfterFee": 0,
+      "result": "tp",
+      "pnl": 0.66,
+      "fee": 0.0877,
+      "pnlAfterFee": 0.66,
       "entryReason": "顺趋势做空SPCX：空头趋势+EMA距+0.4%反弹到位+15m连续3阴确认+mom15-1.7%+RSI64",
-      "exitReason": "",
-      "exit": 0,
-      "exit_time": "",
-      "holdTime": ""
+      "exitReason": "移动止损锁利润",
+      "exit": 159.02,
+      "exit_time": "07-02 23:14",
+      "holdTime": "约15分钟"
     },
     {
       "time": "07-02 21:36",
