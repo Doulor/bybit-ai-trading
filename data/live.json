@@ -1,16 +1,16 @@
 {
-  "wallet": 96.264,
-  "equity": 95.8148,
+  "wallet": 96.2291,
+  "equity": 97.0328,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1625.5911,
-      "value": 0.1406,
+      "price": 1615.4067,
+      "value": 0.1397,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
-      "pnl": 0.0087,
-      "pnlPct": 6.6
+      "pnl": 0.0078,
+      "pnlPct": 5.93
     }
   ],
   "positions": [
@@ -19,13 +19,27 @@
       "side": "Sell",
       "size": "1",
       "avgPrice": "85.05",
-      "unrealisedPnl": "-0.23",
+      "unrealisedPnl": "0.63",
       "leverage": "10",
-      "liqPrice": "179.80184467",
-      "stopLoss": "87.01",
+      "liqPrice": "179.6904633",
+      "stopLoss": "84.65",
       "takeProfit": "80.88",
-      "markPrice": "85.28",
+      "markPrice": "84.42",
       "createdTime": "1782193485960",
+      "positionIdx": 0
+    },
+    {
+      "symbol": "HYPEUSDT",
+      "side": "Sell",
+      "size": "1",
+      "avgPrice": "63.392",
+      "unrealisedPnl": "0.272",
+      "leverage": "10",
+      "liqPrice": "158.3904633",
+      "stopLoss": "64.507",
+      "takeProfit": "60.557",
+      "markPrice": "63.12",
+      "createdTime": "1782973416709",
       "positionIdx": 0
     },
     {
@@ -33,17 +47,17 @@
       "side": "Sell",
       "size": "14000",
       "avgPrice": "0.00234",
-      "unrealisedPnl": "-0.3598",
+      "unrealisedPnl": "-0.238",
       "leverage": "10",
-      "liqPrice": "0.00911726",
+      "liqPrice": "0.00916203",
       "stopLoss": "0.0024",
       "takeProfit": "0.0022",
-      "markPrice": "0.0023657",
+      "markPrice": "0.002357",
       "createdTime": "1782962821578",
       "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782973387471,
-  "updated_local": "2026-07-02 14:23:07"
+  "updated_at": 1782976388899,
+  "updated_local": "2026-07-02 15:13:08"
 }

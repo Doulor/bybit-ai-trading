@@ -1246,6 +1246,29 @@
       "exit": 0,
       "exit_time": "",
       "holdTime": ""
+    },
+    {
+      "time": "07-02 14:23",
+      "symbol": "HYPEUSDT",
+      "side": "short",
+      "entry": 63.404,
+      "sl": 64.5079,
+      "tp": 60.5571,
+      "qty": 0,
+      "score": 8,
+      "rr": 2.0,
+      "stop_pct": 1.7,
+      "risk_pct": 1.5,
+      "margin": 8.29,
+      "result": "hold",
+      "pnl": 0,
+      "fee": 0,
+      "pnlAfterFee": 0,
+      "entryReason": "顺趋势做空HYPE：空头趋势+贴近EMA20(-0.2%)+15m连续3阴拒绝+mom15转负(-1.3%)",
+      "exitReason": "",
+      "exit": 0,
+      "exit_time": "",
+      "holdTime": ""
     }
   ],
   "summary": {
