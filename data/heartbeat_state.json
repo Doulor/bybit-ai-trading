@@ -1,15 +1,15 @@
 {
-  "last_heartbeat": "2026-07-02 01:50",
+  "last_heartbeat": "2026-07-02 11:29",
   "positions": [
     {
-      "symbol": "CELOUSDT",
+      "symbol": "1000PEPEUSDT",
       "side": "short",
-      "size": "277",
-      "entry": "0.06693",
-      "sl": "0.0704",
-      "tp": "0.0614"
+      "size": "14000",
+      "entry": "0.0023",
+      "sl": "0.0024",
+      "tp": "0.0022"
     }
   ],
-  "balance": 95.99,
+  "balance": 95.23,
   "last_trades_count": 50
 }

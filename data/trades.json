@@ -1200,6 +1200,29 @@
       "exit": 0,
       "exit_time": "",
       "holdTime": ""
+    },
+    {
+      "time": "07-02 12:57",
+      "symbol": "LABUSDT",
+      "side": "short",
+      "entry": 9.995,
+      "sl": 10.4972,
+      "tp": 8.9906,
+      "qty": 0,
+      "score": 8,
+      "rr": 2.0,
+      "stop_pct": 5.0,
+      "risk_pct": 2.0,
+      "margin": 3.79,
+      "result": "hold",
+      "pnl": 0,
+      "fee": 0,
+      "pnlAfterFee": 0,
+      "entryReason": "顺趋势做空LAB：空头趋势+反弹EMA20(+9.3%)+15m连续3阴线拒绝+mom15转负(-8.3%)+RSI=72超买区",
+      "exitReason": "",
+      "exit": 0,
+      "exit_time": "",
+      "holdTime": ""
     }
   ],
   "summary": {
