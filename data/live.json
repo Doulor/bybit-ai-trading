@@ -1,35 +1,35 @@
 {
-  "wallet": 96.7411,
-  "equity": 96.2109,
+  "wallet": 95.8307,
+  "equity": 95.9287,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1623.3865,
+      "price": 1623.2379,
       "value": 0.1404,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
       "pnl": 0.0085,
-      "pnlPct": 6.45
+      "pnlPct": 6.44
     }
   ],
   "positions": [
     {
-      "symbol": "1000PEPEUSDT",
+      "symbol": "ARBUSDT",
       "side": "Sell",
-      "size": "14000",
-      "avgPrice": "0.00234",
-      "unrealisedPnl": "-0.6706",
+      "size": "888",
+      "avgPrice": "0.07756227",
+      "unrealisedPnl": "-0.042386",
       "leverage": "10",
-      "liqPrice": "0.00921643",
-      "stopLoss": "0.0024",
-      "takeProfit": "0.0022",
-      "markPrice": "0.0023879",
-      "createdTime": "1782962821578",
+      "liqPrice": "0.18452945",
+      "stopLoss": "0.0792",
+      "takeProfit": "0.0744",
+      "markPrice": "0.07761",
+      "createdTime": "1782982610089",
       "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782982387421,
-  "updated_local": "2026-07-02 16:53:07"
+  "updated_at": 1782982686742,
+  "updated_local": "2026-07-02 16:58:06"
 }

@@ -27,7 +27,14 @@
       "direction": "below",
       "reason": "DYDX趋势多头RSI=14超卖，等15m阳线企稳做多。止损0.128，止盈0.145",
       "added_at": "2026-07-02 11:00"
+    },
+    {
+      "symbol": "1000PEPEUSDT",
+      "price": 0.00235,
+      "direction": "below",
+      "reason": "1000PEPE空头趋势，等价格回落到0.00235附近做空。当前0.002365在涨，等回落再空",
+      "added_at": "2026-07-02 16:00"
     }
   ],
-  "last_update": "2026-07-02 11:00"
+  "last_update": "2026-07-02 16:00"
 }
