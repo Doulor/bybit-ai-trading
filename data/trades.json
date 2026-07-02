@@ -43,15 +43,15 @@
       "stop_pct": 2.0,
       "risk_pct": 1.5,
       "margin": 7.12,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
-      "pnlAfterFee": 0,
+      "result": "tp",
+      "pnl": 0.21,
+      "fee": 0.0782,
+      "pnlAfterFee": 0.21,
       "entryReason": "顺趋势做空XLMUSDT：空头趋势+EMA距+0.6%反弹到位+15m连续3阴确认+1h+15m双重确认",
-      "exitReason": "",
-      "exit": 0,
-      "exit_time": "",
-      "holdTime": ""
+      "exitReason": "移动止损锁利润",
+      "exit": 0.1994,
+      "exit_time": "07-02 21:04",
+      "holdTime": "约45分钟"
     },
     {
       "time": "07-02 18:27",
