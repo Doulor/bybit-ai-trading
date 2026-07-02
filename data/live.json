@@ -1,49 +1,20 @@
 {
-  "wallet": 94.4895,
-  "equity": 92.7407,
+  "wallet": 91.4999,
+  "equity": 91.6478,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1689.6845,
-      "value": 0.1462,
+      "price": 1709.5853,
+      "value": 0.1479,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
-      "pnl": 0.0142,
-      "pnlPct": 10.8
+      "pnl": 0.016,
+      "pnlPct": 12.1
     }
   ],
-  "positions": [
-    {
-      "symbol": "WLDUSDT",
-      "side": "Sell",
-      "size": "141",
-      "avgPrice": "0.3797",
-      "unrealisedPnl": "-0.6627",
-      "leverage": "10",
-      "liqPrice": "1.03173478",
-      "stopLoss": "0.3898",
-      "takeProfit": "0.3609",
-      "markPrice": "0.3844",
-      "createdTime": "1782988044878",
-      "positionIdx": 0
-    },
-    {
-      "symbol": "ARBUSDT",
-      "side": "Sell",
-      "size": "888",
-      "avgPrice": "0.07756227",
-      "unrealisedPnl": "-1.232306",
-      "leverage": "10",
-      "liqPrice": "0.18173626",
-      "stopLoss": "0.0792",
-      "takeProfit": "0.0744",
-      "markPrice": "0.07895",
-      "createdTime": "1782982610089",
-      "positionIdx": 0
-    }
-  ],
+  "positions": [],
   "openOrders": [],
-  "updated_at": 1782999189445,
-  "updated_local": "2026-07-02 21:33:09"
+  "updated_at": 1783000384183,
+  "updated_local": "2026-07-02 21:53:04"
 }
