@@ -1,49 +1,35 @@
 {
-  "wallet": 96.4844,
-  "equity": 96.7441,
+  "wallet": 96.7378,
+  "equity": 96.5204,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1615.3257,
-      "value": 0.1397,
+      "price": 1613.7228,
+      "value": 0.1396,
       "avgPrice": 1525.0,
       "buyTime": "2026-06-25 23:43",
-      "pnl": 0.0078,
-      "pnlPct": 5.92
+      "pnl": 0.0077,
+      "pnlPct": 5.82
     }
   ],
   "positions": [
-    {
-      "symbol": "AAVEUSDT",
-      "side": "Sell",
-      "size": "1",
-      "avgPrice": "85.05",
-      "unrealisedPnl": "0.47",
-      "leverage": "10",
-      "liqPrice": "180.0219003",
-      "stopLoss": "84.65",
-      "takeProfit": "80.88",
-      "markPrice": "84.58",
-      "createdTime": "1782193485960",
-      "positionIdx": 0
-    },
     {
       "symbol": "1000PEPEUSDT",
       "side": "Sell",
       "size": "14000",
       "avgPrice": "0.00234",
-      "unrealisedPnl": "-0.35",
+      "unrealisedPnl": "-0.357",
       "leverage": "10",
-      "liqPrice": "0.00918227",
+      "liqPrice": "0.00921643",
       "stopLoss": "0.0024",
       "takeProfit": "0.0022",
-      "markPrice": "0.002365",
+      "markPrice": "0.0023655",
       "createdTime": "1782962821578",
       "positionIdx": 0
     }
   ],
   "openOrders": [],
-  "updated_at": 1782977587014,
-  "updated_local": "2026-07-02 15:33:07"
+  "updated_at": 1782978485575,
+  "updated_local": "2026-07-02 15:48:05"
 }
