@@ -135,15 +135,15 @@
       "stop_pct": 4.3,
       "risk_pct": 1.5,
       "margin": 3.29,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
-      "pnlAfterFee": 0,
+      "result": "sl",
+      "pnl": -0.89,
+      "fee": 0.0365,
+      "pnlAfterFee": -0.89,
       "entryReason": "趋势做空1000PEPE：空头趋势+反弹EMA20(+1.5%)+15m连续3阴线拒绝+1h动量转负(-0.3%)+RSI=63",
-      "exitReason": "",
-      "exit": 0,
-      "exit_time": "",
-      "holdTime": ""
+      "exitReason": "止损触发 exit@0.002401",
+      "exit": 0.002401,
+      "exit_time": "07-02 16:59",
+      "holdTime": "约352分钟"
     },
     {
       "time": "07-02 00:52",
