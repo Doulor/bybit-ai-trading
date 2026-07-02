@@ -43,15 +43,15 @@
       "stop_pct": 2.2,
       "risk_pct": 1.5,
       "margin": 6.57,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
-      "pnlAfterFee": 0,
+      "result": "sl",
+      "pnl": -1.52,
+      "fee": 0.0731,
+      "pnlAfterFee": -1.52,
       "entryReason": "顺趋势做空FARTCOIN：空头趋势+贴近EMA20(+0.1%)+1h连续3阴拒绝+RSI59",
-      "exitReason": "",
-      "exit": 0,
-      "exit_time": "",
-      "holdTime": ""
+      "exitReason": "止损触发",
+      "exit": 0.14255848,
+      "exit_time": "07-02 17:39",
+      "holdTime": "约24分钟"
     },
     {
       "time": "07-02 16:57",
