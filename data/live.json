@@ -1,35 +1,20 @@
 {
-  "wallet": 92.1424,
-  "equity": 92.4123,
+  "wallet": 91.7055,
+  "equity": 91.8564,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1725.136,
-      "value": 0.1492,
+      "price": 1744.4015,
+      "value": 0.1509,
       "avgPrice": 0,
       "buyTime": "",
       "pnl": 0,
       "pnlPct": 0
     }
   ],
-  "positions": [
-    {
-      "symbol": "SLXUSDT",
-      "side": "Buy",
-      "size": "71",
-      "avgPrice": "0.4668",
-      "unrealisedPnl": "0.1207",
-      "leverage": "10",
-      "liqPrice": "",
-      "stopLoss": "0.443",
-      "takeProfit": "0.506",
-      "markPrice": "0.4685",
-      "createdTime": "1782323590309",
-      "positionIdx": 0
-    }
-  ],
+  "positions": [],
   "openOrders": [],
-  "updated_at": 1783072687437,
-  "updated_local": "2026-07-03 17:58:07"
+  "updated_at": 1783077789405,
+  "updated_local": "2026-07-03 19:23:09"
 }

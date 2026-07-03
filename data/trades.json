@@ -1407,6 +1407,28 @@
       "pnlBeforeFee": 2.09,
       "pnlAfterFee": 2.0937,
       "feePct": 0.224
+    },
+    {
+      "time": "07-03 18:00",
+      "symbol": "SLXUSDT",
+      "side": "long",
+      "entry": 0.4668,
+      "sl": 0.443,
+      "tp": 0.506,
+      "qty": 71,
+      "rr": 2.5,
+      "stop_pct": 4.2,
+      "risk_pct": 1.5,
+      "margin": 3.31,
+      "result": "hold",
+      "pnl": 0,
+      "fee": 0,
+      "pnlAfterFee": 0,
+      "entryReason": "趋势回调企稳:连续2根15m阳线+低点抬高+RSI从超卖回升+资金费率-0.9%极端负值+BB%B破下轨反弹+BTC同向",
+      "exitReason": "",
+      "exit": 0,
+      "exit_time": "",
+      "holdTime": ""
     }
   ],
   "summary": {
