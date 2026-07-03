@@ -1,12 +1,4 @@
 {
-  "alerts": [
-    {
-      "symbol": "ETHUSDT",
-      "price": 1726.0,
-      "direction": "below",
-      "reason": "ETH跌至1726支撑位,1h趋势向上,企稳做多。止损1722,止盈1740",
-      "added_at": "2026-07-04 00:16"
-    }
-  ],
+  "alerts": [],
   "last_update": "2026-07-04 00:16"
 }
