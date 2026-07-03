@@ -1429,6 +1429,28 @@
       "exit": 0.4609,
       "exit_time": "07-03 19:23",
       "holdTime": ""
+    },
+    {
+      "time": "07-03 21:10",
+      "symbol": "XAGUSDT",
+      "side": "long",
+      "entry": 62.39,
+      "sl": 62.08,
+      "tp": 62.8,
+      "qty": 5,
+      "rr": 2.3,
+      "stop_pct": 0.5,
+      "risk_pct": 1.5,
+      "margin": 31.3,
+      "result": "止损",
+      "pnl": -1.7711,
+      "fee": 0.171133,
+      "pnlAfterFee": -1.7711,
+      "entryReason": "1h趋势向上+15m回调到支撑+RSI超卖",
+      "exitReason": "止损触发",
+      "exit": 62.07,
+      "exit_time": "07-03 21:10",
+      "holdTime": ""
     }
   ],
   "summary": {
