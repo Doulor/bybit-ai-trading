@@ -1,20 +1,35 @@
 {
-  "wallet": 91.7055,
-  "equity": 91.8564,
+  "wallet": 91.6197,
+  "equity": 91.3698,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1744.4015,
-      "value": 0.1509,
+      "price": 1735.439,
+      "value": 0.1501,
       "avgPrice": 0,
       "buyTime": "",
       "pnl": 0,
       "pnlPct": 0
     }
   ],
-  "positions": [],
+  "positions": [
+    {
+      "symbol": "XAGUSDT",
+      "side": "Buy",
+      "size": "5",
+      "avgPrice": "62.39",
+      "unrealisedPnl": "-0.4",
+      "leverage": "10",
+      "liqPrice": "44.42891608",
+      "stopLoss": "62.08",
+      "takeProfit": "62.8",
+      "markPrice": "62.31",
+      "createdTime": "1783082901756",
+      "positionIdx": 0
+    }
+  ],
   "openOrders": [],
-  "updated_at": 1783077789405,
-  "updated_local": "2026-07-03 19:23:09"
+  "updated_at": 1783083787738,
+  "updated_local": "2026-07-03 21:03:07"
 }

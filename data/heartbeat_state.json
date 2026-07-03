@@ -1,6 +1,1 @@
-{
-  "last_heartbeat": "2026-07-03 17:47",
-  "positions": [],
-  "balance": 92.16062587,
-  "last_trades_count": 60
-}
+{"last_heartbeat":"2026-07-03 17:55","positions":[{"symbol":"SLXUSDT","side":"long","size":"71","entry":"0.4668"}],"balance":92.14,"last_trades_count":2}

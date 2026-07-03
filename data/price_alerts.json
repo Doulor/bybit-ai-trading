@@ -1,12 +1,4 @@
 {
-  "alerts": [
-    {
-      "symbol": "NEARUSDT",
-      "price": 1.93,
-      "direction": "below",
-      "reason": "NEAR回调到EMA20附近",
-      "added_at": "2026-07-03 17:33"
-    }
-  ],
-  "last_update": "2026-07-03 17:56:59"
+  "alerts": [],
+  "last_update": ""
 }
