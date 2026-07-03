@@ -1487,15 +1487,15 @@
       "stop_pct": 0.78,
       "risk_pct": 1.5,
       "margin": 17.26,
-      "result": "hold",
-      "pnl": 0,
-      "fee": 0,
-      "pnlAfterFee": 0,
+      "result": "止盈",
+      "pnl": 1.2,
+      "fee": 0.21,
+      "pnlAfterFee": 0.99,
       "entryReason": "15m回调结束:连跌5根后出阳线+低点不创新低+1h趋势向上",
-      "exitReason": "",
-      "exit": 0,
-      "exit_time": "",
-      "holdTime": ""
+      "exitReason": "止盈触发: TP 1746",
+      "exit": 1746.27,
+      "exit_time": "07-04 03:24",
+      "holdTime": "约2.5小时"
     }
   ],
   "summary": {

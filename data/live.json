@@ -1,20 +1,9 @@
 {
-  "wallet": 91.3565,
-  "equity": 91.5074,
-  "spotAssets": [
-    {
-      "coin": "ETH",
-      "qty": 8.65e-05,
-      "price": 1744.6275,
-      "value": 0.1509,
-      "avgPrice": 0,
-      "buyTime": "",
-      "pnl": 0,
-      "pnlPct": 0
-    }
-  ],
+  "wallet": 0.0001,
+  "equity": 0.0001,
+  "spotAssets": [],
   "positions": [],
   "openOrders": [],
-  "updated_at": 1783106585083,
-  "updated_local": "2026-07-04 03:23:05"
+  "updated_at": 1784718787338,
+  "updated_local": "2026-07-22 19:13:07"
 }
