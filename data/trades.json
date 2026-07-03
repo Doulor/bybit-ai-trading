@@ -1451,6 +1451,28 @@
       "exit": 62.07,
       "exit_time": "07-03 21:10",
       "holdTime": ""
+    },
+    {
+      "time": "07-03 23:18",
+      "symbol": "SOLUSDT",
+      "side": "long",
+      "entry": 81.33,
+      "sl": 80.53,
+      "tp": 82.56,
+      "qty": 2,
+      "rr": 2.3,
+      "stop_pct": 1.0,
+      "risk_pct": 1.5,
+      "margin": 16.33,
+      "result": "移动止损",
+      "pnl": 0.2209,
+      "fee": 0.179146,
+      "pnlAfterFee": 0.0417,
+      "entryReason": "15m回调结束:连续2根阳线+低点从80.86抬高到81.12+1h趋势向上",
+      "exitReason": "移动止损锁定利润",
+      "exit": 81.53,
+      "exit_time": "07-03 23:18",
+      "holdTime": ""
     }
   ],
   "summary": {

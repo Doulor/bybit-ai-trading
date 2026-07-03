@@ -1,20 +1,35 @@
 {
-  "wallet": 90.1552,
-  "equity": 90.3057,
+  "wallet": 90.1457,
+  "equity": 90.297,
   "spotAssets": [
     {
       "coin": "ETH",
       "qty": 8.65e-05,
-      "price": 1739.5117,
-      "value": 0.1505,
+      "price": 1731.3279,
+      "value": 0.1498,
       "avgPrice": 0,
       "buyTime": "",
       "pnl": 0,
       "pnlPct": 0
     }
   ],
-  "positions": [],
+  "positions": [
+    {
+      "symbol": "ETHUSDT",
+      "side": "Buy",
+      "size": "0.01",
+      "avgPrice": "1731.89",
+      "unrealisedPnl": "0.0015",
+      "leverage": "3",
+      "liqPrice": "",
+      "stopLoss": "",
+      "takeProfit": "",
+      "markPrice": "1732.04",
+      "createdTime": "1781966035080",
+      "positionIdx": 0
+    }
+  ],
   "openOrders": [],
-  "updated_at": 1783091886942,
-  "updated_local": "2026-07-03 23:18:06"
+  "updated_at": 1783097285260,
+  "updated_local": "2026-07-04 00:48:05"
 }
