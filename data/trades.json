@@ -1473,6 +1473,29 @@
       "exit": 81.53,
       "exit_time": "07-03 23:18",
       "holdTime": ""
+    },
+    {
+      "time": "07-04 00:54",
+      "symbol": "ETHUSDT",
+      "side": "long",
+      "entry": 1733.43545455,
+      "sl": 1720.0,
+      "tp": 1746.0,
+      "qty": 0.1,
+      "score": 0,
+      "rr": 0.9,
+      "stop_pct": 0.78,
+      "risk_pct": 1.5,
+      "margin": 17.26,
+      "result": "hold",
+      "pnl": 0,
+      "fee": 0,
+      "pnlAfterFee": 0,
+      "entryReason": "15m回调结束:连跌5根后出阳线+低点不创新低+1h趋势向上",
+      "exitReason": "",
+      "exit": 0,
+      "exit_time": "",
+      "holdTime": ""
     }
   ],
   "summary": {

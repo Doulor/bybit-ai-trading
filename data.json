@@ -1,35 +1,13 @@
 {
-  "wallet": 13.45494216,
-  "equity": 13.60334216,
-  "positions": [
-    {
-      "symbol": "AXSUSDT",
-      "side": "Buy",
-      "size": "30",
-      "avgPrice": "1.14105333",
-      "unrealisedPnl": "0.1514",
-      "takeProfit": "1.165",
-      "stopLoss": "1.11",
-      "leverage": "10",
-      "liqPrice": "0.71071337"
-    }
-  ],
+  "wallet": 90.15522066,
+  "equity": 90.15522066,
+  "positions": [],
   "open_orders": [
     {
-      "symbol": "AXSUSDT",
-      "side": "Sell",
+      "symbol": "ETHUSDT",
+      "side": "Buy",
       "orderType": "Market",
-      "qty": "30",
-      "price": "0",
-      "stopLoss": "",
-      "takeProfit": "",
-      "orderStatus": "Untriggered"
-    },
-    {
-      "symbol": "AXSUSDT",
-      "side": "Sell",
-      "orderType": "Market",
-      "qty": "30",
+      "qty": "0.35",
       "price": "0",
       "stopLoss": "",
       "takeProfit": "",
@@ -38,61 +16,53 @@
   ],
   "recent_trades": [
     {
-      "symbol": "AXSUSDT",
-      "side": "Buy",
-      "qty": "30",
-      "avgPrice": "1.14105333",
-      "status": "Filled",
-      "createdTime": "1781966863674"
-    },
-    {
-      "symbol": "ETHUSDT",
+      "symbol": "SOLUSDT",
       "side": "Sell",
-      "qty": "0.02",
-      "avgPrice": "1735.09",
+      "qty": "2",
+      "avgPrice": "81.53",
       "status": "Filled",
-      "createdTime": "1781966035083"
+      "createdTime": "1783089242591"
     },
     {
-      "symbol": "ETHUSDT",
+      "symbol": "SOLUSDT",
       "side": "Buy",
-      "qty": "0.02",
-      "avgPrice": "1713.59",
+      "qty": "2",
+      "avgPrice": "81.33",
       "status": "Filled",
-      "createdTime": "1781966035080"
+      "createdTime": "1783089238804"
     },
     {
-      "symbol": "HEIUSDT",
+      "symbol": "XAGUSDT",
       "side": "Sell",
-      "qty": "401",
-      "avgPrice": "0.10676",
+      "qty": "5",
+      "avgPrice": "62.07",
       "status": "Filled",
-      "createdTime": "1781940896885"
+      "createdTime": "1783082908587"
     },
     {
-      "symbol": "HEIUSDT",
+      "symbol": "XAGUSDT",
       "side": "Buy",
-      "qty": "401",
-      "avgPrice": "0.10177631",
+      "qty": "5",
+      "avgPrice": "62.39",
       "status": "Filled",
-      "createdTime": "1781940896882"
+      "createdTime": "1783082905651"
     },
     {
-      "symbol": "EPICUSDT",
+      "symbol": "SLXUSDT",
       "side": "Sell",
-      "qty": "148",
-      "avgPrice": "0.4408",
+      "qty": "71",
+      "avgPrice": "0.4609",
       "status": "Filled",
-      "createdTime": "1781939409512"
+      "createdTime": "1783077750741"
     },
     {
-      "symbol": "EPICUSDT",
+      "symbol": "SLXUSDT",
       "side": "Buy",
-      "qty": "148",
-      "avgPrice": "0.4257",
+      "qty": "71",
+      "avgPrice": "0.4668",
       "status": "Filled",
-      "createdTime": "1781939409509"
+      "createdTime": "1783072677349"
     }
   ],
-  "updated_at": 1781971334247
+  "updated_at": 1783092881805
 }
